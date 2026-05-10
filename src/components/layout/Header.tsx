@@ -13,10 +13,32 @@ import { useState, useEffect } from 'react';
 export default function Header() {
   const pathname = usePathname();
   const [time, setTime] = useState<Date | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   useEffect(() => {
+    // Clock
     setTime(new Date());
     const interval = setInterval(() => setTime(new Date()), 1000);
+    
+    // Load User
+    async function loadUser() {
+      const { supabase } = await import('@/lib/supabaseClient');
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setUserEmail(user.email || null);
+        const { data: profile } = await supabase
+          .from('perfiles')
+          .select('rol')
+          .eq('id', user.id)
+          .single();
+        if (profile) {
+          setUserRole(profile.rol);
+        }
+      }
+    }
+    loadUser();
+
     return () => clearInterval(interval);
   }, []);
 
@@ -84,8 +106,12 @@ export default function Header() {
           {/* Información del Operador y Logout */}
           <div className="flex items-center gap-4 border-l border-white/10 pl-6">
             <div className="flex flex-col items-end hidden sm:flex">
-              <p className="text-[9px] text-gray-500 font-black tracking-[0.2em] uppercase">Operador</p>
-              <p className="text-[10px] font-mono text-gray-300 font-bold lowercase tracking-tight">Activo</p>
+              <p className="text-[10px] text-gray-300 font-bold tracking-tight">
+                {userEmail || 'Cargando...'}
+              </p>
+              <p className="text-[9px] font-black text-[#00d4ff] uppercase tracking-[0.2em]">
+                {userRole ? `Rol: ${userRole}` : 'Operador'}
+              </p>
             </div>
             <button 
               onClick={async () => {
