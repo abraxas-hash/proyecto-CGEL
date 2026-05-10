@@ -3,7 +3,7 @@ import Header from '@/components/layout/Header';
 import { CheckCircle2, XCircle, Search, Filter, Truck, ArrowRight, Clock } from 'lucide-react';
 import Link from 'next/link';
 
-export const revalidate = 10; 
+export const dynamic = 'force-dynamic'; 
 
 export default async function RepartidoresPage() {
   const supabase = createAdminClient();

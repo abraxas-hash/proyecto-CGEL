@@ -2,7 +2,7 @@ import { createAdminClient } from '@/lib/supabaseClient';
 import Header from '@/components/layout/Header';
 import VisitasClient from './VisitasClient';
 
-export const revalidate = 10;
+export const dynamic = 'force-dynamic';
 
 export default async function VisitasPage() {
   const supabase = createAdminClient();

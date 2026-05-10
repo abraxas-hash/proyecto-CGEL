@@ -5,7 +5,7 @@ import MetricCard from '@/components/ui/MetricCard';
 import SafeAnalytics from '@/components/dashboard/SafeAnalytics';
 import SafetyObservations from '@/components/dashboard/SafetyObservations';
 
-export const revalidate = 10;
+export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   const supabase = createAdminClient();

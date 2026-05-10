@@ -1,7 +1,7 @@
 import { createAdminClient } from '@/lib/supabaseClient';
 import ContratistaClient from './ContratistaClient';
 
-export const revalidate = 30;
+export const dynamic = 'force-dynamic';
 
 export default async function ContratistaDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

@@ -1,7 +1,7 @@
 import { createAdminClient } from '@/lib/supabaseClient';
 import ProveedorClient from './ProveedorClient';
 
-export const revalidate = 30;
+export const dynamic = 'force-dynamic';
 
 export default async function ProveedorDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

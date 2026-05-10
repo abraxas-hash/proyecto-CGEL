@@ -2,7 +2,7 @@ import { createAdminClient } from '@/lib/supabaseClient';
 import Header from '@/components/layout/Header';
 import ProveedoresClient from './ProveedoresClient';
 
-export const revalidate = 10;
+export const dynamic = 'force-dynamic';
 
 export default async function ProveedoresPage() {
   const supabase = createAdminClient();
