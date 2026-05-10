@@ -52,7 +52,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="mb-8 border-b border-blue-500/20 bg-blue-950/90 backdrop-blur-md sticky top-0 z-50">
+    <header className="mb-8 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-md">
       
       {/* SECCIÓN SUPERIOR: Branding y Perfil */}
       <div className="flex flex-wrap items-center justify-between px-4 sm:px-6 py-3 sm:py-4 gap-y-3">
@@ -72,8 +72,8 @@ export default function Header() {
               CGEL CONTROL
             </h1>
             <p className="mt-0.5 sm:mt-1 font-black uppercase text-[7px] sm:text-[9px] truncate">
-              <span className="text-blue-200 tracking-[0.1em] sm:tracking-[0.2em]">Inteligencia Operativa</span>
-              <span className="ml-2 text-white bg-green-600 px-1 rounded animate-pulse">v2.5.4-STABLE</span>
+              <span className="text-gray-500 tracking-[0.1em] sm:tracking-[0.2em]">Inteligencia Operativa</span>
+              <span className="ml-2 text-red-500/80 bg-red-500/10 px-1 rounded text-[8px]">v2.5.5</span>
             </p>
           </div>
         </div>
@@ -106,8 +106,8 @@ export default function Header() {
 
           {/* Información del Operador y Logout */}
           <div className="flex items-center gap-2 sm:gap-4 sm:border-l sm:border-white/10 sm:pl-6">
-            <div className="flex flex-col items-end">
-              <p className="text-[7px] sm:text-[10px] text-gray-300 font-bold tracking-tight max-w-[70px] sm:max-w-xs truncate">
+            <div className="flex flex-col items-end min-w-0">
+              <p className="text-[7px] sm:text-[10px] text-gray-300 font-bold tracking-tight max-w-[80px] sm:max-w-xs truncate">
                 {userEmail || 'Cargando...'}
               </p>
               <p className="text-[6px] sm:text-[9px] font-black text-[#00d4ff] uppercase tracking-[0.1em] sm:tracking-[0.2em]">
