@@ -23,52 +23,57 @@ export default function VisitasClient({ initialVisitas }: { initialVisitas: any[
     });
   }, [initialVisitas, searchTerm, selectedDate]);
 
+  const handleExport = () => {
+    if (!filteredVisitas || filteredVisitas.length === 0) return;
+    const headers = ['FECHA', 'DNI', 'NOMBRE', 'EMPRESA', 'INGRESO', 'SALIDA', 'REFERENCIA', 'ESTADO'];
+    const BOM = '\uFEFF';
+    const csvRows = filteredVisitas.map(v => [
+      v.fecha,
+      v.dni_ce,
+      v.nombre_completo,
+      v.empresa || 'PARTICULAR',
+      v.hora_ingreso?.slice(0,5),
+      v.hora_salida?.slice(0,5) || '---',
+      v.referencia_visita,
+      v.pase_devuelto_salida ? 'FINALIZADO' : 'EN PLANTA'
+    ].map(field => `"${field}"`).join(','));
+
+    const csvContent = BOM + [headers.join(','), ...csvRows].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `visitas_export_${new Date().toISOString().slice(0,10)}.csv`;
+    link.click();
+  };
+
   return (
     <main className="glass-panel rounded-2xl p-4 sm:p-6 overflow-hidden">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 sm:mb-8">
         <div>
-          <h2 className="text-2xl font-bold text-white flex items-center gap-2 tracking-tight">
-            <Users className="text-green-400 w-8 h-8" />
+          <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 tracking-tight">
+            <Users className="text-green-400 w-6 h-6 sm:w-8 sm:h-8" />
             Gestión de Visitas
           </h2>
-          <p className="text-gray-400 text-sm mt-1">Registro de ingreso peatonal y administrativo</p>
+          <p className="text-gray-400 text-[10px] sm:text-sm mt-1 uppercase tracking-widest font-bold">Registro de ingreso peatonal</p>
         </div>
         
-        <div className="flex items-center gap-3 w-full md:w-auto">
-          <div className="relative flex-1 md:w-64">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full md:w-auto">
+          <div className="relative flex-1 min-w-[200px] md:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
             <input 
               type="text" 
-              placeholder="Nombre, DNI o Empresa..." 
+              placeholder="Buscar por DNI o Nombre..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-10 text-sm text-white focus:outline-none focus:border-green-400/50 transition-all shadow-inner placeholder:text-gray-600"
+              className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-green-400/50 transition-all"
             />
-            {searchTerm && (
-              <button 
-                onClick={() => setSearchTerm('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
           </div>
-          <div className="relative">
-            <input 
-              type="date" 
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="bg-white/5 border border-white/10 text-white text-xs rounded-xl px-3 py-2 focus:outline-none focus:border-green-400/50 transition-all [color-scheme:dark]"
-            />
-            {selectedDate && (
-              <button 
-                onClick={() => setSelectedDate('')}
-                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px]"
-              >
-                <X className="w-2.5 h-2.5" />
-              </button>
-            )}
-          </div>
+          <button 
+            onClick={handleExport}
+            className="w-full md:w-auto px-4 py-2 bg-green-500 hover:bg-green-600 text-black rounded-xl text-[10px] font-black transition-all shadow-lg shadow-green-500/20 shrink-0 uppercase tracking-widest h-9"
+          >
+            Exportar CSV
+          </button>
         </div>
       </div>
 

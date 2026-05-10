@@ -19,38 +19,55 @@ export default function ContratistasClient({ initialContratistas }: { initialCon
     });
   }, [initialContratistas, searchTerm]);
 
+  const handleExport = () => {
+    if (!filteredContratistas || filteredContratistas.length === 0) return;
+    const headers = ['FECHA', 'EMPRESA', 'RUC', 'TRABAJO', 'AREA', 'AUTORIZA', 'SCTR'];
+    const BOM = '\uFEFF';
+    const csvRows = filteredContratistas.map(c => [
+      c.fecha,
+      c.empresa_contratista,
+      c.ruc,
+      c.trabajo_realizar,
+      c.area_trabajo,
+      c.autorizado_por,
+      c.sctr_vigente ? 'VIGENTE' : 'VENCIDO'
+    ].map(field => `"${field}"`).join(','));
+
+    const csvContent = BOM + [headers.join(','), ...csvRows].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `contratistas_export_${new Date().toISOString().slice(0,10)}.csv`;
+    link.click();
+  };
+
   return (
     <main className="glass-panel rounded-2xl p-4 sm:p-6 overflow-hidden">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 sm:mb-8">
         <div>
-          <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-            <HardHat className="text-yellow-500 w-8 h-8" />
-            Trabajos y Contratistas
+          <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 tracking-tight">
+            <HardHat className="text-yellow-500 w-6 h-6 sm:w-8 sm:h-8" />
+            Contratistas y Mantenimiento
           </h2>
-          <p className="text-gray-400 text-sm mt-1">Supervisión de obras, mantenimiento y servicios externos</p>
+          <p className="text-gray-400 text-[10px] sm:text-sm mt-1 uppercase tracking-widest font-bold">Control de servicios externos</p>
         </div>
         
-        <div className="flex items-center gap-3 w-full md:w-auto">
-          <div className="relative flex-1 md:w-64">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full md:w-auto">
+          <div className="relative flex-1 min-w-[200px] md:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
             <input 
               type="text" 
-              placeholder="Empresa o tipo de trabajo..." 
+              placeholder="Buscar por Empresa o RUC..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-lg py-2 pl-10 pr-10 text-sm text-white focus:outline-none focus:border-yellow-500/50 transition-all placeholder:text-gray-600"
+              className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-yellow-500/50 transition-all"
             />
-            {searchTerm && (
-              <button 
-                onClick={() => setSearchTerm('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
           </div>
-          <button className="px-4 py-2 bg-yellow-500 text-black rounded-lg text-sm font-bold hover:bg-yellow-400 transition-colors shadow-lg whitespace-nowrap">
-            Nuevo Registro
+          <button 
+            onClick={handleExport}
+            className="w-full md:w-auto px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-black rounded-xl text-[10px] font-black transition-all shadow-lg shadow-yellow-500/20 shrink-0 uppercase tracking-widest h-9"
+          >
+            Exportar CSV
           </button>
         </div>
       </div>

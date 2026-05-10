@@ -21,22 +21,43 @@ export default function RepartidoresClient({ initialData }: { initialData: any[]
   const handleExport = () => {
     if (!filteredData || filteredData.length === 0) return;
     
-    // Simple CSV Export
-    const headers = ['Fecha', 'Turno', 'Empresa', 'Placa', 'Conductor', 'Ciclos', 'SCTR', 'EPP', 'Estado'];
-    const csvContent = [
-      headers.join(','),
-      ...filteredData.map(row => [
+    // Professional CSV Export with UTF-8 BOM for Excel Compatibility
+    const headers = [
+      'FECHA', 
+      'DIA',
+      'TURNO', 
+      'EMPRESA', 
+      'PLACA', 
+      'CONDUCTOR', 
+      'CICLOS_TOTAL', 
+      'SCTR', 
+      'EPP', 
+      'ESTADO_PLANTA'
+    ];
+    
+    const BOM = '\uFEFF';
+    const csvRows = filteredData.map(row => {
+      const dia = new Date(row.fecha + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long' }).toUpperCase();
+      const nCiclos = [row.entrada_1, row.entrada_2, row.entrada_3].filter(Boolean).length;
+      const sctr = row.sctr_ok ? 'CUMPLE' : 'PENDIENTE';
+      const epp = row.epp_ok ? 'COMPLETO' : 'OBSERVADO';
+      const enPlanta = (!row.salida_1 || (row.entrada_2 && !row.salida_2)) ? 'DENTRO' : 'SALIDA';
+      
+      return [
         row.fecha,
+        dia,
         row.turno,
         row.empresa_abreviatura,
         row.placa,
         row.conductor_apellido,
-        [row.entrada_1, row.entrada_2, row.entrada_3].filter(Boolean).length,
-        row.sctr_ok ? 'OK' : 'X',
-        row.epp_ok ? 'OK' : 'X',
-        (!row.salida_1 || (row.entrada_2 && !row.salida_2)) ? 'EN PLANTA' : 'FINALIZADO'
-      ].join(','))
-    ].join('\n');
+        nCiclos,
+        sctr,
+        epp,
+        enPlanta
+      ].map(field => `"${field}"`).join(',');
+    });
+
+    const csvContent = BOM + [headers.join(','), ...csvRows].join('\n');
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');

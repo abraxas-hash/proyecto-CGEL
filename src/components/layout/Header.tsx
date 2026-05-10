@@ -71,8 +71,9 @@ export default function Header() {
             <h1 className="text-xs sm:text-xl font-black bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent tracking-tighter leading-none truncate">
               CGEL CONTROL
             </h1>
-            <p className="text-gray-500 mt-0.5 sm:mt-1 font-bold tracking-[0.1em] sm:tracking-[0.2em] uppercase text-[6px] sm:text-[9px] truncate">
-              Inteligencia Operativa v2.5.0
+            <p className="mt-0.5 sm:mt-1 font-black uppercase text-[7px] sm:text-[9px] truncate">
+              <span className="text-gray-500 tracking-[0.1em] sm:tracking-[0.2em]">Inteligencia Operativa</span>
+              <span className="ml-2 text-red-500 bg-red-500/10 px-1 rounded animate-pulse">v2.5.1</span>
             </p>
           </div>
         </div>
