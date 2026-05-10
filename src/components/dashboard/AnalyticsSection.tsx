@@ -42,26 +42,26 @@ export default function AnalyticsSection({ data }: { data: any }) {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       
       {/* 1. TOP METRICS HUB */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {[
           { title: 'Total Auditorías', val: data.counts.repartidores + data.counts.visitas + data.counts.proveedores + data.counts.contratistas, icon: Activity, color: COLORS.blue, trend: '+12.5%' },
           { title: 'Alertas Críticas', val: 12, icon: AlertTriangle, color: COLORS.red, trend: '3 Activas' },
           { title: 'Afluencia Promedio', val: ((data.counts.repartidores + data.counts.visitas + data.counts.proveedores + data.counts.contratistas) / 7).toFixed(1), icon: Users, color: COLORS.purple, trend: 'Ing/Día' },
           { title: 'Salud SCTR', val: '94%', icon: ShieldCheck, color: COLORS.green, trend: 'Sincronizado' }
         ].map((kpi, i) => (
-          <Card key={i} className="bg-black/40 border-white/10 backdrop-blur-xl relative overflow-hidden group hover:border-[#00d4ff]/30 transition-all">
-            <div className={`absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity`}>
+          <Card key={i} className="bg-black/40 border-white/10 backdrop-blur-xl relative overflow-hidden group hover:border-[#00d4ff]/30 transition-all p-3 sm:p-6">
+            <div className={`absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 -mr-4 -mt-4 sm:-mr-8 sm:-mt-8 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity`}>
               <kpi.icon className="w-full h-full" style={{ color: kpi.color }} />
             </div>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">{kpi.title}</CardTitle>
-              <kpi.icon className="w-4 h-4" style={{ color: kpi.color }} />
+            <CardHeader className="flex flex-row items-center justify-between pb-1 sm:pb-2 p-0">
+              <CardTitle className="text-[8px] sm:text-[10px] font-black uppercase tracking-wider sm:tracking-[0.2em] text-gray-500 truncate mr-1">{kpi.title}</CardTitle>
+              <kpi.icon className="w-3 h-3 sm:w-4 sm:h-4 shrink-0" style={{ color: kpi.color }} />
             </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-black text-white tracking-tighter">{kpi.val}</div>
-              <div className="flex items-center gap-2 mt-1">
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-white/5" style={{ color: kpi.color }}>{kpi.trend}</span>
-                <span className="text-[9px] text-gray-600 font-medium uppercase tracking-widest">Estado Nominal</span>
+            <CardContent className="p-0 pt-1 sm:pt-2">
+              <div className="text-2xl sm:text-3xl font-black text-white tracking-tighter">{kpi.val}</div>
+              <div className="flex flex-col xl:flex-row xl:items-center gap-1 xl:gap-2 mt-1 sm:mt-2">
+                <span className="text-[8px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded bg-white/5 inline-block w-fit" style={{ color: kpi.color }}>{kpi.trend}</span>
+                <span className="hidden sm:inline-block text-[7px] sm:text-[9px] text-gray-600 font-medium uppercase tracking-widest truncate">Estado Nominal</span>
               </div>
             </CardContent>
           </Card>
