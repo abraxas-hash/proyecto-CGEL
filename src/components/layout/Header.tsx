@@ -3,7 +3,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Truck, Users, ShieldCheck, Wrench, LogOut } from 'lucide-react';
+import { Home, Truck, Users, ShieldCheck, Wrench, LogOut, Clock, MapPin } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 /**
  * Header: Encabezado principal del Dashboard.
@@ -11,6 +12,13 @@ import { Home, Truck, Users, ShieldCheck, Wrench, LogOut } from 'lucide-react';
  */
 export default function Header() {
   const pathname = usePathname();
+  const [time, setTime] = useState<Date | null>(null);
+
+  useEffect(() => {
+    setTime(new Date());
+    const interval = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const navItems = [
     { name: 'DASHBOARD', href: '/', icon: Home, color: 'text-gray-400', activeBg: 'bg-white/10', hoverBg: 'hover:bg-white/10' },
@@ -44,6 +52,20 @@ export default function Header() {
             <p className="text-gray-500 mt-1 font-bold tracking-[0.2em] uppercase text-[9px]">
               Inteligencia Operativa
             </p>
+          </div>
+        </div>
+
+        {/* Centro: Reloj, Fecha y Ubicación */}
+        <div className="hidden lg:flex flex-col items-center justify-center opacity-80">
+          <div className="flex items-center gap-2 text-gray-300">
+            <Clock className="w-3.5 h-3.5 text-[#00d4ff]" />
+            <span className="text-[13px] font-mono font-bold tracking-[0.15em]">
+              {time ? time.toLocaleTimeString('es-PE', { hour12: false }) : '--:--:--'}
+            </span>
+          </div>
+          <div className="text-[9px] text-gray-500 font-black uppercase tracking-[0.2em] mt-1 flex items-center gap-1.5">
+            <MapPin className="w-3 h-3 text-red-500/80" />
+            LIMA, PERÚ • CD SONEPAR • {time ? time.toLocaleDateString('es-PE', { day: '2-digit', month: 'short', year: 'numeric' }).replace('.', '') : '...'}
           </div>
         </div>
 
