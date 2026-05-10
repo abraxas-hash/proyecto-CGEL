@@ -55,44 +55,44 @@ export default function Header() {
     <header className="mb-8 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-md sticky top-0 z-50">
       
       {/* SECCIÓN SUPERIOR: Branding y Perfil */}
-      <div className="flex items-center justify-between px-6 py-4">
+      <div className="flex flex-wrap items-center justify-between px-4 sm:px-6 py-3 sm:py-4 gap-y-3">
         
         {/* Izquierda: Logo y Título */}
-        <div className="flex items-center gap-4">
-          <div className="relative flex items-center justify-center bg-white/5 rounded-xl p-2 border border-white/5">
+        <div className="flex items-center gap-3">
+          <div className="relative flex items-center justify-center bg-white/5 rounded-xl p-1.5 sm:p-2 border border-white/5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img 
               src="/logo-cgel.png" 
               alt="Logo CGEL" 
-              className="h-10 w-auto object-contain filter drop-shadow-[0_0_10px_rgba(0,212,255,0.15)]"
+              className="h-8 sm:h-10 w-auto object-contain filter drop-shadow-[0_0_10px_rgba(0,212,255,0.15)]"
             />
           </div>
-          <div className="hidden sm:block">
-            <h1 className="text-xl font-black bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent tracking-tighter leading-none">
+          <div>
+            <h1 className="text-sm sm:text-xl font-black bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent tracking-tighter leading-none">
               CGEL CONTROL
             </h1>
-            <p className="text-gray-500 mt-1 font-bold tracking-[0.2em] uppercase text-[9px]">
+            <p className="text-gray-500 mt-0.5 sm:mt-1 font-bold tracking-[0.1em] sm:tracking-[0.2em] uppercase text-[7px] sm:text-[9px]">
               Inteligencia Operativa
             </p>
           </div>
         </div>
 
-        {/* Centro: Reloj, Fecha y Ubicación */}
-        <div className="hidden lg:flex flex-col items-center justify-center opacity-80">
+        {/* Centro: Reloj, Fecha y Ubicación (Wraps to bottom on mobile) */}
+        <div className="flex flex-col items-center justify-center opacity-80 order-3 lg:order-2 w-full lg:w-auto mt-2 lg:mt-0 pt-3 lg:pt-0 border-t border-white/5 lg:border-none">
           <div className="flex items-center gap-2 text-gray-300">
             <Clock className="w-3.5 h-3.5 text-[#00d4ff]" />
-            <span className="text-[13px] font-mono font-bold tracking-[0.15em]">
+            <span className="text-[12px] sm:text-[13px] font-mono font-bold tracking-[0.15em]">
               {time ? time.toLocaleTimeString('es-PE', { hour12: false }) : '--:--:--'}
             </span>
           </div>
-          <div className="text-[9px] text-gray-500 font-black uppercase tracking-[0.2em] mt-1 flex items-center gap-1.5">
+          <div className="text-[8px] sm:text-[9px] text-gray-500 font-black uppercase tracking-[0.2em] mt-1 flex items-center gap-1.5">
             <MapPin className="w-3 h-3 text-red-500/80" />
             LIMA, PERÚ • CD SONEPAR • {time ? time.toLocaleDateString('es-PE', { day: '2-digit', month: 'short', year: 'numeric' }).replace('.', '') : '...'}
           </div>
         </div>
 
         {/* Derecha: Estado y Usuario */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-3 sm:gap-6 order-2 lg:order-3">
           
           {/* Indicador de Sistema */}
           <div className="hidden md:flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/5 shadow-inner">
@@ -104,12 +104,12 @@ export default function Header() {
           </div>
 
           {/* Información del Operador y Logout */}
-          <div className="flex items-center gap-4 border-l border-white/10 pl-6">
-            <div className="flex flex-col items-end hidden sm:flex">
-              <p className="text-[10px] text-gray-300 font-bold tracking-tight">
+          <div className="flex items-center gap-3 sm:gap-4 sm:border-l sm:border-white/10 sm:pl-6">
+            <div className="flex flex-col items-end">
+              <p className="text-[9px] sm:text-[10px] text-gray-300 font-bold tracking-tight max-w-[100px] sm:max-w-xs truncate">
                 {userEmail || 'Cargando...'}
               </p>
-              <p className="text-[9px] font-black text-[#00d4ff] uppercase tracking-[0.2em]">
+              <p className="text-[8px] sm:text-[9px] font-black text-[#00d4ff] uppercase tracking-[0.2em]">
                 {userRole ? `Rol: ${userRole}` : 'Operador'}
               </p>
             </div>
