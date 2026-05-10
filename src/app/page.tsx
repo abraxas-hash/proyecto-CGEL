@@ -86,24 +86,24 @@ export default async function Home() {
   ];
 
   return (
-    <div className="min-h-screen p-8 font-[family-name:var(--font-geist-sans)]">
+    <div className="min-h-screen p-4 sm:p-8 font-[family-name:var(--font-geist-sans)]">
       <Header />
 
       <main>
         {/* Alertas de Seguridad en Vivo */}
         {totalInside > 0 ? (
-          <div className="mb-8 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center justify-between animate-pulse">
-            <div className="flex items-center gap-4">
-              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-              <p className="text-red-500 text-xs font-black uppercase tracking-widest">
+          <div className="mb-8 p-4 sm:p-5 bg-red-500/10 border border-red-500/20 rounded-2xl flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 animate-pulse">
+            <div className="flex items-center gap-3">
+              <div className="w-2.5 h-2.5 bg-red-500 rounded-full shrink-0"></div>
+              <p className="text-red-500 text-xs sm:text-sm font-black uppercase tracking-widest leading-tight">
                 ALERTA DE SEGURIDAD: {totalInside} Personas/Vehículos en Planta sin salida registrada
               </p>
             </div>
-            <div className="flex gap-4 text-[10px] font-bold text-red-400/70">
-              <span>REPARTIDORES: {countInsideRepartidores || 0}</span>
-              <span>VISITAS: {countInsideVisitas || 0}</span>
-              <span>CONTRATISTAS: {countInsideContratistas || 0}</span>
-              <span>PROVEEDORES: {countInsideProveedores || 0}</span>
+            <div className="flex flex-wrap gap-2 sm:gap-4 text-[9px] sm:text-[10px] font-bold text-red-400/80">
+              <span className="bg-red-500/10 px-2 py-1 rounded">REPARTIDORES: {countInsideRepartidores || 0}</span>
+              <span className="bg-red-500/10 px-2 py-1 rounded">VISITAS: {countInsideVisitas || 0}</span>
+              <span className="bg-red-500/10 px-2 py-1 rounded">CONTRATISTAS: {countInsideContratistas || 0}</span>
+              <span className="bg-red-500/10 px-2 py-1 rounded">PROVEEDORES: {countInsideProveedores || 0}</span>
             </div>
           </div>
         ) : (
