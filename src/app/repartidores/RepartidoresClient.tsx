@@ -72,32 +72,34 @@ export default function RepartidoresClient({ initialData }: { initialData: any[]
 
   return (
     <main className="glass-panel rounded-2xl p-4 sm:p-6 overflow-hidden w-full">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 sm:mb-8">
-        <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 tracking-tight">
-            <Truck className="text-[#00d4ff] w-6 h-6 sm:w-8 sm:h-8" />
-            Repartidores Fijos
-          </h2>
-          <p className="text-gray-400 text-[10px] sm:text-sm mt-1 uppercase tracking-widest font-bold">Control diario de ciclos de carga</p>
-        </div>
-        
-        <div className="grid grid-cols-1 gap-2 w-full md:w-auto md:flex md:items-center">
-          <div className="relative w-full md:w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-            <input 
-              type="text" 
-              placeholder="Buscar placa..." 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-[#00d4ff]/50 transition-all"
-            />
+      <div className="sticky top-[68px] sm:top-[88px] z-30 bg-[#0a0a0a]/95 backdrop-blur-xl -mx-4 sm:-mx-6 px-4 sm:px-6 py-4 mb-4 border-b border-white/5">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 tracking-tight">
+              <Truck className="text-[#00d4ff] w-6 h-6 sm:w-8 sm:h-8" />
+              Repartidores Fijos
+            </h2>
+            <p className="text-gray-400 text-[10px] sm:text-sm mt-1 uppercase tracking-widest font-bold">Control diario de ciclos</p>
           </div>
-          <button 
-            onClick={handleExport}
-            className="w-full md:w-auto px-4 py-2 bg-[#00d4ff] hover:bg-[#00d4ff]/80 text-black rounded-xl text-[10px] font-black transition-all shadow-lg shadow-[#00d4ff]/20 shrink-0 uppercase tracking-widest h-9"
-          >
-            Exportar CSV
-          </button>
+          
+          <div className="grid grid-cols-1 gap-2 w-full md:w-auto md:flex md:items-center">
+            <div className="relative w-full md:w-64">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+              <input 
+                type="text" 
+                placeholder="Buscar placa..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-[#00d4ff]/50 transition-all"
+              />
+            </div>
+            <button 
+              onClick={handleExport}
+              className="w-full md:w-auto px-4 py-2 bg-[#00d4ff] hover:bg-[#00d4ff]/80 text-black rounded-xl text-[10px] font-black transition-all shadow-lg shadow-[#00d4ff]/20 shrink-0 uppercase tracking-widest h-9"
+            >
+              Exportar CSV
+            </button>
+          </div>
         </div>
       </div>
 
