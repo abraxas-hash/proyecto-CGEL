@@ -55,8 +55,8 @@ export default async function VisitaDetailPage({ params }: { params: Promise<{ i
   return (
     <VisitaClient 
       visita={visita} 
-      historial={historial} 
-      evidencias={evidencias} 
+      historial={historial || []} 
+      evidencias={evidencias || []} 
     />
   );
 }

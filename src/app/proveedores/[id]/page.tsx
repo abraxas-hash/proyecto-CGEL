@@ -55,8 +55,8 @@ export default async function ProveedorDetailPage({ params }: { params: Promise<
   return (
     <ProveedorClient 
       proveedor={proveedor} 
-      historial={historial} 
-      evidencias={evidencias} 
+      historial={historial || []} 
+      evidencias={evidencias || []} 
     />
   );
 }

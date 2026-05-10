@@ -61,7 +61,7 @@ export default async function ContratistaDetailPage({ params }: { params: Promis
       contratista={contratista} 
       personal={personal || []} 
       herramientas={herramientas || []} 
-      evidencias={evidencias} 
+      evidencias={evidencias || []} 
     />
   );
 }

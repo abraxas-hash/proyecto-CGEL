@@ -62,8 +62,8 @@ export default async function RepartidorDetailPage({ params }: { params: Promise
   return (
     <RepartidorClient 
       repartidor={repartidor} 
-      historial={historial} 
-      evidencias={evidencias} 
+      historial={historial || []} 
+      evidencias={evidencias || []} 
     />
   );
 }

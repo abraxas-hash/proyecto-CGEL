@@ -67,13 +67,13 @@ export default function SafetyObservations() {
             </div>
             <div>
               <h4 className="text-white font-bold">Estado General de Riesgos (Matriz IPERC)</h4>
-              <p className="text-xs text-gray-400">Total: 15 observaciones detectadas por CGEL Security</p>
+              <p className="text-xs text-gray-400">Total: 16 observaciones detectadas por CGEL Security</p>
             </div>
           </div>
           <div className="flex gap-2">
-            <div className="px-3 py-1 bg-red-500/20 text-red-400 rounded-full text-[9px] font-black border border-red-500/20">2 CRÍTICOS</div>
-            <div className="px-3 py-1 bg-orange-500/20 text-orange-400 rounded-full text-[9px] font-black border border-orange-500/20">10 ALTOS</div>
-            <div className="px-3 py-1 bg-yellow-500/20 text-yellow-400 rounded-full text-[9px] font-black border border-yellow-500/20">3 MEDIOS</div>
+            <div className="px-3 py-1 bg-red-500/20 text-red-400 rounded-full text-[9px] font-black border border-red-500/20">2 CRÍTICOS MÁXIMOS</div>
+            <div className="px-3 py-1 bg-orange-500/20 text-orange-400 rounded-full text-[9px] font-black border border-orange-500/20">10 CRÍTICOS / ALTOS</div>
+            <div className="px-3 py-1 bg-yellow-500/20 text-yellow-400 rounded-full text-[9px] font-black border border-yellow-500/20">4 MEDIOS-ALTOS</div>
           </div>
         </div>
       </div>
