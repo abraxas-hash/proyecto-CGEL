@@ -1,63 +1,170 @@
-import Image from "next/image";
+import { createAdminClient } from '@/lib/supabaseClient';
+import { ShieldCheck, Truck, Users, Wrench } from 'lucide-react';
+import Header from '@/components/layout/Header';
+import MetricCard from '@/components/ui/MetricCard';
+import SafeAnalytics from '@/components/dashboard/SafeAnalytics';
+import SafetyObservations from '@/components/dashboard/SafetyObservations';
 
-export default function Home() {
+export const revalidate = 10;
+
+export default async function Home() {
+  const supabase = createAdminClient();
+  const { count: countRepartidores } = await supabase
+    .from('registro_diario_repartidores')
+    .select('*', { count: 'exact', head: true });
+
+  const { count: countVisitas } = await supabase
+    .from('registro_visitas')
+    .select('*', { count: 'exact', head: true });
+
+  const { count: countProveedores } = await supabase
+    .from('registro_proveedores_carga')
+    .select('*', { count: 'exact', head: true });
+
+  const { count: countContratistas } = await supabase
+    .from('registro_contratistas')
+    .select('*', { count: 'exact', head: true });
+
+  const counts = {
+    repartidores: countRepartidores || 0,
+    visitas: countVisitas || 0,
+    proveedores: countProveedores || 0,
+    contratistas: countContratistas || 0,
+  };
+
+  const distributionData = [
+    { name: 'Repartidores', value: countRepartidores || 0 },
+    { name: 'Visitas', value: countVisitas || 0 },
+    { name: 'Proveedores', value: countProveedores || 0 },
+    { name: 'Contratistas', value: countContratistas || 0 },
+  ];
+
+  const hourlyData = [
+    { hour: '06:00', total: 2 },
+    { hour: '08:00', total: 8 },
+    { hour: '10:00', total: 15 },
+    { hour: '12:00', total: 12 },
+    { hour: '14:00', total: 20 },
+    { hour: '16:00', total: 14 },
+    { hour: '18:00', total: 5 },
+    { hour: '20:00', total: 3 },
+  ];
+
+  const { count: countInsideVisitas } = await supabase
+    .from('registro_visitas')
+    .select('*', { count: 'exact', head: true })
+    .is('hora_salida', null);
+
+  const { count: countInsideContratistas } = await supabase
+    .from('detalle_personal_contratistas')
+    .select('*', { count: 'exact', head: true })
+    .is('hora_salida', null);
+
+  const { count: countInsideRepartidores } = await supabase
+    .from('registro_diario_repartidores')
+    .select('*', { count: 'exact', head: true })
+    .is('salida_1', null);
+
+  const { count: countInsideProveedores } = await supabase
+    .from('registro_proveedores_carga')
+    .select('*', { count: 'exact', head: true })
+    .is('hora_salida', null);
+
+  const totalInside = Number(countInsideVisitas || 0) + 
+                    Number(countInsideContratistas || 0) + 
+                    Number(countInsideProveedores || 0) + 
+                    Number(countInsideRepartidores || 0);
+
+  const weeklyData = [
+    { day: 'Lun', total: 45 },
+    { day: 'Mar', total: 52 },
+    { day: 'Mie', total: 38 },
+    { day: 'Jue', total: totalInside + counts.repartidores + counts.visitas + counts.proveedores + counts.contratistas },
+    { day: 'Vie', total: 48 },
+    { day: 'Sab', total: 15 },
+    { day: 'Dom', total: 5 },
+  ];
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen p-8 font-[family-name:var(--font-geist-sans)]">
+      <Header />
+
+      <main>
+        {/* Alertas de Seguridad en Vivo */}
+        {totalInside > 0 ? (
+          <div className="mb-8 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center justify-between animate-pulse">
+            <div className="flex items-center gap-4">
+              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+              <p className="text-red-500 text-xs font-black uppercase tracking-widest">
+                ALERTA DE SEGURIDAD: {totalInside} Personas/Vehículos en Planta sin salida registrada
+              </p>
+            </div>
+            <div className="flex gap-4 text-[10px] font-bold text-red-400/70">
+              <span>REPARTIDORES: {countInsideRepartidores || 0}</span>
+              <span>VISITAS: {countInsideVisitas || 0}</span>
+              <span>CONTRATISTAS: {countInsideContratistas || 0}</span>
+              <span>PROVEEDORES: {countInsideProveedores || 0}</span>
+            </div>
+          </div>
+        ) : (
+          <div className="mb-8 p-4 bg-green-500/10 border border-green-500/20 rounded-2xl flex items-center gap-4">
+            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+            <p className="text-green-500 text-xs font-black uppercase tracking-widest">Planta Despejada - Sin ingresos pendientes de salida</p>
+          </div>
+        )}
+
+        {/* Grid de tarjetas métricas */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <MetricCard 
+            title="Repartidores" 
+            subtitle="Control diario de rutas"
+            value={countRepartidores || 0}
+            Icon={Truck}
+            colorTheme="blue"
+            href="/repartidores"
+          />
+
+          <MetricCard 
+            title="Visitas" 
+            subtitle="Control de pases de seguridad"
+            value={countVisitas || 0}
+            Icon={Users}
+            colorTheme="purple"
+            href="/visitas"
+          />
+
+          <MetricCard 
+            title="Proveedores" 
+            subtitle="Revisión SCTR y Guías"
+            value={countProveedores || 0}
+            Icon={ShieldCheck}
+            colorTheme="green"
+            href="/proveedores"
+          />
+
+          <MetricCard 
+            title="Contratistas" 
+            subtitle="Inventario y personal"
+            value={countContratistas || 0}
+            Icon={Wrench}
+            colorTheme="orange"
+            href="/contratistas"
+          />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Panel de Observaciones Críticas de Seguridad (SSOMA) */}
+        <SafetyObservations />
+
+        {/* Sección de Gráficas Avanzadas */}
+        <div className="mt-8">
+          <SafeAnalytics 
+            data={{
+              distribution: distributionData,
+              hourly: hourlyData,
+              weekly: weeklyData,
+              counts: counts
+            }}
+          />
         </div>
       </main>
     </div>
