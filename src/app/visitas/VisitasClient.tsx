@@ -24,7 +24,6 @@ export default function VisitasClient({ initialVisitas }: { initialVisitas: any[
   }, [initialVisitas, searchTerm, selectedDate]);
 
   return (
-  return (
     <main className="glass-panel rounded-2xl p-4 sm:p-6 overflow-hidden">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 sm:mb-8">
         <div>
