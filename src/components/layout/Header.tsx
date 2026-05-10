@@ -72,7 +72,7 @@ export default function Header() {
               CGEL CONTROL
             </h1>
             <p className="text-gray-500 mt-0.5 sm:mt-1 font-bold tracking-[0.1em] sm:tracking-[0.2em] uppercase text-[6px] sm:text-[9px] truncate">
-              Inteligencia Operativa
+              Inteligencia Operativa v2.5.0
             </p>
           </div>
         </div>

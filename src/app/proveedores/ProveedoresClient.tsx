@@ -21,52 +21,57 @@ export default function ProveedoresClient({ initialProveedores }: { initialProve
     });
   }, [initialProveedores, searchTerm, selectedDate]);
 
+  const handleExport = () => {
+    if (!filteredProveedores || filteredProveedores.length === 0) return;
+    const headers = ['Fecha', 'Empresa', 'Placa', 'Conductor', 'SCTR', 'EPP'];
+    const csvContent = [
+      headers.join(','),
+      ...filteredProveedores.map(item => [
+        item.fecha,
+        item.empresa_proveedor,
+        item.placa,
+        item.conductor,
+        (item.sctr_salud && item.sctr_pension) ? 'OK' : 'X',
+        item.epp_completo ? 'OK' : 'X'
+      ].join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `proveedores_export_${new Date().toISOString().slice(0,10)}.csv`);
+    link.click();
+  };
+
   return (
     <main className="glass-panel rounded-2xl p-4 sm:p-6 overflow-hidden w-full">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 sm:mb-8">
         <div>
-          <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-            <Truck className="text-[#00d4ff] w-8 h-8" />
+          <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+            <Truck className="text-[#00d4ff] w-6 h-6 sm:w-8 sm:h-8" />
             Proveedores y Carga
           </h2>
-          <p className="text-gray-400 text-sm mt-1">Control de ingreso de mercadería y despacho pesado</p>
+          <p className="text-gray-400 text-[10px] sm:text-sm mt-1 uppercase tracking-widest font-bold">Control de mercadería pesada</p>
         </div>
         
-        <div className="flex items-center gap-3 w-full md:w-auto">
-          <div className="relative flex-1 md:w-64">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full md:w-auto">
+          <div className="relative flex-1 min-w-[200px] md:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
             <input 
               type="text" 
-              placeholder="Buscar por placa o empresa..." 
+              placeholder="Placa o empresa..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-lg py-2 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-[#00d4ff]/50 transition-all placeholder:text-gray-600"
+              className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-[#00d4ff]/50 transition-all"
             />
-            {searchTerm && (
-              <button 
-                onClick={() => setSearchTerm('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
-              >
-                ×
-              </button>
-            )}
           </div>
-          <div className="relative">
-            <input 
-              type="date" 
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="bg-white/5 border border-white/10 text-white text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-[#00d4ff]/50 transition-all [color-scheme:dark]"
-            />
-            {selectedDate && (
-              <button 
-                onClick={() => setSelectedDate('')}
-                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px]"
-              >
-                ×
-              </button>
-            )}
-          </div>
+          <button 
+            onClick={handleExport}
+            className="px-4 py-2 bg-[#00d4ff] hover:bg-[#00d4ff]/80 text-black rounded-xl text-[10px] font-black transition-all shadow-lg shadow-[#00d4ff]/20 shrink-0 uppercase tracking-widest"
+          >
+            Exportar CSV
+          </button>
         </div>
       </div>
 
