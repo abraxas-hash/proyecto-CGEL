@@ -78,8 +78,8 @@ export default function RepartidoresClient({ initialData }: { initialData: any[]
   };
 
   return (
-    <main className="glass-panel rounded-2xl p-4 sm:p-6 w-full">
-      <div className="sticky top-0 z-30 bg-[#0a0a0a]/95 backdrop-blur-xl -mx-4 sm:-mx-6 px-4 sm:px-6 py-4 mb-4 border-b border-white/5 shadow-xl">
+    <main className="glass-panel rounded-2xl p-2 sm:p-4 w-full">
+      <header className="sticky top-0 z-30 bg-[#0a0a0a]/95 backdrop-blur-xl -mx-4 sm:-mx-6 px-4 sm:px-6 py-4 mb-2 border-b border-white/5 shadow-xl">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 tracking-tight">

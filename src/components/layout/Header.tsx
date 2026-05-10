@@ -52,7 +52,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="mb-8 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-md">
+    <header className="mb-1 sm:mb-2 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-md">
       
       {/* SECCIÓN SUPERIOR: Branding y Perfil */}
       <div className="flex flex-wrap items-center justify-between px-4 sm:px-6 py-3 sm:py-4 gap-y-3">
@@ -73,7 +73,7 @@ export default function Header() {
             </h1>
             <p className="mt-0.5 sm:mt-1 font-black uppercase text-[7px] sm:text-[9px] truncate">
               <span className="text-gray-500 tracking-[0.1em] sm:tracking-[0.2em]">Inteligencia Operativa</span>
-              <span className="ml-2 text-black bg-white px-1 rounded font-black">v2.5.7-ULTRA</span>
+              <span className="ml-2 text-white bg-blue-600 px-2 py-0.5 rounded-full text-[9px] font-black animate-pulse">v2.5.8-NO-SPACE</span>
             </p>
           </div>
         </div>
