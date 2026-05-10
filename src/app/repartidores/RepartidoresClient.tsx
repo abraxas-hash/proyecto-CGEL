@@ -7,6 +7,13 @@ import Link from 'next/link';
 export default function RepartidoresClient({ initialData }: { initialData: any[] }) {
   const [searchTerm, setSearchTerm] = useState('');
 
+  // Auto-scroll to top on search
+  React.useEffect(() => {
+    if (searchTerm) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [searchTerm]);
+
   const filteredData = useMemo(() => {
     return initialData?.filter((row) => {
       const search = searchTerm.toLowerCase();

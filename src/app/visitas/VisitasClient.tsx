@@ -1,12 +1,19 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Users, UserCheck, UserX, Search, ArrowRight, X, Calendar } from 'lucide-react';
 import Link from 'next/link';
 
 export default function VisitasClient({ initialVisitas }: { initialVisitas: any[] }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDate, setSelectedDate] = useState<string>('');
+
+  // Auto-scroll to top on search
+  useEffect(() => {
+    if (searchTerm || selectedDate) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [searchTerm, selectedDate]);
 
   const filteredVisitas = useMemo(() => {
     return initialVisitas?.filter((v) => {

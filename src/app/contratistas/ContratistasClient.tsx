@@ -1,11 +1,18 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { HardHat, Hammer, CheckCircle2, XCircle, Search, ChevronRight, X } from 'lucide-react';
 import Link from 'next/link';
 
 export default function ContratistasClient({ initialContratistas }: { initialContratistas: any[] }) {
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Auto-scroll to top when searching
+  useEffect(() => {
+    if (searchTerm) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [searchTerm]);
 
   const filteredContratistas = useMemo(() => {
     return initialContratistas?.filter((c) => {

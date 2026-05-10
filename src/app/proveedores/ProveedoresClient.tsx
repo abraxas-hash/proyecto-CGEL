@@ -1,12 +1,19 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Truck, CheckCircle2, XCircle, Search, Calendar } from 'lucide-react';
 import Link from 'next/link';
 
 export default function ProveedoresClient({ initialProveedores }: { initialProveedores: any[] }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDate, setSelectedDate] = useState<string>('');
+
+  // Auto-scroll to top when searching
+  useEffect(() => {
+    if (searchTerm || selectedDate) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [searchTerm, selectedDate]);
 
   const filteredProveedores = useMemo(() => {
     return initialProveedores?.filter((item) => {
