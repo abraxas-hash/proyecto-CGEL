@@ -24,7 +24,7 @@ export default async function ProveedoresPage() {
   }
 
   return (
-    <div className="min-h-screen p-8 font-[family-name:var(--font-geist-sans)]">
+    <div className="min-h-screen p-4 sm:p-8 font-[family-name:var(--font-geist-sans)] max-w-full overflow-x-hidden">
       <Header />
       <ProveedoresClient initialProveedores={proveedores || []} />
     </div>

@@ -58,20 +58,20 @@ export default function Header() {
       <div className="flex flex-wrap items-center justify-between px-4 sm:px-6 py-3 sm:py-4 gap-y-3">
         
         {/* Izquierda: Logo y Título */}
-        <div className="flex items-center gap-3">
-          <div className="relative flex items-center justify-center bg-white/5 rounded-xl p-1.5 sm:p-2 border border-white/5">
+        <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+          <div className="relative flex items-center justify-center bg-white/5 rounded-xl p-1 sm:p-2 border border-white/5 shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img 
               src="/logo-cgel.png" 
               alt="Logo CGEL" 
-              className="h-8 sm:h-10 w-auto object-contain filter drop-shadow-[0_0_10px_rgba(0,212,255,0.15)]"
+              className="h-7 sm:h-10 w-auto object-contain filter drop-shadow-[0_0_10px_rgba(0,212,255,0.15)]"
             />
           </div>
-          <div>
-            <h1 className="text-sm sm:text-xl font-black bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent tracking-tighter leading-none">
+          <div className="min-w-0">
+            <h1 className="text-xs sm:text-xl font-black bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent tracking-tighter leading-none truncate">
               CGEL CONTROL
             </h1>
-            <p className="text-gray-500 mt-0.5 sm:mt-1 font-bold tracking-[0.1em] sm:tracking-[0.2em] uppercase text-[7px] sm:text-[9px]">
+            <p className="text-gray-500 mt-0.5 sm:mt-1 font-bold tracking-[0.1em] sm:tracking-[0.2em] uppercase text-[6px] sm:text-[9px] truncate">
               Inteligencia Operativa
             </p>
           </div>
@@ -92,10 +92,10 @@ export default function Header() {
         </div>
 
         {/* Derecha: Estado y Usuario */}
-        <div className="flex items-center gap-3 sm:gap-6 order-2 lg:order-3">
+        <div className="flex items-center gap-2 sm:gap-6 order-2 lg:order-3">
           
-          {/* Indicador de Sistema */}
-          <div className="hidden md:flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/5 shadow-inner">
+          {/* Indicador de Sistema (Hidden on mobile) */}
+          <div className="hidden lg:flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/5 shadow-inner">
             <span className="relative flex h-1.5 w-1.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00d4ff] opacity-75"></span>
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#00d4ff]"></span>
@@ -104,13 +104,13 @@ export default function Header() {
           </div>
 
           {/* Información del Operador y Logout */}
-          <div className="flex items-center gap-3 sm:gap-4 sm:border-l sm:border-white/10 sm:pl-6">
+          <div className="flex items-center gap-2 sm:gap-4 sm:border-l sm:border-white/10 sm:pl-6">
             <div className="flex flex-col items-end">
-              <p className="text-[9px] sm:text-[10px] text-gray-300 font-bold tracking-tight max-w-[100px] sm:max-w-xs truncate">
+              <p className="text-[7px] sm:text-[10px] text-gray-300 font-bold tracking-tight max-w-[70px] sm:max-w-xs truncate">
                 {userEmail || 'Cargando...'}
               </p>
-              <p className="text-[8px] sm:text-[9px] font-black text-[#00d4ff] uppercase tracking-[0.2em]">
-                {userRole ? `Rol: ${userRole}` : 'Operador'}
+              <p className="text-[6px] sm:text-[9px] font-black text-[#00d4ff] uppercase tracking-[0.1em] sm:tracking-[0.2em]">
+                {userRole ? userRole : 'OPERADOR'}
               </p>
             </div>
             <button 
@@ -119,10 +119,10 @@ export default function Header() {
                 await supabase.auth.signOut();
                 window.location.href = '/login';
               }}
-              className="p-2.5 bg-[#151515] hover:bg-red-500/10 text-gray-400 hover:text-red-500 rounded-xl border border-white/5 hover:border-red-500/20 transition-all group"
+              className="p-1.5 sm:p-2.5 bg-[#151515] hover:bg-red-500/10 text-gray-400 hover:text-red-500 rounded-lg sm:rounded-xl border border-white/5 hover:border-red-500/20 transition-all group"
               title="Cerrar Sesión"
             >
-              <LogOut className="w-4 h-4 group-hover:scale-110 transition-transform" />
+              <LogOut className="w-3 h-3 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform" />
             </button>
           </div>
 

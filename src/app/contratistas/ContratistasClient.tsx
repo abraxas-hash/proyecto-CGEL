@@ -20,8 +20,9 @@ export default function ContratistasClient({ initialContratistas }: { initialCon
   }, [initialContratistas, searchTerm]);
 
   return (
-    <main className="glass-panel rounded-2xl p-6 overflow-hidden">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+  return (
+    <main className="glass-panel rounded-2xl p-4 sm:p-6 overflow-hidden">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 sm:mb-8">
         <div>
           <h2 className="text-2xl font-bold text-white flex items-center gap-2">
             <HardHat className="text-yellow-500 w-8 h-8" />

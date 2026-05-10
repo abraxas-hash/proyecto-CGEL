@@ -22,8 +22,8 @@ export default function ProveedoresClient({ initialProveedores }: { initialProve
   }, [initialProveedores, searchTerm, selectedDate]);
 
   return (
-    <main className="glass-panel rounded-2xl p-6 overflow-hidden">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+    <main className="glass-panel rounded-2xl p-4 sm:p-6 overflow-hidden w-full">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 sm:mb-8">
         <div>
           <h2 className="text-2xl font-bold text-white flex items-center gap-2">
             <Truck className="text-[#00d4ff] w-8 h-8" />
@@ -70,8 +70,8 @@ export default function ProveedoresClient({ initialProveedores }: { initialProve
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
+      <div className="overflow-x-auto w-full -mx-4 sm:mx-0 px-4 sm:px-0">
+        <table className="w-full text-left border-collapse min-w-[650px]">
           <thead>
             <tr className="border-b border-white/10 text-gray-400 text-xs uppercase tracking-wider">
               <th className="px-4 py-4 font-semibold">Fecha / Hora</th>

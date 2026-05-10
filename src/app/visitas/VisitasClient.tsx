@@ -24,8 +24,9 @@ export default function VisitasClient({ initialVisitas }: { initialVisitas: any[
   }, [initialVisitas, searchTerm, selectedDate]);
 
   return (
-    <main className="glass-panel rounded-2xl p-6 overflow-hidden">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+  return (
+    <main className="glass-panel rounded-2xl p-4 sm:p-6 overflow-hidden">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 sm:mb-8">
         <div>
           <h2 className="text-2xl font-bold text-white flex items-center gap-2 tracking-tight">
             <Users className="text-green-400 w-8 h-8" />
@@ -72,7 +73,7 @@ export default function VisitasClient({ initialVisitas }: { initialVisitas: any[
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
         {filteredVisitas?.map((v) => (
           <Link 
             key={v.id} 

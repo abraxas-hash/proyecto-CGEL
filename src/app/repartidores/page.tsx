@@ -27,11 +27,11 @@ export default async function RepartidoresPage() {
   }
 
   return (
-    <div className="min-h-screen p-8 font-[family-name:var(--font-geist-sans)]">
+    <div className="min-h-screen p-4 sm:p-8 font-[family-name:var(--font-geist-sans)] max-w-full overflow-x-hidden">
       <Header />
 
-      <main className="glass-panel rounded-2xl p-6 overflow-hidden">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+      <main className="glass-panel rounded-2xl p-4 sm:p-6 overflow-hidden w-full">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 sm:mb-8">
           <div>
             <h2 className="text-2xl font-bold text-white flex items-center gap-2 tracking-tight">
               <Truck className="text-[#00d4ff] w-8 h-8" />
@@ -52,14 +52,14 @@ export default async function RepartidoresPage() {
             <button className="p-2.5 bg-white/5 hover:bg-white/10 text-white rounded-xl border border-white/10 transition-colors" title="Filtros avanzados">
               <Filter className="w-5 h-5" />
             </button>
-            <button className="px-4 py-2.5 bg-[#00d4ff] hover:bg-[#00d4ff]/80 text-black rounded-xl text-sm font-black transition-all shadow-lg shadow-[#00d4ff]/20">
+            <button className="w-full sm:w-auto px-4 py-2.5 bg-[#00d4ff] hover:bg-[#00d4ff]/80 text-black rounded-xl text-sm font-black transition-all shadow-lg shadow-[#00d4ff]/20 shrink-0">
               EXPORTAR
             </button>
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm text-gray-300">
+        <div className="overflow-x-auto w-full -mx-4 sm:mx-0 px-4 sm:px-0">
+          <table className="w-full text-left text-xs sm:text-sm text-gray-300 min-w-[600px]">
             <thead className="bg-white/5 text-gray-400 uppercase font-mono text-[10px] tracking-widest">
               <tr>
                 <th className="px-4 py-4 rounded-tl-xl border-b border-white/10">Fecha / Turno</th>
