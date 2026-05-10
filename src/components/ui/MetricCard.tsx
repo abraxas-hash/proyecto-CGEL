@@ -51,16 +51,16 @@ export default function MetricCard({ title, subtitle, value, Icon, colorTheme, h
   const theme = colorStyles[colorTheme];
 
   return (
-    <Link href={href} className={`block glass-panel p-6 rounded-2xl ${theme.hoverBorder} transition-colors cursor-pointer group`}>
-      <div className="flex justify-between items-start mb-4">
+    <Link href={href} className={`block glass-panel p-4 sm:p-6 rounded-2xl ${theme.hoverBorder} transition-colors cursor-pointer group`}>
+      <div className="flex justify-between items-start mb-3 sm:mb-4">
         {/* Contenedor del ícono que reacciona al hover de la tarjeta principal (group-hover) */}
-        <div className={`p-3 rounded-lg ${theme.iconBg} ${theme.iconHoverBg} transition-colors`}>
-          <Icon className={`w-6 h-6 ${theme.iconColor}`} />
+        <div className={`p-2 sm:p-3 rounded-lg ${theme.iconBg} ${theme.iconHoverBg} transition-colors`}>
+          <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${theme.iconColor}`} />
         </div>
-        <span className="text-2xl font-bold font-mono text-white">{value}</span>
+        <span className="text-xl sm:text-2xl font-bold font-mono text-white">{value}</span>
       </div>
-      <h2 className="text-lg font-semibold text-white">{title}</h2>
-      <p className="text-sm text-gray-400 mt-1">{subtitle}</p>
+      <h2 className="text-base sm:text-lg font-semibold text-white truncate">{title}</h2>
+      <p className="text-[10px] sm:text-sm text-gray-400 mt-1 leading-snug line-clamp-2 sm:line-clamp-1">{subtitle}</p>
     </Link>
   );
 }
