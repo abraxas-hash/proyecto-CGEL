@@ -61,18 +61,14 @@ export default function ContratistaClient({ contratista, personal, herramientas,
 
       <Header />
 
-      <div className="mb-6 flex justify-between items-center">
-        <Link href="/contratistas" className="flex items-center gap-2 text-[#00d4ff] hover:text-white transition-colors bg-white/5 px-4 py-2 rounded-lg w-fit text-sm">
+      <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
+        <Link href="/contratistas" className="flex items-center gap-2 text-[#00d4ff] hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-4 py-2.5 rounded-xl border border-white/5 text-sm font-bold w-full sm:w-auto justify-center sm:justify-start">
           <ArrowLeft className="w-4 h-4" />
-          Volver a Contratistas
+          Volver a la tabla
         </Link>
-        <div className="flex gap-3">
-          <span className="px-3 py-1 bg-white/5 text-gray-400 rounded-full text-[10px] font-black tracking-widest border border-white/10 uppercase">
-            RUC: {contratista.ruc}
-          </span>
-          <span className="px-3 py-1 bg-yellow-500/20 text-yellow-500 rounded-full text-[10px] font-black tracking-widest border border-yellow-500/30 uppercase">
-            ORDEN: {contratista.id.split('-')[0]}
-          </span>
+        <div className="flex items-center gap-2 bg-purple-500/10 px-4 py-2 rounded-xl border border-purple-500/20 w-full sm:w-auto justify-center sm:justify-end">
+          <span className="text-[10px] font-black text-purple-400 uppercase tracking-widest">ID AUDITORÍA</span>
+          <span className="text-sm font-mono font-bold text-white tracking-tighter">#{contratista.id.split('-')[0]}</span>
         </div>
       </div>
 

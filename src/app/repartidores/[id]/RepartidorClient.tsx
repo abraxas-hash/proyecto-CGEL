@@ -55,7 +55,7 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
   const fotoDniUrl = evidencias?.find((e: any) => e.tipo_evidencia === 'DNI')?.url_foto || 'https://images.unsplash.com/photo-1633265486064-086b219458ce?q=80&w=800&auto=format&fit=crop';
 
   return (
-    <div className="min-h-screen p-8 font-[family-name:var(--font-geist-sans)] relative">
+    <div className="min-h-screen p-4 sm:p-8 font-[family-name:var(--font-geist-sans)] relative">
       {/* MODAL ZOOM GENÉRICO (EVIDENCIAS) CON ESTILO HUD REFINADO */}
       {zoomPhotoUrl && (
         <div className="fixed inset-0 z-[101] flex items-center justify-center p-4 bg-black/95 backdrop-blur-2xl animate-in fade-in duration-500" onClick={() => setZoomPhotoUrl(null)}>
@@ -157,14 +157,15 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
 
       <Header />
 
-      <div className="mb-6 flex justify-between items-center">
-        <Link href="/repartidores" className="flex items-center gap-2 text-[#00d4ff] hover:text-white transition-colors bg-white/5 px-4 py-2 rounded-lg w-fit">
+      <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
+        <Link href="/repartidores" className="flex items-center gap-2 text-[#00d4ff] hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-4 py-2.5 rounded-xl border border-white/5 text-sm font-bold w-full sm:w-auto justify-center sm:justify-start">
           <ArrowLeft className="w-4 h-4" />
           Volver a la tabla
         </Link>
-        <span className="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-xs font-mono border border-purple-500/30">
-          ID AUDITORÍA: {repartidor.id.split('-')[0]}
-        </span>
+        <div className="flex items-center gap-2 bg-purple-500/10 px-4 py-2 rounded-xl border border-purple-500/20 w-full sm:w-auto justify-center sm:justify-end">
+          <span className="text-[10px] font-black text-purple-400 uppercase tracking-widest">ID AUDITORÍA</span>
+          <span className="text-sm font-mono font-bold text-white tracking-tighter">#{repartidor.id.split('-')[0]}</span>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

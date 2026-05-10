@@ -65,14 +65,15 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
 
       <Header />
 
-      <div className="mb-6 flex justify-between items-center">
-        <Link href="/proveedores" className="flex items-center gap-2 text-[#00d4ff] hover:text-white transition-colors bg-white/5 px-4 py-2 rounded-lg w-fit">
+      <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
+        <Link href="/proveedores" className="flex items-center gap-2 text-[#00d4ff] hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-4 py-2.5 rounded-xl border border-white/5 text-sm font-bold w-full sm:w-auto justify-center sm:justify-start">
           <ArrowLeft className="w-4 h-4" />
-          Volver al listado
+          Volver a la tabla
         </Link>
-        <span className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-xs font-mono border border-blue-500/30">
-          CONTROL CARGA: {proveedor.id.split('-')[0]}
-        </span>
+        <div className="flex items-center gap-2 bg-purple-500/10 px-4 py-2 rounded-xl border border-purple-500/20 w-full sm:w-auto justify-center sm:justify-end">
+          <span className="text-[10px] font-black text-purple-400 uppercase tracking-widest">ID AUDITORÍA</span>
+          <span className="text-sm font-mono font-bold text-white tracking-tighter">#{proveedor.id.split('-')[0]}</span>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

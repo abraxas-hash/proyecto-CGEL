@@ -73,7 +73,7 @@ export default function Header() {
             </h1>
             <p className="mt-0.5 sm:mt-1 font-black uppercase text-[7px] sm:text-[9px] truncate">
               <span className="text-gray-500 tracking-[0.1em] sm:tracking-[0.2em]">Inteligencia Operativa</span>
-              <span className="ml-2 text-white bg-blue-600 px-2 py-0.5 rounded-full text-[9px] font-black animate-pulse">v2.5.8-NO-SPACE</span>
+              <span className="ml-2 text-white bg-orange-600 px-2 py-0.5 rounded-full text-[9px] font-black animate-bounce">v2.5.9-MOBILE-FIX</span>
             </p>
           </div>
         </div>
