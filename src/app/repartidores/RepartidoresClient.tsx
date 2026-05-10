@@ -78,7 +78,7 @@ export default function RepartidoresClient({ initialData }: { initialData: any[]
   };
 
   return (
-    <main className="glass-panel rounded-2xl p-4 sm:p-6 overflow-hidden w-full">
+    <main className="glass-panel rounded-2xl p-4 sm:p-6 w-full">
       <div className="sticky top-0 z-30 bg-[#0a0a0a]/95 backdrop-blur-xl -mx-4 sm:-mx-6 px-4 sm:px-6 py-4 mb-4 border-b border-white/5 shadow-xl">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
@@ -191,6 +191,7 @@ export default function RepartidoresClient({ initialData }: { initialData: any[]
                   <td className="px-4 py-4 text-right">
                     <Link 
                       href={`/repartidores/${row.id}`} 
+                      onClick={() => window.scrollTo(0, 0)}
                       className="p-1.5 bg-white/5 hover:bg-[#00d4ff]/20 text-gray-400 hover:text-[#00d4ff] rounded-lg transition-all"
                     >
                       <ArrowRight className="w-4 h-4" />
