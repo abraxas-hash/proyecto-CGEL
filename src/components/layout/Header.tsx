@@ -141,11 +141,11 @@ export default function Header() {
               <Link 
                 key={item.name}
                 href={item.href} 
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-[11px] font-black transition-all ${
+                className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] font-black transition-all duration-300 ${
                   isActive 
-                    ? `${item.activeBg} ${item.color} border border-white/10 shadow-md shadow-black/20` 
-                    : `bg-transparent text-gray-500 border border-transparent ${item.hoverBg} hover:text-white`
-                }`}
+                    ? `${item.activeBg} ${item.color} border border-white/10 shadow-[0_0_15px_rgba(0,212,255,0.1)]` 
+                    : `bg-transparent text-gray-500 border border-transparent hover:bg-white/5 hover:text-white`
+                } soft-button`}
               >
                 <Icon className={`w-3.5 h-3.5 ${isActive ? item.color : ''}`} />
                 {item.name}
