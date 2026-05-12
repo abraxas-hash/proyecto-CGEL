@@ -126,40 +126,46 @@ export default function VisitasClient({ initialVisitas }: { initialVisitas: any[
             </button>
 
             {expandedDates[date] && (
-              <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 bg-black/20 animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="bg-black/20 animate-in fade-in slide-in-from-top-2 duration-300 divide-y divide-white/5">
                 {items.map((v) => (
                   <Link 
                     key={v.id} 
                     href={`/visitas/${v.id}`}
-                    className="group bg-white/[0.02] border border-white/[0.05] rounded-xl p-4 hover:bg-white/[0.05] hover:border-green-400/20 transition-all duration-200 relative overflow-hidden flex flex-col justify-between h-full shadow-lg shadow-black/20"
+                    className="group flex items-center gap-4 p-3 hover:bg-white/[0.03] transition-all"
                   >
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center border border-green-500/20">
-                          <UserCheck className="w-4 h-4 text-green-400" />
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-bold text-white group-hover:text-green-400 transition-colors capitalize leading-tight">
-                            {v.nombre_completo?.toLowerCase()}
-                          </h4>
-                          <p className="text-[10px] text-gray-500 font-mono tracking-tighter">DNI: {v.dni_ce}</p>
-                        </div>
+                    {/* Icon & Name */}
+                    <div className="flex items-center gap-3 min-w-[150px] sm:min-w-[200px]">
+                      <div className={`w-8 h-8 rounded-lg ${!v.pase_devuelto_salida ? 'bg-green-500/10' : 'bg-gray-500/10'} flex items-center justify-center border border-white/5`}>
+                        <UserCheck className={`w-4 h-4 ${!v.pase_devuelto_salida ? 'text-green-400' : 'text-gray-500'}`} />
                       </div>
-                      <span className={`text-[8px] px-2 py-0.5 rounded-md font-black border ${v.pase_devuelto_salida ? 'bg-blue-500/5 border-blue-500/10 text-blue-500/60' : 'bg-orange-500/10 border-orange-500/20 text-orange-400 animate-pulse'}`}>
-                        {v.pase_devuelto_salida ? 'FINALIZADO' : 'ACTIVO'}
-                      </span>
+                      <div>
+                        <h4 className="text-[11px] font-black text-white leading-none uppercase truncate max-w-[120px]">{v.nombre_completo}</h4>
+                        <p className="text-[9px] text-gray-500 font-mono mt-1">{v.dni_ce}</p>
+                      </div>
                     </div>
 
-                    <div className="py-3 border-y border-white/[0.03] mb-3">
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-[8px] text-gray-600 font-black uppercase tracking-widest">Empresa</span>
+                    {/* Empresa - Hidden on small screens */}
+                    <div className="hidden sm:block flex-1 min-w-0">
+                      <span className="text-[8px] text-gray-600 font-black uppercase tracking-widest block mb-0.5">Empresa</span>
+                      <p className="text-[10px] text-gray-300 font-medium truncate uppercase">{v.empresa || 'PARTICULAR'}</p>
+                    </div>
+
+                    {/* Time & Status */}
+                    <div className="flex items-center gap-6 shrink-0">
+                      <div className="flex flex-col items-center min-w-[60px]">
+                        <span className="text-[8px] text-gray-600 font-black uppercase mb-1">Horario</span>
                         <span className="text-[10px] text-gray-400 font-mono">{v.hora_ingreso?.slice(0,5)} — {v.hora_salida?.slice(0,5) || '--:--'}</span>
                       </div>
-                      <p className="text-[10px] text-gray-300 font-bold truncate">{v.empresa || 'PARTICULAR'}</p>
+
+                      <div className="hidden md:flex flex-col items-end min-w-[80px]">
+                         <span className={`text-[8px] px-2 py-0.5 rounded-md font-black border ${!v.pase_devuelto_salida ? 'bg-orange-500/10 border-orange-500/20 text-orange-400' : 'bg-white/5 border-white/10 text-gray-500'}`}>
+                          {!v.pase_devuelto_salida ? 'ACTIVO' : 'FINALIZADO'}
+                        </span>
+                      </div>
                     </div>
 
-                    <div className="text-[9px] text-gray-400 font-medium truncate italic opacity-60">
-                      {v.referencia_visita}
+                    <div className="ml-auto">
+                      <ArrowRight className="w-3.5 h-3.5 text-white/20 group-hover:text-green-400 group-hover:translate-x-0.5 transition-all" />
                     </div>
                   </Link>
                 ))}

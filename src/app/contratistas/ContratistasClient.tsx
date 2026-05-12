@@ -125,41 +125,45 @@ export default function ContratistasClient({ initialContratistas }: { initialCon
             </button>
 
             {expandedDates[date] && (
-              <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 bg-black/20 animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="bg-black/20 animate-in fade-in slide-in-from-top-2 duration-300 divide-y divide-white/5">
                 {items.map((c) => (
                   <Link 
                     key={c.id} 
                     href={`/contratistas/${c.id}`}
-                    className="group bg-white/[0.02] border border-white/[0.05] rounded-xl p-4 hover:bg-white/[0.05] hover:border-yellow-500/20 transition-all duration-200 relative overflow-hidden flex flex-col justify-between h-full shadow-lg shadow-black/20"
+                    className="group flex items-center gap-4 p-3 hover:bg-white/[0.03] transition-all"
                   >
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-yellow-500/10 flex items-center justify-center border border-yellow-500/20">
-                          <Hammer className="w-4 h-4 text-yellow-500" />
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-bold text-white group-hover:text-yellow-500 transition-colors uppercase leading-tight tracking-tighter">
-                            {c.empresa_contratista}
-                          </h4>
-                          <p className="text-[10px] text-gray-500 font-mono tracking-tighter">RUC: {c.ruc}</p>
-                        </div>
+                    {/* Icon & Empresa */}
+                    <div className="flex items-center gap-3 min-w-[150px] sm:min-w-[200px]">
+                      <div className={`w-8 h-8 rounded-lg ${c.sctr_vigente ? 'bg-yellow-500/10' : 'bg-red-500/10'} flex items-center justify-center border border-white/5`}>
+                        <Hammer className={`w-4 h-4 ${c.sctr_vigente ? 'text-yellow-500' : 'text-red-500'}`} />
                       </div>
-                      <span className={`text-[8px] px-2 py-0.5 rounded-md font-black border ${c.sctr_vigente ? 'bg-green-500/5 border-green-500/10 text-green-500/60' : 'bg-red-500/10 border-red-500/20 text-red-400 animate-pulse'}`}>
-                        {c.sctr_vigente ? 'SCTR OK' : 'SIN SCTR'}
-                      </span>
+                      <div>
+                        <h4 className="text-[11px] font-black text-white leading-none uppercase truncate max-w-[120px]">{c.empresa_contratista}</h4>
+                        <p className="text-[9px] text-gray-500 font-mono mt-1">RUC: {c.ruc}</p>
+                      </div>
                     </div>
 
-                    <div className="py-3 border-y border-white/[0.03] mb-3">
-                      <span className="block text-[8px] text-gray-600 font-black uppercase tracking-widest mb-1">Trabajo</span>
-                      <p className="text-[10px] text-gray-300 font-medium line-clamp-1 italic">{c.trabajo_realizar}</p>
+                    {/* Trabajo - Hidden on small screens */}
+                    <div className="hidden sm:block flex-1 min-w-0">
+                      <span className="text-[8px] text-gray-600 font-black uppercase tracking-widest block mb-0.5">Actividad</span>
+                      <p className="text-[10px] text-gray-300 font-medium truncate italic line-clamp-1">{c.trabajo_realizar}</p>
                     </div>
 
-                    <div className="flex items-center justify-between">
-                      <div className="flex flex-col">
-                        <span className="text-[8px] text-gray-600 font-black uppercase tracking-widest">Área</span>
+                    {/* Area & SCTR */}
+                    <div className="flex items-center gap-6 shrink-0">
+                      <div className="flex flex-col items-center">
+                        <span className="text-[8px] text-gray-600 font-black uppercase mb-1">Área</span>
                         <span className="text-[10px] text-gray-400 font-bold uppercase">{c.area_trabajo}</span>
                       </div>
-                      <ArrowRight className="w-3 h-3 text-yellow-500/40 group-hover:text-yellow-500 transition-colors" />
+
+                      <div className="flex flex-col items-center">
+                        <span className="text-[8px] text-gray-600 font-black uppercase mb-1">SCTR</span>
+                        <div className={`w-1.5 h-1.5 rounded-full ${c.sctr_vigente ? 'bg-green-500' : 'bg-red-500'}`} title="SCTR"></div>
+                      </div>
+                    </div>
+
+                    <div className="ml-auto">
+                      <ArrowRight className="w-3.5 h-3.5 text-white/20 group-hover:text-yellow-500 group-hover:translate-x-0.5 transition-all" />
                     </div>
                   </Link>
                 ))}

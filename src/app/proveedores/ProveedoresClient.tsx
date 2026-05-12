@@ -125,41 +125,54 @@ export default function ProveedoresClient({ initialProveedores }: { initialProve
             </button>
 
             {expandedDates[date] && (
-              <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 bg-black/20 animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="bg-black/20 animate-in fade-in slide-in-from-top-2 duration-300 divide-y divide-white/5">
                 {items.map((item) => (
                   <Link 
                     key={item.id} 
                     href={`/proveedores/${item.id}`}
-                    className="group bg-white/[0.02] border border-white/[0.05] rounded-xl p-4 hover:bg-white/[0.05] hover:border-[#00d4ff]/20 transition-all duration-200 relative overflow-hidden flex flex-col justify-between h-full shadow-lg shadow-black/20"
+                    className="group flex items-center gap-4 p-3 hover:bg-white/[0.03] transition-all"
                   >
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-                          <Truck className="w-4 h-4 text-blue-400" />
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-bold text-white group-hover:text-[#00d4ff] transition-colors uppercase leading-tight tracking-tighter">
-                            {item.empresa_proveedor}
-                          </h4>
-                          <p className="text-[10px] text-gray-500 font-mono tracking-tighter">{item.placa}</p>
-                        </div>
+                    {/* Icon & Empresa */}
+                    <div className="flex items-center gap-3 min-w-[150px] sm:min-w-[200px]">
+                      <div className={`w-8 h-8 rounded-lg ${!item.hora_salida ? 'bg-blue-500/10' : 'bg-gray-500/10'} flex items-center justify-center border border-white/5`}>
+                        <Truck className={`w-4 h-4 ${!item.hora_salida ? 'text-blue-400' : 'text-gray-500'}`} />
                       </div>
-                      <div className="flex gap-1">
-                        <div className={`w-2 h-2 rounded-full ${(item.sctr_salud && item.sctr_pension) ? 'bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.5)]' : 'bg-red-500 shadow-[0_0_5_rgba(239,68,68,0.5)]'}`} title="SCTR"></div>
-                        <div className={`w-2 h-2 rounded-full ${item.epp_completo ? 'bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.5)]' : 'bg-red-500 shadow-[0_0_5px_rgba(239,68,68,0.5)]'}`} title="EPP"></div>
+                      <div>
+                        <h4 className="text-[11px] font-black text-white leading-none uppercase truncate max-w-[120px]">{item.empresa_proveedor}</h4>
+                        <p className="text-[9px] text-gray-500 font-mono mt-1">{item.placa}</p>
                       </div>
                     </div>
 
-                    <div className="py-3 border-y border-white/[0.03] mb-3">
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-[8px] text-gray-600 font-black uppercase tracking-widest">Conductor</span>
+                    {/* Conductor - Hidden on small screens */}
+                    <div className="hidden sm:block flex-1 min-w-0">
+                      <span className="text-[8px] text-gray-600 font-black uppercase tracking-widest block mb-0.5">Conductor</span>
+                      <p className="text-[10px] text-gray-300 font-medium truncate capitalize">{item.conductor?.toLowerCase()}</p>
+                    </div>
+
+                    {/* Status & Docs */}
+                    <div className="flex items-center gap-6 shrink-0">
+                      <div className="flex flex-col items-center">
+                        <span className="text-[8px] text-gray-600 font-black uppercase mb-1">Horario</span>
                         <span className="text-[10px] text-gray-400 font-mono">{item.hora_llegada?.slice(0,5)} — {item.hora_salida?.slice(0,5) || '--:--'}</span>
                       </div>
-                      <p className="text-[10px] text-gray-300 font-medium capitalize">{item.conductor?.toLowerCase()}</p>
+
+                      <div className="flex flex-col items-center">
+                        <span className="text-[8px] text-gray-600 font-black uppercase mb-1">Docs</span>
+                        <div className="flex gap-1.5">
+                          <div className={`w-1.5 h-1.5 rounded-full ${(item.sctr_salud && item.sctr_pension) ? 'bg-green-500' : 'bg-red-500'}`} title="SCTR"></div>
+                          <div className={`w-1.5 h-1.5 rounded-full ${item.epp_completo ? 'bg-green-500' : 'bg-red-500'}`} title="EPP"></div>
+                        </div>
+                      </div>
+
+                      <div className="hidden md:flex flex-col items-end min-w-[80px]">
+                         <span className={`text-[8px] px-2 py-0.5 rounded-md font-black border ${!item.hora_salida ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' : 'bg-white/5 border-white/10 text-gray-500'}`}>
+                          {!item.hora_salida ? 'EN PLANTA' : 'FINALIZADO'}
+                        </span>
+                      </div>
                     </div>
 
-                    <div className="flex items-center justify-end">
-                       <ArrowRight className="w-3 h-3 text-[#00d4ff]/40 group-hover:text-[#00d4ff] transition-colors" />
+                    <div className="ml-auto">
+                      <ArrowRight className="w-3.5 h-3.5 text-white/20 group-hover:text-blue-400 group-hover:translate-x-0.5 transition-all" />
                     </div>
                   </Link>
                 ))}

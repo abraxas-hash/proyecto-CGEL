@@ -130,7 +130,7 @@ export default function RepartidoresClient({ initialData }: { initialData: any[]
             </button>
 
             {expandedDates[date] && (
-              <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 bg-black/20 animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="bg-black/20 animate-in fade-in slide-in-from-top-2 duration-300 divide-y divide-white/5">
                 {items.map((row) => {
                   const isEnPlanta = !row.salida_1 || (row.entrada_2 && !row.salida_2) || (row.entrada_3 && !row.salida_3);
                   const nCiclos = [row.entrada_1, row.entrada_2, row.entrada_3].filter(Boolean).length;
@@ -139,53 +139,56 @@ export default function RepartidoresClient({ initialData }: { initialData: any[]
                     <Link 
                       key={row.id} 
                       href={`/repartidores/${row.id}`}
-                      className="group bg-white/[0.02] border border-white/[0.05] rounded-xl p-4 hover:bg-white/[0.05] hover:border-[#00d4ff]/20 transition-all duration-200 flex flex-col justify-between h-full relative"
+                      className="group flex items-center gap-4 p-3 hover:bg-white/[0.03] transition-all"
                     >
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-[#00d4ff]/10 flex items-center justify-center border border-[#00d4ff]/20">
-                            <Truck className="w-4 h-4 text-[#00d4ff]" />
-                          </div>
-                          <div>
-                            <h4 className="text-sm font-bold text-white group-hover:text-[#00d4ff] transition-colors uppercase leading-tight">
-                              {row.empresa_abreviatura}
-                            </h4>
-                            <p className="text-[10px] text-gray-500 font-mono tracking-tighter">{row.placa}</p>
-                          </div>
+                      {/* Icon & Placa */}
+                      <div className="flex items-center gap-3 min-w-[120px] sm:min-w-[150px]">
+                        <div className={`w-8 h-8 rounded-lg ${isEnPlanta ? 'bg-cyan-500/10' : 'bg-gray-500/10'} flex items-center justify-center border border-white/5`}>
+                          <Truck className={`w-4 h-4 ${isEnPlanta ? 'text-cyan-400' : 'text-gray-500'}`} />
                         </div>
-                        <span className={`text-[8px] px-2 py-0.5 rounded-md font-black border ${isEnPlanta ? 'bg-green-500/10 border-green-500/20 text-green-400' : 'bg-blue-500/5 border-blue-500/10 text-blue-500/60'}`}>
-                          {isEnPlanta ? 'EN PLANTA' : 'FINALIZADO'}
-                        </span>
+                        <div>
+                          <h4 className="text-[11px] font-black text-white leading-none uppercase">{row.empresa_abreviatura}</h4>
+                          <p className="text-[9px] text-gray-500 font-mono mt-1">{row.placa}</p>
+                        </div>
                       </div>
 
-                      <div className="py-3 border-y border-white/[0.03] mb-3">
-                        <span className="block text-[8px] text-gray-600 font-black uppercase tracking-widest mb-1">Conductor</span>
-                        <p className="text-[10px] text-gray-300 font-medium capitalize">{row.conductor_apellido?.toLowerCase()}</p>
+                      {/* Conductor - Hidden on very small screens */}
+                      <div className="hidden sm:block flex-1 min-w-0">
+                        <span className="text-[8px] text-gray-600 font-black uppercase tracking-widest block mb-0.5">Conductor</span>
+                        <p className="text-[10px] text-gray-300 font-medium truncate capitalize">{row.conductor_apellido?.toLowerCase()}</p>
                       </div>
 
-                      <div className="flex items-center justify-between">
-                        <div className="flex gap-2">
-                          <div className="flex flex-col items-center" title="SCTR">
-                            <span className="text-[7px] text-gray-700 font-bold mb-0.5">SCTR</span>
-                            <div className={`w-1.5 h-1.5 rounded-full ${row.sctr_ok ? 'bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.5)]' : 'bg-red-500 shadow-[0_0_5px_rgba(239,68,68,0.5)]'}`}></div>
-                          </div>
-                          <div className="flex flex-col items-center" title="EPP">
-                            <span className="text-[7px] text-gray-700 font-bold mb-0.5">EPP</span>
-                            <div className={`w-1.5 h-1.5 rounded-full ${row.epp_ok ? 'bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.5)]' : 'bg-red-500 shadow-[0_0_5px_rgba(239,68,68,0.5)]'}`}></div>
+                      {/* Status & Ciclos */}
+                      <div className="flex items-center gap-6 shrink-0">
+                         <div className="flex flex-col items-center">
+                          <span className="text-[8px] text-gray-600 font-black uppercase mb-1">Ciclos</span>
+                          <div className="flex gap-1 items-center">
+                            <span className="text-[10px] text-white font-bold">{nCiclos}</span>
+                            <div className="flex gap-0.5">
+                              {[1, 2, 3].map((n) => (
+                                <div key={n} className={`w-1 h-1 rounded-full ${row[`entrada_${n}`] ? 'bg-cyan-400' : 'bg-white/10'}`}></div>
+                              ))}
+                            </div>
                           </div>
                         </div>
-                        <div className="flex items-center gap-1.5">
-                           <div className="flex gap-0.5">
-                            {[1, 2, 3].map((n) => (
-                              <div key={n} className={`w-1 h-1 rounded-full ${row[`entrada_${n}`] ? 'bg-[#00d4ff]' : 'bg-white/10'}`}></div>
-                            ))}
+
+                        <div className="flex flex-col items-center">
+                          <span className="text-[8px] text-gray-600 font-black uppercase mb-1">Docs</span>
+                          <div className="flex gap-1.5">
+                            <div className={`w-1.5 h-1.5 rounded-full ${row.sctr_ok ? 'bg-green-500' : 'bg-red-500'}`} title="SCTR"></div>
+                            <div className={`w-1.5 h-1.5 rounded-full ${row.epp_ok ? 'bg-green-500' : 'bg-red-500'}`} title="EPP"></div>
                           </div>
-                          <span className="text-[9px] text-gray-500 font-black uppercase">{nCiclos} CICLOS</span>
+                        </div>
+
+                        <div className="hidden md:flex flex-col items-end min-w-[80px]">
+                          <span className={`text-[8px] px-2 py-0.5 rounded-md font-black border ${isEnPlanta ? 'bg-green-500/10 border-green-500/20 text-green-400' : 'bg-white/5 border-white/10 text-gray-500'}`}>
+                            {isEnPlanta ? 'EN PLANTA' : 'FINALIZADO'}
+                          </span>
                         </div>
                       </div>
-                      
-                      <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <ArrowRight className="w-3 h-3 text-[#00d4ff]" />
+
+                      <div className="ml-auto">
+                        <ArrowRight className="w-3.5 h-3.5 text-white/20 group-hover:text-cyan-400 group-hover:translate-x-0.5 transition-all" />
                       </div>
                     </Link>
                   );
