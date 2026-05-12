@@ -28,8 +28,8 @@ export function OperationalFunnel() {
           ))}
         </div>
         
-        <div className="h-40 w-full">
-          <ResponsiveContainer width="100%" height="100%">
+        <div style={{ width: '100%', height: 160 }}>
+          <ResponsiveContainer width="100%" height={160}>
             <AreaChart data={data} margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="funnelGradient" x1="0" y1="0" x2="0" y2="1">
