@@ -52,9 +52,9 @@ export default function RepartidoresClient({ initialData }: { initialData: any[]
   };
 
   return (
-    <main className="glass-panel rounded-2xl p-2 sm:p-4 w-full min-h-[600px] flex flex-col">
-      {/* Search & Export Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 pt-2 border-b border-white/5 pb-4 px-2">
+    <main className="glass-panel rounded-2xl p-2 sm:p-4 w-full h-[calc(100vh-140px)] flex flex-col overflow-hidden">
+      {/* Search & Export Header (STAY FIXED) */}
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 pt-2 border-b border-white/5 pb-4 px-2 shrink-0">
         <div className="flex items-center gap-3 w-full sm:w-auto">
           <div className="w-10 h-10 rounded-xl bg-[#00d4ff]/10 flex items-center justify-center border border-[#00d4ff]/20">
             <Truck className="text-[#00d4ff] w-6 h-6" />
@@ -86,9 +86,9 @@ export default function RepartidoresClient({ initialData }: { initialData: any[]
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6 flex-1 h-full">
-        {/* Left Sidebar: Visual Calendar */}
-        <aside className="w-full md:w-72 shrink-0 border-b md:border-b-0 md:border-r border-white/5 pb-6 md:pb-0 md:pr-6">
+      <div className="flex flex-col md:flex-row gap-6 flex-1 min-h-0 overflow-hidden">
+        {/* Left Sidebar: Visual Calendar (STAY FIXED) */}
+        <aside className="w-full md:w-72 shrink-0 border-b md:border-b-0 md:border-r border-white/5 pb-6 md:pb-0 md:pr-6 overflow-y-auto no-scrollbar">
           <VisualCalendar 
             selectedDate={selectedDate}
             onDateSelect={setSelectedDate}
@@ -110,8 +110,8 @@ export default function RepartidoresClient({ initialData }: { initialData: any[]
           </div>
         </aside>
 
-        {/* Right Content: Record List */}
-        <div className="flex-1 overflow-y-auto min-h-0">
+        {/* Right Content: Record List (THE ONLY ONE SCROLLING) */}
+        <div className="flex-1 overflow-y-auto min-h-0 pr-2 custom-scrollbar">
           {selectedDate && (
             <div className="animate-in fade-in slide-in-from-right-4 duration-500">
               <div className="flex items-center justify-between mb-4 px-2">
