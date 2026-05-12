@@ -54,8 +54,8 @@ export function OperationalFunnel() {
           <AreaChart data={funnelData} margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
             <defs>
               <linearGradient id="funnelFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--color-value)" stopOpacity={0.4} />
-                <stop offset="95%" stopColor="var(--color-value)" stopOpacity={0} />
+                <stop offset="5%" stopColor="var(--color-value)" stopOpacity={0.7} />
+                <stop offset="95%" stopColor="var(--color-value)" stopOpacity={0.1} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
@@ -63,7 +63,7 @@ export function OperationalFunnel() {
             <ChartTooltip content={<ChartTooltipContent />} />
             <Area
               dataKey="value"
-              type="bump"
+              type="monotone"
               stroke="var(--color-value)"
               strokeWidth={2.5}
               fill="url(#funnelFill)"
