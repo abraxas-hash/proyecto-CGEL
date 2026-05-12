@@ -149,21 +149,42 @@ export default function AnalyticsSection({ data }: { data: any }) {
                 endAngle={450}
               >
                 <RadialBar
-                  label={{ position: 'insideStart', fill: '#fff', fontSize: 9, fontWeight: 900 }}
                   background={{ fill: 'rgba(255,255,255,0.03)' }}
                   dataKey="value"
-                  cornerRadius={10}
+                  cornerRadius={12}
                   animationDuration={1500}
                 />
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#000', border: '1px solid #ffffff10', borderRadius: '12px' }}
+                  cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                  contentStyle={{ 
+                    backgroundColor: 'rgba(5, 5, 5, 0.9)', 
+                    border: '1px solid rgba(255,255,255,0.1)', 
+                    borderRadius: '16px',
+                    backdropFilter: 'blur(12px)',
+                    boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+                    padding: '8px 12px'
+                  }}
+                  itemStyle={{ 
+                    fontSize: '11px', 
+                    fontWeight: '900', 
+                    textTransform: 'uppercase',
+                    color: '#fff'
+                  }}
                 />
                 <Legend 
-                  iconSize={8} 
+                  iconSize={10} 
                   layout="vertical" 
                   verticalAlign="middle" 
                   align="right"
-                  formatter={(value) => <span className="text-[9px] font-black uppercase text-gray-500 tracking-tighter">{value}</span>}
+                  wrapperStyle={{ paddingLeft: '20px' }}
+                  formatter={(value, entry: any) => {
+                    const item = radialData.find(d => d.name === value);
+                    return (
+                      <span className="text-[10px] font-black uppercase text-gray-400 tracking-tighter hover:text-white transition-colors">
+                        {value}: <span className="text-white ml-1">{item?.value || 0}</span>
+                      </span>
+                    );
+                  }}
                 />
               </RadialBarChart>
             </ResponsiveContainer>
