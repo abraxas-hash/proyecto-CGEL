@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Truck, Search, Filter, ArrowRight, CheckCircle2, XCircle } from 'lucide-react';
 import Link from 'next/link';
 
@@ -108,7 +108,7 @@ export default function RepartidoresClient({ initialData }: { initialData: any[]
             </button>
           </div>
         </div>
-      </div>
+      </header>
 
       <div className="overflow-x-auto w-full -mx-4 sm:mx-0 px-4 sm:px-0">
         <table className="w-full text-left text-[10px] sm:text-sm text-gray-300 min-w-[700px]">

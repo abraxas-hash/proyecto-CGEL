@@ -135,7 +135,6 @@ export default function ContratistasClient({ initialContratistas }: { initialCon
             <p className="text-gray-500 font-black uppercase tracking-[0.4em] text-xs">Sin coincidencias encontradas</p>
           </div>
         )}
-      </div>
     </main>
   );
 }
