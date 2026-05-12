@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { Users, UserCheck, UserX, Search, ChevronDown, ChevronRight, Calendar, Download } from 'lucide-react';
+import { Users, UserCheck, UserX, Search, ChevronDown, ChevronRight, Calendar, Download, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 export default function VisitasClient({ initialVisitas }: { initialVisitas: any[] }) {
