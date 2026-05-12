@@ -62,7 +62,7 @@ export default function Header() {
           </div>
           <div className="hidden sm:block">
             <h1 className="text-sm font-black text-white tracking-tighter leading-none">CGEL CONTROL</h1>
-            <span className="text-[8px] text-cyan-400 font-bold uppercase tracking-widest">v2.7.3-UX</span>
+            <span className="text-[8px] text-cyan-400 font-bold uppercase tracking-widest">v2.8.0-UX</span>
           </div>
         </Link>
 

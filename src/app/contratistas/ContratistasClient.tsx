@@ -4,21 +4,24 @@ import { useState, useMemo, useEffect } from 'react';
 import { HardHat, Hammer, Search, ChevronDown, ChevronRight, Download, Calendar, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
+import VisualCalendar from '@/components/ui/VisualCalendar';
+
 export default function ContratistasClient({ initialContratistas }: { initialContratistas: any[] }) {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  // Grouping logic for the sidebar
-  const uniqueDates = useMemo(() => {
-    const dates = Array.from(new Set(initialContratistas?.map(c => c.fecha) || []));
-    return dates.sort((a, b) => b.localeCompare(a));
+  // Grouping logic for the calendar dots
+  const availableDates = useMemo(() => {
+    return Array.from(new Set(initialContratistas?.map(c => c.fecha) || []));
   }, [initialContratistas]);
 
   // Set initial selected date
   useEffect(() => {
-    if (uniqueDates.length > 0 && !selectedDate) {
-      setSelectedDate(uniqueDates[0]);
+    if (availableDates.length > 0 && !selectedDate) {
+      const sorted = [...availableDates].sort((a, b) => b.localeCompare(a));
+      setSelectedDate(sorted[0]);
     }
-  }, [uniqueDates, selectedDate]);
+  }, [availableDates, selectedDate]);
 
   const filteredByDate = useMemo(() => {
     if (!selectedDate) return [];
@@ -47,7 +50,7 @@ export default function ContratistasClient({ initialContratistas }: { initialCon
   };
 
   return (
-    <main className="glass-panel rounded-2xl p-2 sm:p-4 w-full min-h-[600px] flex flex-col overflow-hidden">
+    <main className="glass-panel rounded-2xl p-2 sm:p-4 w-full min-h-[600px] flex flex-col">
       {/* Search & Export Header */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 pt-2 border-b border-white/5 pb-4 px-2">
         <div className="flex items-center gap-3 w-full sm:w-auto">
@@ -62,7 +65,7 @@ export default function ContratistasClient({ initialContratistas }: { initialCon
         
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <div className="relative flex-1 sm:w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500" />
             <input 
               type="text" 
               placeholder="Buscar en la fecha..." 
@@ -81,37 +84,28 @@ export default function ContratistasClient({ initialContratistas }: { initialCon
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6 flex-1 h-full overflow-hidden">
-        {/* Left Sidebar: Dates */}
-        <aside className="w-full md:w-56 shrink-0 flex md:flex-col overflow-x-auto md:overflow-y-auto no-scrollbar gap-2 pb-2 md:pb-0 md:pr-2 border-b md:border-b-0 md:border-r border-white/5">
-          <span className="hidden md:block text-[9px] text-gray-600 font-black uppercase tracking-widest mb-3 px-2">Historial de Obras</span>
-          {uniqueDates.map(date => {
-            const dateObj = new Date(date + 'T00:00:00');
-            const isActive = selectedDate === date;
-            return (
-              <button
-                key={date}
-                onClick={() => setSelectedDate(date)}
-                className={`flex items-center gap-3 p-3 rounded-xl transition-all shrink-0 md:shrink ${
-                  isActive 
-                  ? 'bg-yellow-500/10 border border-yellow-500/20 shadow-[0_0_15px_rgba(234,179,8,0.05)]' 
-                  : 'bg-white/[0.02] border border-transparent hover:bg-white/[0.05]'
-                }`}
-              >
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border ${isActive ? 'bg-yellow-500 border-yellow-500 text-black' : 'bg-white/5 border-white/10 text-gray-500'}`}>
-                  <Calendar className="w-4 h-4" />
-                </div>
-                <div className="text-left">
-                  <p className={`text-[10px] font-black uppercase leading-none ${isActive ? 'text-white' : 'text-gray-400'}`}>
-                    {dateObj.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
-                  </p>
-                  <p className="text-[8px] text-gray-500 font-bold uppercase mt-1">
-                    {dateObj.toLocaleDateString('es-ES', { weekday: 'long' })}
-                  </p>
-                </div>
-              </button>
-            );
-          })}
+      <div className="flex flex-col md:flex-row gap-6 flex-1 h-full">
+        {/* Left Sidebar: Visual Calendar */}
+        <aside className="w-full md:w-72 shrink-0 border-b md:border-b-0 md:border-r border-white/5 pb-6 md:pb-0 md:pr-6">
+          <VisualCalendar 
+            selectedDate={selectedDate}
+            onDateSelect={setSelectedDate}
+            availableDates={availableDates}
+            accentColor="#eab308"
+          />
+          
+          <div className="mt-6 hidden md:block">
+            <span className="text-[9px] text-gray-600 font-black uppercase tracking-widest px-2 block mb-3">Historial de Obras</span>
+            <div className="bg-white/[0.02] rounded-xl p-3 border border-white/5">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-[10px] text-gray-400 font-bold uppercase">Total Empresas</span>
+                <span className="text-xs text-white font-black">{filteredByDate.length}</span>
+              </div>
+              <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden">
+                <div className="bg-yellow-500 h-full" style={{ width: `${Math.min(filteredByDate.length * 8, 100)}%` }}></div>
+              </div>
+            </div>
+          </div>
         </aside>
 
         {/* Right Content: Record List */}

@@ -4,40 +4,42 @@ import { useState, useMemo, useEffect } from 'react';
 import { Users, UserCheck, UserX, Search, ChevronDown, ChevronRight, Calendar, Download, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
+import VisualCalendar from '@/components/ui/VisualCalendar';
+
 export default function VisitasClient({ initialVisitas }: { initialVisitas: any[] }) {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  // Grouping logic for the sidebar
-  const uniqueDates = useMemo(() => {
-    const dates = Array.from(new Set(initialVisitas?.map(v => v.fecha) || []));
-    return dates.sort((a, b) => b.localeCompare(a));
+  // Grouping logic for the calendar dots
+  const availableDates = useMemo(() => {
+    return Array.from(new Set(initialVisitas?.map(v => v.fecha) || []));
   }, [initialVisitas]);
 
   // Set initial selected date
   useEffect(() => {
-    if (uniqueDates.length > 0 && !selectedDate) {
-      setSelectedDate(uniqueDates[0]);
+    if (availableDates.length > 0 && !selectedDate) {
+      const sorted = [...availableDates].sort((a, b) => b.localeCompare(a));
+      setSelectedDate(sorted[0]);
     }
-  }, [uniqueDates, selectedDate]);
+  }, [availableDates, selectedDate]);
 
   const filteredByDate = useMemo(() => {
     if (!selectedDate) return [];
     return initialVisitas?.filter(v => v.fecha === selectedDate && (
       !searchTerm || 
-      v.nombre_completo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      v.dni_ce?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      v.empresa?.toLowerCase().includes(searchTerm.toLowerCase())
+      v.nombre_apellido?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      v.area_visita?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      v.dni_ce?.toLowerCase().includes(searchTerm.toLowerCase())
     ));
   }, [initialVisitas, selectedDate, searchTerm]);
 
   const handleExport = () => {
     if (!filteredByDate || filteredByDate.length === 0) return;
-    const headers = ['FECHA', 'DNI', 'NOMBRE', 'EMPRESA', 'INGRESO', 'SALIDA', 'REFERENCIA', 'ESTADO'];
+    const headers = ['FECHA', 'NOMBRE', 'DOCUMENTO', 'EMPRESA', 'AREA', 'MOTIVO', 'SCTR'];
     const BOM = '\uFEFF';
     const csvRows = filteredByDate.map(v => [
-      v.fecha, v.dni_ce, v.nombre_completo, v.empresa || 'PARTICULAR',
-      v.hora_ingreso?.slice(0,5), v.hora_salida?.slice(0,5) || '---',
-      v.referencia_visita, v.pase_devuelto_salida ? 'FINALIZADO' : 'EN PLANTA'
+      v.fecha, v.nombre_apellido, v.dni_ce, v.empresa_proviene,
+      v.area_visita, v.motivo_visita, v.sctr_vigente ? 'VIGENTE' : 'VENCIDO'
     ].map(field => `"${field}"`).join(','));
     const csvContent = BOM + [headers.join(','), ...csvRows].join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -48,16 +50,16 @@ export default function VisitasClient({ initialVisitas }: { initialVisitas: any[
   };
 
   return (
-    <main className="glass-panel rounded-2xl p-2 sm:p-4 w-full min-h-[600px] flex flex-col overflow-hidden">
+    <main className="glass-panel rounded-2xl p-2 sm:p-4 w-full min-h-[600px] flex flex-col">
       {/* Search & Export Header */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 pt-2 border-b border-white/5 pb-4 px-2">
         <div className="flex items-center gap-3 w-full sm:w-auto">
-          <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center border border-green-500/20">
-            <Users className="text-green-400 w-6 h-6" />
+          <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center border border-orange-500/20">
+            <UserCheck className="text-orange-500 w-6 h-6" />
           </div>
           <div>
             <h2 className="text-lg font-black text-white leading-none uppercase">Visitas</h2>
-            <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Registro peatonal</p>
+            <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Control de Accesos</p>
           </div>
         </div>
         
@@ -69,12 +71,12 @@ export default function VisitasClient({ initialVisitas }: { initialVisitas: any[
               placeholder="Buscar en la fecha..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-lg py-2 pl-9 pr-4 text-[11px] text-white focus:outline-none focus:border-green-400/50 transition-all"
+              className="w-full bg-white/5 border border-white/10 rounded-lg py-2 pl-9 pr-4 text-[11px] text-white focus:outline-none focus:border-orange-500/50 transition-all"
             />
           </div>
           <button 
             onClick={handleExport}
-            className="p-2 bg-green-500 hover:bg-green-600 text-black rounded-lg transition-all shadow-lg shadow-green-500/20"
+            className="p-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-all shadow-lg shadow-orange-500/20"
             title="Exportar fecha seleccionada"
           >
             <Download className="w-4 h-4" />
@@ -82,37 +84,28 @@ export default function VisitasClient({ initialVisitas }: { initialVisitas: any[
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6 flex-1 h-full overflow-hidden">
-        {/* Left Sidebar: Dates */}
-        <aside className="w-full md:w-56 shrink-0 flex md:flex-col overflow-x-auto md:overflow-y-auto no-scrollbar gap-2 pb-2 md:pb-0 md:pr-2 border-b md:border-b-0 md:border-r border-white/5">
-          <span className="hidden md:block text-[9px] text-gray-600 font-black uppercase tracking-widest mb-3 px-2">Calendario de Visitas</span>
-          {uniqueDates.map(date => {
-            const dateObj = new Date(date + 'T00:00:00');
-            const isActive = selectedDate === date;
-            return (
-              <button
-                key={date}
-                onClick={() => setSelectedDate(date)}
-                className={`flex items-center gap-3 p-3 rounded-xl transition-all shrink-0 md:shrink ${
-                  isActive 
-                  ? 'bg-green-500/10 border border-green-500/20 shadow-[0_0_15px_rgba(34,197,94,0.05)]' 
-                  : 'bg-white/[0.02] border border-transparent hover:bg-white/[0.05]'
-                }`}
-              >
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border ${isActive ? 'bg-green-500 border-green-500 text-black' : 'bg-white/5 border-white/10 text-gray-500'}`}>
-                  <Calendar className="w-4 h-4" />
-                </div>
-                <div className="text-left">
-                  <p className={`text-[10px] font-black uppercase leading-none ${isActive ? 'text-white' : 'text-gray-400'}`}>
-                    {dateObj.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
-                  </p>
-                  <p className="text-[8px] text-gray-500 font-bold uppercase mt-1">
-                    {dateObj.toLocaleDateString('es-ES', { weekday: 'long' })}
-                  </p>
-                </div>
-              </button>
-            );
-          })}
+      <div className="flex flex-col md:flex-row gap-6 flex-1 h-full">
+        {/* Left Sidebar: Visual Calendar */}
+        <aside className="w-full md:w-72 shrink-0 border-b md:border-b-0 md:border-r border-white/5 pb-6 md:pb-0 md:pr-6">
+          <VisualCalendar 
+            selectedDate={selectedDate}
+            onDateSelect={setSelectedDate}
+            availableDates={availableDates}
+            accentColor="#f97316"
+          />
+          
+          <div className="mt-6 hidden md:block">
+            <span className="text-[9px] text-gray-600 font-black uppercase tracking-widest px-2 block mb-3">Registros de Hoy</span>
+            <div className="bg-white/[0.02] rounded-xl p-3 border border-white/5">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-[10px] text-gray-400 font-bold uppercase">Total Personas</span>
+                <span className="text-xs text-white font-black">{filteredByDate.length}</span>
+              </div>
+              <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden">
+                <div className="bg-orange-500 h-full" style={{ width: `${Math.min(filteredByDate.length * 10, 100)}%` }}></div>
+              </div>
+            </div>
+          </div>
         </aside>
 
         {/* Right Content: Record List */}
