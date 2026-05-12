@@ -4,6 +4,9 @@ import Header from '@/components/layout/Header';
 import MetricCard from '@/components/ui/MetricCard';
 import SafeAnalytics from '@/components/dashboard/SafeAnalytics';
 import SafetyObservations from '@/components/dashboard/SafetyObservations';
+import { OperationalFunnel } from '@/components/dashboard/OperationalFunnel';
+import { SafetyTimeline } from '@/components/dashboard/SafetyTimeline';
+import { OperationalPerformance } from '@/components/dashboard/OperationalPerformance';
 
 export const dynamic = 'force-dynamic';
 
@@ -155,7 +158,21 @@ export default async function Home() {
         {/* Panel de Observaciones Críticas de Seguridad (SSOMA) */}
         <SafetyObservations />
 
-        {/* Sección de Gráficas Avanzadas */}
+        {/* Nuevas Joyas Analíticas: Embudo y Línea de Tiempo */}
+        <div className="mt-8 grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div className="xl:col-span-2">
+            <OperationalFunnel />
+          </div>
+          <div className="xl:col-span-1">
+            <SafetyTimeline />
+          </div>
+        </div>
+
+        {/* Sección de Gráficas Avanzadas y Rendimiento Histórico */}
+        <div className="mt-8 grid grid-cols-1 gap-6">
+          <OperationalPerformance />
+        </div>
+
         <div className="mt-8">
           <SafeAnalytics 
             data={{
