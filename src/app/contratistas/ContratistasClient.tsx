@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { HardHat, Hammer, Search, ChevronDown, ChevronRight, Download, Calendar } from 'lucide-react';
+import { HardHat, Hammer, Search, ChevronDown, ChevronRight, Download, Calendar, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 export default function ContratistasClient({ initialContratistas }: { initialContratistas: any[] }) {
