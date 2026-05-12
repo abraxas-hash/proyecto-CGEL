@@ -3,7 +3,8 @@
 import React from 'react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
-  AreaChart, Area, RadialBarChart, RadialBar, Cell, Legend 
+  AreaChart, Area, RadialBarChart, RadialBar, Cell, Legend,
+  ScatterChart, Scatter, ZAxis
 } from 'recharts';
 import { 
   Card, CardContent, CardDescription, CardHeader, CardTitle 
@@ -192,7 +193,110 @@ export default function AnalyticsSection({ data }: { data: any }) {
         </Card>
       </div>
 
-      {/* 3. ACTIVITY FEED & SYSTEM HEALTH */}
+      {/* 3. SCATTER PLOT: MAPA DE CALOR DE INGRESOS (NEW) */}
+      <Card className="bg-black/40 border-white/10 backdrop-blur-xl">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle className="text-sm font-black uppercase tracking-widest text-white">Mapa de Calor de Ingresos</CardTitle>
+            <CardDescription className="text-xs text-gray-500">Densidad operativa y detección de anomalías por franja horaria</CardDescription>
+          </div>
+          <div className="hidden sm:flex gap-2">
+             <div className="flex items-center gap-4 text-[9px] font-black uppercase tracking-widest">
+                <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#00d4ff]"></div> Rep</span>
+                <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#a855f7]"></div> Vis</span>
+                <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#22c55e]"></div> Pro</span>
+                <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#f97316]"></div> Con</span>
+             </div>
+          </div>
+        </CardHeader>
+        <CardContent className="h-[300px] mt-4 relative">
+          <ResponsiveContainer width="100%" height="100%">
+            <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
+              <XAxis 
+                type="number" 
+                dataKey="hour" 
+                name="Hora" 
+                unit=":00" 
+                domain={[0, 24]} 
+                stroke="#475569" 
+                fontSize={10} 
+                fontWeight="bold"
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis 
+                type="number" 
+                dataKey="index" 
+                name="Categoría" 
+                domain={[0, 5]} 
+                ticks={[1, 2, 3, 4]}
+                tickFormatter={(val) => {
+                  if (val === 1) return 'REP';
+                  if (val === 2) return 'VIS';
+                  if (val === 3) return 'PRO';
+                  if (val === 4) return 'CON';
+                  return '';
+                }}
+                stroke="#475569" 
+                fontSize={10} 
+                fontWeight="bold"
+                axisLine={false}
+                tickLine={false}
+              />
+              <ZAxis type="number" dataKey="size" range={[50, 400]} />
+              <Tooltip 
+                cursor={{ strokeDasharray: '3 3', stroke: '#ffffff20' }}
+                content={({ active, payload }) => {
+                  if (active && payload && payload.length) {
+                    const data = payload[0].payload;
+                    return (
+                      <div className="bg-black/90 border border-white/10 p-3 rounded-xl backdrop-blur-xl shadow-2xl">
+                        <p className="text-[10px] font-black text-white uppercase mb-1">{data.name}</p>
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full" style={{ backgroundColor: data.fill }}></div>
+                          <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{data.category}</span>
+                        </div>
+                        <p className="text-[9px] text-gray-500 mt-2">HORA DE INGRESO: <span className="text-white">{data.hour}:00</span></p>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+              <Scatter 
+                name="Ingresos" 
+                data={[
+                  // Mock Data para el Scatter
+                  { hour: 8, index: 1, size: 100, name: 'Juan Perez', category: 'Repartidor', fill: COLORS.blue },
+                  { hour: 9, index: 1, size: 150, name: 'R-1024', category: 'Repartidor', fill: COLORS.blue },
+                  { hour: 11, index: 1, size: 80, name: 'T&F-851', category: 'Repartidor', fill: COLORS.blue },
+                  { hour: 15, index: 1, size: 200, name: 'A2B-244', category: 'Repartidor', fill: COLORS.blue },
+                  
+                  { hour: 10, index: 2, size: 120, name: 'Visita Comercial', category: 'Visita', fill: COLORS.purple },
+                  { hour: 14, index: 2, size: 90, name: 'Auditoría Externa', category: 'Visita', fill: COLORS.purple },
+                  { hour: 16, index: 2, size: 180, name: 'Proveedor IT', category: 'Visita', fill: COLORS.purple },
+                  
+                  { hour: 7, index: 3, size: 300, name: 'Ferreyros S.A.', category: 'Proveedor', fill: COLORS.green },
+                  { hour: 12, index: 3, size: 250, name: 'Manasa', category: 'Proveedor', fill: COLORS.green },
+                  { hour: 13, index: 3, size: 100, name: 'SiderPeru', category: 'Proveedor', fill: COLORS.green },
+                  
+                  { hour: 8, index: 4, size: 150, name: 'Obras Civiles', category: 'Contratista', fill: COLORS.orange },
+                  { hour: 17, index: 4, size: 120, name: 'Mantenimiento Nave 1', category: 'Contratista', fill: COLORS.orange },
+                  { hour: 21, index: 4, size: 80, name: 'Seguridad Nocturna', category: 'Contratista', fill: COLORS.orange },
+                ]} 
+              >
+                {/* Efecto de Brillo para los puntos */}
+                {Array.from({ length: 13 }).map((_, index) => (
+                  <Cell key={`cell-${index}`} />
+                ))}
+              </Scatter>
+            </ScatterChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+
+      {/* 4. ACTIVITY FEED & SYSTEM HEALTH */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Timeline de Actividad (Shadboard Style) */}
