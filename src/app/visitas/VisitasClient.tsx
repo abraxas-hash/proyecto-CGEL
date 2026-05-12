@@ -5,6 +5,7 @@ import { Users, UserCheck, UserX, Search, ArrowRight, X, Calendar } from 'lucide
 import Link from 'next/link';
 
 export default function VisitasClient({ initialVisitas }: { initialVisitas: any[] }) {
+  const [refreshKey] = useState(() => Math.random().toString(36).substring(7));
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDate, setSelectedDate] = useState<string>('');
 
@@ -54,7 +55,7 @@ export default function VisitasClient({ initialVisitas }: { initialVisitas: any[
   };
 
   return (
-    <main className="glass-panel rounded-2xl p-4 sm:p-6 overflow-hidden">
+    <main key={refreshKey} className="glass-panel rounded-2xl p-4 sm:p-6 overflow-hidden">
       <div className="sticky top-0 z-30 bg-[#0a0a0a]/95 backdrop-blur-xl -mx-4 sm:-mx-6 px-4 sm:px-6 py-4 mb-4 border-b border-white/5 shadow-xl">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
