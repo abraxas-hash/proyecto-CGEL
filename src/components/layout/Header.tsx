@@ -90,11 +90,18 @@ export default function Header() {
 
         {/* User & Info */}
         <div className="flex items-center gap-3 shrink-0">
-          <div className="hidden lg:flex flex-col items-end opacity-60">
-             <div className="flex items-center gap-2 text-[10px] font-mono font-bold text-gray-400">
+          <div className="hidden lg:flex flex-col items-end border-r border-white/10 pr-3 mr-1">
+             <div className="flex items-center gap-2 text-[9px] font-mono font-bold text-gray-400">
                 <Clock className="w-3 h-3 text-cyan-400" />
                 {time ? time.toLocaleTimeString('es-PE', { hour12: false }) : '--:--'}
              </div>
+             {userEmail && (
+               <div className="flex items-center gap-1.5 mt-0.5 text-[8px] font-black text-gray-500 uppercase tracking-tighter">
+                  <span className="text-cyan-400/60">{userRole || 'AUDITOR'}</span>
+                  <span className="opacity-30">|</span>
+                  <span>{userEmail.split('@')[0]}</span>
+               </div>
+             )}
           </div>
           <button 
             onClick={async () => {
