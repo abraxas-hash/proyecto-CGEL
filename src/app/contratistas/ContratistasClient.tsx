@@ -176,5 +176,3 @@ export default function ContratistasClient({ initialContratistas }: { initialCon
     </main>
   );
 }
-  );
-}

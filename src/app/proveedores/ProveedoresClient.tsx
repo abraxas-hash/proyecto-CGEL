@@ -186,5 +186,3 @@ export default function ProveedoresClient({ initialProveedores }: { initialProve
     </main>
   );
 }
-  );
-}
