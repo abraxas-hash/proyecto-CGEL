@@ -84,85 +84,49 @@ export default function ProveedoresClient({ initialProveedores }: { initialProve
         </div>
       </div>
 
-      <div className="overflow-x-auto w-full -mx-4 sm:mx-0 px-4 sm:px-0">
-        <table className="w-full text-left border-collapse min-w-[650px]">
-          <thead>
-            <tr className="border-b border-white/10 text-gray-400 text-xs uppercase tracking-wider">
-              <th className="px-4 py-4 font-semibold">Fecha / Hora</th>
-              <th className="px-4 py-4 font-semibold">Empresa / Proveedor</th>
-              <th className="px-4 py-4 font-semibold">Placa</th>
-              <th className="px-4 py-4 font-semibold">Conductor</th>
-              <th className="px-4 py-4 font-semibold">Estado SCTR / EPP</th>
-              <th className="px-4 py-4 font-semibold text-center">Acciones</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/5">
-            {filteredProveedores?.map((item) => (
-              <tr key={item.id} className="group hover:bg-white/[0.02] transition-colors">
-                <td className="px-4 py-4">
-                  <div className="flex flex-col">
-                    <span className="text-white font-bold text-[11px] uppercase">
-                      {new Date(item.fecha + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long' })}
-                    </span>
-                    <span className="text-gray-400 font-mono text-[10px]">{item.fecha}</span>
-                    <span className="text-gray-500 text-[10px] font-mono mt-1">{item.hora_llegada?.slice(0,5)} - {item.hora_salida?.slice(0,5) || '--:--'}</span>
-                  </div>
-                </td>
-                <td className="px-4 py-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-                      <Truck className="w-4 h-4 text-blue-400" />
-                    </div>
-                    <span className="text-white font-semibold">{item.empresa_proveedor}</span>
-                  </div>
-                </td>
-                <td className="px-4 py-4">
-                  <span className="bg-white/5 px-2 py-1 rounded text-xs font-mono text-white border border-white/10 group-hover:border-[#00d4ff]/30 transition-colors">
-                    {item.placa}
-                  </span>
-                </td>
-                <td className="px-4 py-4">
-                  <span className="text-gray-300 text-sm capitalize">{item.conductor?.toLowerCase()}</span>
-                </td>
-                <td className="px-4 py-4">
-                  <div className="flex gap-4">
-                    <div className="flex items-center gap-1.5" title="SCTR">
-                      {item.sctr_salud && item.sctr_pension ? (
-                        <CheckCircle2 className="w-4 h-4 text-green-500" />
-                      ) : (
-                        <XCircle className="w-4 h-4 text-red-500" />
-                      )}
-                      <span className="text-[10px] text-gray-500 font-bold uppercase">SCTR</span>
-                    </div>
-                    <div className="flex items-center gap-1.5" title="EPP">
-                      {item.epp_completo ? (
-                        <CheckCircle2 className="w-4 h-4 text-green-500" />
-                      ) : (
-                        <XCircle className="w-4 h-4 text-red-500" />
-                      )}
-                      <span className="text-[10px] text-gray-500 font-bold uppercase">EPP</span>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-4 py-4 text-center">
-                  <Link 
-                    href={`/proveedores/${item.id}`}
-                    className="inline-flex items-center gap-1 text-xs font-bold text-[#00d4ff] hover:text-white transition-colors bg-[#00d4ff]/10 hover:bg-[#00d4ff] px-3 py-1.5 rounded-full border border-[#00d4ff]/30"
-                  >
-                    AUDITAR FICHA
-                  </Link>
-                </td>
-              </tr>
-            ))}
-            {(!filteredProveedores || filteredProveedores.length === 0) && (
-              <tr>
-                <td colSpan={6} className="px-4 py-12 text-center text-gray-500 text-sm">
-                  No se encontraron registros que coincidan con la búsqueda.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {filteredProveedores?.map((item) => (
+          <Link 
+            key={item.id} 
+            href={`/proveedores/${item.id}`}
+            onClick={() => window.scrollTo(0, 0)}
+            className="group bg-white/[0.02] border border-white/[0.05] rounded-xl p-4 hover:bg-white/[0.05] hover:border-[#00d4ff]/20 transition-all duration-200 relative overflow-hidden flex flex-col justify-between h-full shadow-lg shadow-black/20"
+          >
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+                  <Truck className="w-4 h-4 text-blue-400" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-white group-hover:text-[#00d4ff] transition-colors uppercase leading-tight tracking-tighter">
+                    {item.empresa_proveedor}
+                  </h3>
+                  <p className="text-[10px] text-gray-500 font-mono uppercase tracking-tighter">{item.placa}</p>
+                </div>
+              </div>
+              <div className="flex gap-1">
+                <div className={`w-2 h-2 rounded-full ${item.sctr_salud && item.sctr_pension ? 'bg-green-500' : 'bg-red-500'} shadow-[0_0_5px_rgba(34,197,94,0.3)]`} title="SCTR"></div>
+                <div className={`w-2 h-2 rounded-full ${item.epp_completo ? 'bg-green-500' : 'bg-red-500'} shadow-[0_0_5px_rgba(34,197,94,0.3)]`} title="EPP"></div>
+              </div>
+            </div>
+
+            <div className="py-3 border-y border-white/[0.03] mb-3">
+              <span className="block text-[8px] text-gray-600 font-black uppercase tracking-widest mb-1">Conductor</span>
+              <p className="text-[10px] text-gray-300 font-medium capitalize">{item.conductor?.toLowerCase()}</p>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex flex-col">
+                <span className="text-[8px] text-gray-600 font-black uppercase tracking-widest">Horario</span>
+                <span className="text-[10px] text-gray-400 font-mono">{item.hora_llegada?.slice(0,5)} — {item.hora_salida?.slice(0,5) || '--:--'}</span>
+              </div>
+              <div className="text-right flex flex-col">
+                <span className="text-[8px] text-gray-600 font-black uppercase tracking-widest">Fecha</span>
+                <span className="text-[10px] text-[#00d4ff] font-mono font-black">{item.fecha}</span>
+              </div>
+            </div>
+          </Link>
+        ))}
       </div>
     </main>
   );

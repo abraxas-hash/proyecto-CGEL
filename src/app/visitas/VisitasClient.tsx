@@ -91,46 +91,46 @@ export default function VisitasClient({ initialVisitas }: { initialVisitas: any[
           <Link 
             key={v.id} 
             href={`/visitas/${v.id}`}
-            className="group bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/[0.08] hover:border-green-400/30 transition-all duration-300 relative overflow-hidden"
+            className="group bg-white/[0.02] border border-white/[0.05] rounded-xl p-4 hover:bg-white/[0.05] hover:border-green-400/20 transition-all duration-200 relative overflow-hidden flex flex-col justify-between h-full shadow-lg shadow-black/20"
           >
-            <div className="absolute top-0 right-0 p-3">
-              <ArrowRight className="w-4 h-4 text-gray-600 group-hover:text-green-400 group-hover:translate-x-1 transition-all" />
-            </div>
-
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20 group-hover:scale-110 transition-transform">
-                <UserCheck className="w-6 h-6 text-green-400" />
-              </div>
-              <div>
-                <h3 className="text-white font-bold group-hover:text-green-400 transition-colors capitalize">{v.nombre_completo?.toLowerCase()}</h3>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-[10px] text-green-400 font-bold uppercase">
-                    {new Date(v.fecha + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'short' })}
-                  </span>
-                  <span className="text-[10px] text-gray-600 font-mono">{v.fecha}</span>
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center border border-green-500/20">
+                  <UserCheck className="w-4 h-4 text-green-400" />
                 </div>
-                <p className="text-[10px] text-gray-500 font-mono tracking-widest uppercase mt-1">DNI: {v.dni_ce}</p>
+                <div>
+                  <h3 className="text-sm font-bold text-white group-hover:text-green-400 transition-colors capitalize leading-tight">
+                    {v.nombre_completo?.toLowerCase()}
+                  </h3>
+                  <p className="text-[10px] text-gray-500 font-mono uppercase tracking-tighter">DNI: {v.dni_ce}</p>
+                </div>
+              </div>
+              <span className={`text-[8px] px-2 py-0.5 rounded-md font-black border ${v.pase_devuelto_salida ? 'bg-blue-500/5 border-blue-500/10 text-blue-500/60' : 'bg-orange-500/10 border-orange-500/20 text-orange-400 animate-pulse'}`}>
+                {v.pase_devuelto_salida ? 'FINALIZADO' : 'ACTIVO'}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 py-3 border-y border-white/[0.03] mb-3">
+              <div>
+                <span className="block text-[8px] text-gray-600 font-black uppercase tracking-widest mb-1">Empresa</span>
+                <span className="text-[10px] text-gray-300 font-bold truncate block">{v.empresa || 'PARTICULAR'}</span>
+              </div>
+              <div className="text-right">
+                <span className="block text-[8px] text-gray-600 font-black uppercase tracking-widest mb-1">Horario</span>
+                <span className="text-[10px] text-gray-400 font-mono">
+                  {v.hora_ingreso?.slice(0,5)} — {v.hora_salida?.slice(0,5) || '--:--'}
+                </span>
               </div>
             </div>
 
-            <div className="space-y-2 mb-4">
-              <div className="flex justify-between text-xs">
-                <span className="text-gray-500">Empresa</span>
-                <span className="text-gray-300 font-medium truncate ml-4 text-right">{v.empresa || 'PARTICULAR'}</span>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Calendar className="w-3 h-3 text-gray-600" />
+                <span className="text-[10px] text-gray-500 font-bold uppercase tracking-tighter">{v.fecha}</span>
               </div>
-              <div className="flex justify-between text-xs text-gray-500 font-mono">
-                <span>Ingreso: {v.hora_ingreso?.slice(0,5)}</span>
-                <span>Salida: {v.hora_salida?.slice(0,5) || '---'}</span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 border-t border-white/5 pt-4">
-              <div className="px-2 py-1 bg-white/5 rounded text-[9px] font-bold text-gray-400 border border-white/5 uppercase truncate max-w-[150px]">
+              <div className="text-[9px] text-gray-400 font-medium truncate max-w-[120px] text-right italic opacity-60">
                 {v.referencia_visita}
               </div>
-              <span className={`ml-auto text-[9px] px-2 py-0.5 rounded-full font-black border ${v.pase_devuelto_salida ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' : 'bg-orange-500/10 border-orange-500/20 text-orange-400'}`}>
-                {v.pase_devuelto_salida ? 'FINALIZADO' : 'EN PLANTA'}
-              </span>
             </div>
           </Link>
         ))}
