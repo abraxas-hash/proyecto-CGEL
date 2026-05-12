@@ -5,55 +5,36 @@ import { Users, UserCheck, UserX, Search, ChevronDown, ChevronRight, Calendar, D
 import Link from 'next/link';
 
 export default function VisitasClient({ initialVisitas }: { initialVisitas: any[] }) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [expandedDates, setExpandedDates] = useState<Record<string, boolean>>({});
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
-  // Auto-scroll to top on search
+  // Grouping logic for the sidebar
+  const uniqueDates = useMemo(() => {
+    const dates = Array.from(new Set(initialVisitas?.map(v => v.fecha) || []));
+    return dates.sort((a, b) => b.localeCompare(a));
+  }, [initialVisitas]);
+
+  // Set initial selected date
   useEffect(() => {
-    if (searchTerm) {
-      window.scrollTo(0, 0);
+    if (uniqueDates.length > 0 && !selectedDate) {
+      setSelectedDate(uniqueDates[0]);
     }
-  }, [searchTerm]);
+  }, [uniqueDates, selectedDate]);
 
-  const filteredVisitas = useMemo(() => {
-    return initialVisitas?.filter((v) => {
-      const search = searchTerm.toLowerCase();
-      return (
-        v.nombre_completo?.toLowerCase().includes(search) ||
-        v.dni_ce?.toLowerCase().includes(search) ||
-        v.empresa?.toLowerCase().includes(search) ||
-        v.referencia_visita?.toLowerCase().includes(search)
-      );
-    });
-  }, [initialVisitas, searchTerm]);
-
-  // Grouping logic
-  const groupedData = useMemo(() => {
-    const groups: Record<string, any[]> = {};
-    filteredVisitas?.forEach(v => {
-      if (!groups[v.fecha]) groups[v.fecha] = [];
-      groups[v.fecha].push(v);
-    });
-    // Sort by date descending
-    return Object.entries(groups).sort((a, b) => b[0].localeCompare(a[0]));
-  }, [filteredVisitas]);
-
-  // Auto-expand first group if searching
-  useEffect(() => {
-    if (searchTerm && groupedData.length > 0) {
-      setExpandedDates({ [groupedData[0][0]]: true });
-    }
-  }, [searchTerm, groupedData]);
-
-  const toggleDate = (date: string) => {
-    setExpandedDates(prev => ({ ...prev, [date]: !prev[date] }));
-  };
+  const filteredByDate = useMemo(() => {
+    if (!selectedDate) return [];
+    return initialVisitas?.filter(v => v.fecha === selectedDate && (
+      !searchTerm || 
+      v.nombre_completo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      v.dni_ce?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      v.empresa?.toLowerCase().includes(searchTerm.toLowerCase())
+    ));
+  }, [initialVisitas, selectedDate, searchTerm]);
 
   const handleExport = () => {
-    if (!filteredVisitas || filteredVisitas.length === 0) return;
+    if (!filteredByDate || filteredByDate.length === 0) return;
     const headers = ['FECHA', 'DNI', 'NOMBRE', 'EMPRESA', 'INGRESO', 'SALIDA', 'REFERENCIA', 'ESTADO'];
     const BOM = '\uFEFF';
-    const csvRows = filteredVisitas.map(v => [
+    const csvRows = filteredByDate.map(v => [
       v.fecha, v.dni_ce, v.nombre_completo, v.empresa || 'PARTICULAR',
       v.hora_ingreso?.slice(0,5), v.hora_salida?.slice(0,5) || '---',
       v.referencia_visita, v.pase_devuelto_salida ? 'FINALIZADO' : 'EN PLANTA'
@@ -62,13 +43,14 @@ export default function VisitasClient({ initialVisitas }: { initialVisitas: any[
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `visitas_${new Date().toISOString().slice(0,10)}.csv`;
+    link.download = `visitas_${selectedDate}.csv`;
     link.click();
   };
 
   return (
-    <main className="glass-panel rounded-2xl p-4 sm:p-6 overflow-hidden">
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 pt-2">
+    <main className="glass-panel rounded-2xl p-2 sm:p-4 w-full min-h-[600px] flex flex-col overflow-hidden">
+      {/* Search & Export Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 pt-2 border-b border-white/5 pb-4 px-2">
         <div className="flex items-center gap-3 w-full sm:w-auto">
           <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center border border-green-500/20">
             <Users className="text-green-400 w-6 h-6" />
@@ -84,7 +66,7 @@ export default function VisitasClient({ initialVisitas }: { initialVisitas: any[
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500" />
             <input 
               type="text" 
-              placeholder="DNI o Nombre..." 
+              placeholder="Buscar en la fecha..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full bg-white/5 border border-white/10 rounded-lg py-2 pl-9 pr-4 text-[11px] text-white focus:outline-none focus:border-green-400/50 transition-all"
@@ -93,47 +75,65 @@ export default function VisitasClient({ initialVisitas }: { initialVisitas: any[
           <button 
             onClick={handleExport}
             className="p-2 bg-green-500 hover:bg-green-600 text-black rounded-lg transition-all shadow-lg shadow-green-500/20"
-            title="Exportar CSV"
+            title="Exportar fecha seleccionada"
           >
             <Download className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      <div className="space-y-4">
-        {groupedData.map(([date, items]) => (
-          <div key={date} className="border border-white/5 rounded-2xl overflow-hidden bg-white/[0.01]">
-            <button 
-              onClick={() => toggleDate(date)}
-              className="w-full flex items-center justify-between p-4 bg-white/[0.03] hover:bg-white/[0.05] transition-all group"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center border border-green-500/20">
-                  <Calendar className="w-5 h-5 text-green-400" />
+      <div className="flex flex-col md:flex-row gap-6 flex-1 h-full overflow-hidden">
+        {/* Left Sidebar: Dates */}
+        <aside className="w-full md:w-56 shrink-0 flex md:flex-col overflow-x-auto md:overflow-y-auto no-scrollbar gap-2 pb-2 md:pb-0 md:pr-2 border-b md:border-b-0 md:border-r border-white/5">
+          <span className="hidden md:block text-[9px] text-gray-600 font-black uppercase tracking-widest mb-3 px-2">Calendario de Visitas</span>
+          {uniqueDates.map(date => {
+            const dateObj = new Date(date + 'T00:00:00');
+            const isActive = selectedDate === date;
+            return (
+              <button
+                key={date}
+                onClick={() => setSelectedDate(date)}
+                className={`flex items-center gap-3 p-3 rounded-xl transition-all shrink-0 md:shrink ${
+                  isActive 
+                  ? 'bg-green-500/10 border border-green-500/20 shadow-[0_0_15px_rgba(34,197,94,0.05)]' 
+                  : 'bg-white/[0.02] border border-transparent hover:bg-white/[0.05]'
+                }`}
+              >
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border ${isActive ? 'bg-green-500 border-green-500 text-black' : 'bg-white/5 border-white/10 text-gray-500'}`}>
+                  <Calendar className="w-4 h-4" />
                 </div>
                 <div className="text-left">
-                  <h3 className="text-sm sm:text-base font-black text-white uppercase tracking-tighter">
-                    {new Date(date + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
-                  </h3>
-                  <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">{items.length} Visitas registradas</p>
+                  <p className={`text-[10px] font-black uppercase leading-none ${isActive ? 'text-white' : 'text-gray-400'}`}>
+                    {dateObj.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+                  </p>
+                  <p className="text-[8px] text-gray-500 font-bold uppercase mt-1">
+                    {dateObj.toLocaleDateString('es-ES', { weekday: 'long' })}
+                  </p>
                 </div>
-              </div>
-              {expandedDates[date] ? (
-                <ChevronDown className="w-5 h-5 text-green-400" />
-              ) : (
-                <ChevronRight className="w-5 h-5 text-gray-600 group-hover:text-white" />
-              )}
-            </button>
+              </button>
+            );
+          })}
+        </aside>
 
-            {expandedDates[date] && (
-              <div className="bg-black/20 animate-in fade-in slide-in-from-top-2 duration-300 divide-y divide-white/5">
-                {items.map((v) => (
+        {/* Right Content: Record List */}
+        <div className="flex-1 overflow-y-auto min-h-0">
+          {selectedDate && (
+            <div className="animate-in fade-in slide-in-from-right-4 duration-500">
+              <div className="flex items-center justify-between mb-4 px-2">
+                <h3 className="text-sm font-black text-white uppercase tracking-tighter flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></div>
+                  Mostrando: {new Date(selectedDate + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
+                </h3>
+                <span className="text-[10px] text-gray-500 font-bold uppercase">{filteredByDate.length} Visitas</span>
+              </div>
+
+              <div className="bg-white/[0.02] border border-white/5 rounded-2xl overflow-hidden divide-y divide-white/5">
+                {filteredByDate.map((v) => (
                   <Link 
                     key={v.id} 
                     href={`/visitas/${v.id}`}
                     className="group flex items-center gap-4 p-3 hover:bg-white/[0.03] transition-all"
                   >
-                    {/* Icon & Name */}
                     <div className="flex items-center gap-3 min-w-[150px] sm:min-w-[200px]">
                       <div className={`w-8 h-8 rounded-lg ${!v.pase_devuelto_salida ? 'bg-green-500/10' : 'bg-gray-500/10'} flex items-center justify-center border border-white/5`}>
                         <UserCheck className={`w-4 h-4 ${!v.pase_devuelto_salida ? 'text-green-400' : 'text-gray-500'}`} />
@@ -144,13 +144,11 @@ export default function VisitasClient({ initialVisitas }: { initialVisitas: any[
                       </div>
                     </div>
 
-                    {/* Empresa - Hidden on small screens */}
                     <div className="hidden sm:block flex-1 min-w-0">
                       <span className="text-[8px] text-gray-600 font-black uppercase tracking-widest block mb-0.5">Empresa</span>
                       <p className="text-[10px] text-gray-300 font-medium truncate uppercase">{v.empresa || 'PARTICULAR'}</p>
                     </div>
 
-                    {/* Time & Status */}
                     <div className="flex items-center gap-6 shrink-0">
                       <div className="flex flex-col items-center min-w-[60px]">
                         <span className="text-[8px] text-gray-600 font-black uppercase mb-1">Horario</span>
@@ -170,16 +168,18 @@ export default function VisitasClient({ initialVisitas }: { initialVisitas: any[
                   </Link>
                 ))}
               </div>
-            )}
-          </div>
-        ))}
+            </div>
+          )}
 
-        {groupedData.length === 0 && (
-          <div className="py-20 text-center flex flex-col items-center">
-            <UserX className="w-12 h-12 text-gray-700 mb-4 opacity-20" />
-            <p className="text-gray-500 font-black uppercase tracking-[0.4em] text-xs">Sin coincidencias encontradas</p>
-          </div>
-        )}
+          {filteredByDate.length === 0 && (
+            <div className="py-20 text-center flex flex-col items-center animate-in fade-in duration-500">
+              <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mb-4">
+                <UserX className="w-10 h-10 text-gray-700 opacity-20" />
+              </div>
+              <p className="text-gray-500 font-black uppercase tracking-[0.4em] text-xs">Sin visitas para esta fecha</p>
+            </div>
+          )}
+        </div>
       </div>
     </main>
   );
