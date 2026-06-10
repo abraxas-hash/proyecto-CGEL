@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Truck, Users, ShieldCheck, Wrench, LogOut, Clock, MapPin } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { ModeToggle } from '@/components/ui/ModeToggle';
+import { GuidedTourButton } from '@/components/ui/GuidedTourButton';
 
 /**
  * Header: Encabezado principal del Dashboard.
@@ -43,7 +45,7 @@ export default function Header() {
   }, []);
 
   const navItems = [
-    { name: 'DASHBOARD', href: '/', icon: Home, color: 'text-gray-400', activeBg: 'bg-white/10', hoverBg: 'hover:bg-white/10' },
+    { name: 'RESUMEN', href: '/', icon: Home, color: 'text-gray-400', activeBg: 'bg-white/10', hoverBg: 'hover:bg-white/10' },
     { name: 'REPARTIDORES', href: '/repartidores', icon: Truck, color: 'text-[#00d4ff]', activeBg: 'bg-[#00d4ff]/20', hoverBg: 'hover:bg-[#00d4ff]/20' },
     { name: 'VISITAS', href: '/visitas', icon: Users, color: 'text-purple-400', activeBg: 'bg-purple-500/20', hoverBg: 'hover:bg-purple-500/20' },
     { name: 'PROVEEDORES', href: '/proveedores', icon: ShieldCheck, color: 'text-green-400', activeBg: 'bg-green-500/20', hoverBg: 'hover:bg-green-500/20' },
@@ -52,17 +54,17 @@ export default function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-md px-4 py-2">
-      <div className="flex items-center justify-between gap-4 max-w-full overflow-hidden">
+    <header className="sticky top-0 z-50 border-b border-black/5 dark:border-white/5 bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md px-4 py-2 transition-colors duration-500">
+      <div className="flex items-center justify-between gap-4 max-w-full">
         
         {/* Logo & Version */}
         <Link href="/" className="flex items-center gap-2 shrink-0">
-          <div className="bg-white/5 p-1.5 rounded-lg border border-white/10">
-            <img src="/logo-cgel.png" alt="Logo" className="h-6 w-auto" />
+          <div className="bg-black/5 dark:bg-white/5 p-1.5 rounded-lg border border-black/10 dark:border-white/10">
+            <ShieldCheck className="w-6 h-6 text-blue-500" />
           </div>
           <div className="hidden sm:block">
-            <h1 className="text-sm font-black text-white tracking-tighter leading-none">CGEL CONTROL</h1>
-            <span className="text-[8px] text-cyan-400 font-bold uppercase tracking-widest">v2.8.3-UX</span>
+            <h1 className="text-sm font-black text-black dark:text-white tracking-tighter leading-none">NEXUS CONTROL</h1>
+            <span className="text-[8px] text-cyan-600 dark:text-cyan-400 font-bold uppercase tracking-widest">v2.8.3-UX</span>
           </div>
         </Link>
 
@@ -77,8 +79,8 @@ export default function Header() {
                 href={item.href} 
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[9px] font-black transition-all whitespace-nowrap ${
                   isActive 
-                    ? `${item.activeBg} ${item.color} border border-white/10` 
-                    : `text-gray-500 hover:text-white hover:bg-white/5`
+                    ? `${item.activeBg} ${item.color} border border-black/10 dark:border-white/10` 
+                    : `text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5`
                 }`}
               >
                 <Icon className="w-3 h-3" />
@@ -90,26 +92,32 @@ export default function Header() {
 
         {/* User & Info */}
         <div className="flex items-center gap-3 shrink-0">
-          <div className="hidden lg:flex flex-col items-end border-r border-white/10 pr-3 mr-1">
-             <div className="flex items-center gap-2 text-[9px] font-mono font-bold text-gray-400">
-                <Clock className="w-3 h-3 text-cyan-400" />
+          <div className="hidden lg:flex flex-col items-end border-r border-black/10 dark:border-white/10 pr-3 mr-1">
+             <div className="flex items-center gap-2 text-[9px] font-mono font-bold text-gray-600 dark:text-gray-400">
+                <Clock className="w-3 h-3 text-cyan-600 dark:text-cyan-400" />
                 {time ? time.toLocaleTimeString('es-PE', { hour12: false }) : '--:--'}
              </div>
              {userEmail && (
                <div className="flex items-center gap-1.5 mt-0.5 text-[8px] font-black text-gray-500 uppercase tracking-tighter">
-                  <span className="text-cyan-400/60">{userRole || 'AUDITOR'}</span>
+                  <span className="text-cyan-600/80 dark:text-cyan-400/60">{userRole || 'AUDITOR'}</span>
                   <span className="opacity-30">|</span>
                   <span>{userEmail.split('@')[0]}</span>
                </div>
              )}
           </div>
+          <ModeToggle />
+          <GuidedTourButton />
           <button 
             onClick={async () => {
-              const { supabase } = await import('@/lib/supabaseClient');
+              const { createBrowserClient } = await import('@supabase/ssr');
+              const supabase = createBrowserClient(
+                process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
+                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key'
+              );
               await supabase.auth.signOut();
               window.location.href = '/login';
             }}
-            className="p-2 bg-white/5 hover:bg-red-500/10 text-gray-400 hover:text-red-500 rounded-lg border border-white/10 transition-all"
+            className="p-2 bg-black/5 dark:bg-white/5 hover:bg-red-500/10 text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-500 rounded-lg border border-black/10 dark:border-white/10 transition-all"
           >
             <LogOut className="w-3.5 h-3.5" />
           </button>

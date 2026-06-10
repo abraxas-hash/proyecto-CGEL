@@ -18,23 +18,27 @@ export default async function ContratistaDetailPage({ params }: { params: Promis
     return <div className="p-8 text-white font-[family-name:var(--font-geist-sans)]">Contratista no encontrado (ID: {id}).</div>;
   }
 
-  // 2. Personal (Detail)
-  const { data: personal } = await supabase
-    .from('detalle_personal_contratistas')
-    .select('*')
-    .eq('registro_contratista_id', id);
+  // 2, 3 y 4. Personal, herramientas y evidencias vinculadas (en paralelo)
+  const [
+    { data: personal },
+    { data: herramientas },
+    { data: evidenciasResult }
+  ] = await Promise.all([
+    supabase
+      .from('detalle_personal_contratistas')
+      .select('*')
+      .eq('registro_contratista_id', id),
+    supabase
+      .from('inventario_herramientas_contratistas')
+      .select('*')
+      .eq('registro_contratista_id', id),
+    supabase
+      .from('evidencias_fotograficas')
+      .select('*')
+      .eq('vinculado_a_registro_id', id)
+  ]);
 
-  // 3. Herramientas (Detail)
-  const { data: herramientas } = await supabase
-    .from('inventario_herramientas_contratistas')
-    .select('*')
-    .eq('registro_contratista_id', id);
-
-  // 4. Evidencias vinculadas
-  let { data: evidencias } = await supabase
-    .from('evidencias_fotograficas')
-    .select('*')
-    .eq('vinculado_a_registro_id', id);
+  let evidencias = evidenciasResult;
 
   // Mocks industriales
   if (!evidencias || evidencias.length === 0) {

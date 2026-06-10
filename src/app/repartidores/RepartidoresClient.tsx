@@ -7,22 +7,18 @@ import Link from 'next/link';
 import VisualCalendar from '@/components/ui/VisualCalendar';
 
 export default function RepartidoresClient({ initialData }: { initialData: any[] }) {
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-
   // Grouping logic for the calendar dots
   const availableDates = useMemo(() => {
     return Array.from(new Set(initialData?.map(row => row.fecha) || []));
   }, [initialData]);
 
-  // Set initial selected date
-  useEffect(() => {
-    if (availableDates.length > 0 && !selectedDate) {
-      // Find the most recent date with data
-      const sorted = [...availableDates].sort((a, b) => b.localeCompare(a));
-      setSelectedDate(sorted[0]);
+  const [selectedDate, setSelectedDate] = useState<string | null>(() => {
+    if (availableDates.length > 0) {
+      return [...availableDates].sort((a, b) => b.localeCompare(a))[0];
     }
-  }, [availableDates, selectedDate]);
+    return null;
+  });
+  const [searchTerm, setSearchTerm] = useState('');
 
   const filteredByDate = useMemo(() => {
     if (!selectedDate) return [];
@@ -73,13 +69,16 @@ export default function RepartidoresClient({ initialData }: { initialData: any[]
               placeholder="Buscar en la fecha..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              aria-label="Buscar en la fecha"
               className="w-full bg-white/5 border border-white/10 rounded-lg py-2 pl-9 pr-4 text-[11px] text-white focus:outline-none focus:border-[#00d4ff]/50 transition-all"
             />
           </div>
           <button 
+            type="button"
             onClick={handleExport}
             className="p-2 bg-[#00d4ff] hover:bg-[#00d4ff]/80 text-black rounded-lg transition-all shadow-lg shadow-[#00d4ff]/20"
             title="Exportar fecha seleccionada"
+            aria-label="Exportar fecha seleccionada a CSV"
           >
             <Download className="w-4 h-4" />
           </button>

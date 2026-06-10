@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Header from '@/components/layout/Header';
 import { 
   Camera, 
@@ -24,6 +24,46 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
   const [showDniModal, setShowDniModal] = useState<boolean>(false);
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
 
+  // Parse JSON observations if any
+  const parsedObs = useMemo(() => {
+    if (!proveedor.observaciones) return { texto: '', fotos: {} };
+    try {
+      const parsed = JSON.parse(proveedor.observaciones);
+      return {
+        texto: parsed.texto || '',
+        fotos: parsed.fotos || {}
+      };
+    } catch {
+      return { texto: proveedor.observaciones, fotos: {} };
+    }
+  }, [proveedor.observaciones]);
+
+  const mergedEvidencias = useMemo(() => {
+    let ev = [...(evidencias || [])];
+    
+    const nowISO = new Date().toISOString();
+    
+    if (parsedObs.fotos.guia) {
+      ev.push({
+        id: 'json-guia',
+        url_foto: parsedObs.fotos.guia,
+        tipo_evidencia: 'GUIA',
+        etiqueta: 'Foto de Guía',
+        fecha_captura: nowISO
+      });
+    }
+    if (parsedObs.fotos.estiba) {
+      ev.push({
+        id: 'json-estiba',
+        url_foto: parsedObs.fotos.estiba,
+        tipo_evidencia: 'ESTIBA',
+        etiqueta: 'Foto de Estiba',
+        fecha_captura: nowISO
+      });
+    }
+    return ev;
+  }, [evidencias, parsedObs]);
+
   // Mock de la foto del DNI
   const fotoDniUrl = evidencias?.find((e: any) => e.tipo_evidencia === 'DNI')?.url_foto || 'https://images.unsplash.com/photo-1633265486064-086b219458ce?q=80&w=800&auto=format&fit=crop';
 
@@ -31,9 +71,16 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
     <div className="min-h-screen p-8 font-[family-name:var(--font-geist-sans)] relative">
       {/* MODAL ZOOM DNI / FOTO */}
       {(showDniModal || selectedImg) && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md transition-opacity" onClick={() => { setShowDniModal(false); setSelectedImg(null); }}>
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md transition-opacity" 
+          onClick={() => { setShowDniModal(false); setSelectedImg(null); }}
+          onKeyDown={(e) => { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') { setShowDniModal(false); setSelectedImg(null); } }}
+          role="button"
+          tabIndex={0}
+        >
           <div className="relative max-w-4xl w-full flex flex-col items-center" onClick={e => e.stopPropagation()}>
             <button 
+              type="button"
               onClick={() => { setShowDniModal(false); setSelectedImg(null); }}
               className="absolute -top-14 right-0 p-3 bg-white/10 hover:bg-white/20 hover:text-red-400 rounded-full text-white transition-all shadow-lg"
             >
@@ -72,7 +119,7 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
         </Link>
         <div className="flex items-center gap-2 bg-purple-500/10 px-4 py-2 rounded-xl border border-purple-500/20 w-full sm:w-auto justify-center sm:justify-end">
           <span className="text-[10px] font-black text-purple-400 uppercase tracking-widest">ID AUDITORÍA</span>
-          <span className="text-sm font-mono font-bold text-white tracking-tighter">#{proveedor.id.split('-')[0]}</span>
+          <span className="text-sm font-mono font-bold text-white tracking-tighter">#{String(proveedor.id).split('-')[0]}</span>
         </div>
       </div>
 
@@ -111,6 +158,7 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
                 <div className="flex items-center justify-between mt-2 bg-white/5 p-3 rounded-xl border border-white/5">
                   <span className="text-white font-semibold text-sm capitalize">{proveedor.conductor?.toLowerCase()}</span>
                   <button 
+                    type="button"
                     onClick={() => setShowDniModal(true)}
                     className="p-2 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 rounded-lg text-blue-400 transition-all shadow-[0_0_10px_rgba(59,130,246,0.1)]"
                   >
@@ -187,9 +235,9 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
             </h3>
             
             <div className="space-y-4 flex-1">
-              {historial?.map((hist: any, idx: number) => (
+              {historial?.map((hist: any) => (
                 <Link 
-                  key={idx} 
+                  key={hist.id} 
                   href={`/proveedores/${hist.id}`}
                   className="block group relative pl-6 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-0.5 before:bg-white/10 hover:before:bg-blue-400 transition-all"
                 >
@@ -209,7 +257,7 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
             <div className="mt-8 p-5 bg-white/5 rounded-2xl border border-white/5 italic">
               <p className="text-xs text-gray-400 leading-relaxed">
                 <span className="text-blue-400 font-bold not-italic uppercase text-[10px] block mb-1">Observaciones del Agente:</span>
-                "{proveedor.observaciones || 'Sin observaciones adicionales registradas para este ingreso.'}"
+                "{parsedObs.texto || 'Sin observaciones adicionales registradas para este ingreso.'}"
               </p>
             </div>
           </div>
@@ -222,13 +270,16 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
             <h2 className="text-xl font-bold text-white uppercase tracking-tight">Evidencia Fotográfica</h2>
           </div>
 
-          {evidencias && evidencias.length > 0 ? (
+          {mergedEvidencias && mergedEvidencias.length > 0 ? (
             <div className="space-y-4 max-h-[700px] overflow-y-auto pr-2 custom-scrollbar">
-              {evidencias.map((foto: any) => (
+              {mergedEvidencias.map((foto: any, i: number) => (
                 <div 
-                  key={foto.id} 
+                  key={foto.id || i} 
                   className="bg-[#050505] border border-white/10 rounded-2xl overflow-hidden group hover:border-purple-500/50 transition-all shadow-xl cursor-pointer"
                   onClick={() => setSelectedImg(foto.url_foto)}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSelectedImg(foto.url_foto); }}
+                  role="button"
+                  tabIndex={0}
                 >
                   <div className="relative h-56 w-full overflow-hidden">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -245,11 +296,11 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
                     <div className="flex justify-between items-start mb-2">
                       <p className="text-xs font-black text-white uppercase tracking-widest">{foto.etiqueta}</p>
                       <span className="text-[10px] font-mono text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded">
-                        {new Date(foto.fecha_captura).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                        {new Date(foto.fecha_captura || new Date()).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                       </span>
                     </div>
                     <p className="text-[10px] text-gray-500" suppressHydrationWarning>
-                      Capturado el {new Date(foto.fecha_captura).toLocaleDateString()}
+                      Capturado el {new Date(foto.fecha_captura || new Date()).toLocaleDateString()}
                     </p>
                   </div>
                 </div>

@@ -18,19 +18,24 @@ export default async function RepartidorDetailPage({ params }: { params: Promise
     return <div className="p-8 text-white font-[family-name:var(--font-geist-sans)]">Registro no encontrado (ID: {id}).</div>;
   }
 
-  // 2. Obtener el historial completo de este conductor (Récord de visitas pasadas)
-  const { data: historial } = await supabase
-    .from('registro_diario_repartidores')
-    .select('id, fecha, entrada_1, salida_1, entrada_2, salida_2, entrada_3, salida_3, epp_ok, sctr_ok')
-    .eq('conductor_apellido', repartidor.conductor_apellido)
-    .order('fecha', { ascending: false })
-    .limit(5);
+  // 2 y 3. Historial de ingresos y evidencias vinculadas (en paralelo)
+  let [
+    { data: historial },
+    { data: evidenciasResult }
+  ] = await Promise.all([
+    supabase
+      .from('registro_diario_repartidores')
+      .select('id, fecha, entrada_1, salida_1, entrada_2, salida_2, entrada_3, salida_3, epp_ok, sctr_ok')
+      .eq('conductor_apellido', repartidor.conductor_apellido)
+      .order('fecha', { ascending: false })
+      .limit(5),
+    supabase
+      .from('evidencias_fotograficas')
+      .select('*')
+      .eq('vinculado_a_registro_id', id)
+  ]);
 
-  // 3. Obtener las evidencias fotográficas
-  let { data: evidencias } = await supabase
-    .from('evidencias_fotograficas')
-    .select('*')
-    .eq('vinculado_a_registro_id', id);
+  let evidencias = evidenciasResult;
 
   // MOCK DATA: Si no hay evidencias, simulamos unas para visualizar el diseño
   if (!evidencias || evidencias.length === 0) {

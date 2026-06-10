@@ -67,12 +67,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  // Si ya hay sesión y estamos en login, enviamos al home
-  if (user && isLoginPage) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/'
-    return NextResponse.redirect(url)
-  }
+  // Permitimos que el usuario elija su destino en la página de login
+  // aunque ya tenga sesión activa (para poder navegar a garita o dashboard)
 
   return response
 }

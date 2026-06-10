@@ -18,19 +18,24 @@ export default async function VisitaDetailPage({ params }: { params: Promise<{ i
     return <div className="p-8 text-white font-[family-name:var(--font-geist-sans)]">Visita no encontrada (ID: {id}).</div>;
   }
 
-  // 2. Historial de ingresos de esta persona (por DNI)
-  const { data: historial } = await supabase
-    .from('registro_visitas')
-    .select('id, fecha, hora_ingreso, hora_salida, referencia_visita')
-    .eq('dni_ce', visita.dni_ce)
-    .order('fecha', { ascending: false })
-    .limit(10);
+  // 2 y 3. Historial de ingresos y evidencias vinculadas (en paralelo)
+  let [
+    { data: historial },
+    { data: evidenciasResult }
+  ] = await Promise.all([
+    supabase
+      .from('registro_visitas')
+      .select('id, fecha, hora_ingreso, hora_salida, referencia_visita')
+      .eq('dni_ce', visita.dni_ce)
+      .order('fecha', { ascending: false })
+      .limit(10),
+    supabase
+      .from('evidencias_fotograficas')
+      .select('*')
+      .eq('vinculado_a_registro_id', id)
+  ]);
 
-  // 3. Evidencias vinculadas
-  let { data: evidencias } = await supabase
-    .from('evidencias_fotograficas')
-    .select('*')
-    .eq('vinculado_a_registro_id', id);
+  let evidencias = evidenciasResult;
 
   // Mocks de seguridad
   if (!evidencias || evidencias.length === 0) {

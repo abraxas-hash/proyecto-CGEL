@@ -18,19 +18,24 @@ export default async function ProveedorDetailPage({ params }: { params: Promise<
     return <div className="p-8 text-white font-[family-name:var(--font-geist-sans)]">Proveedor no encontrado (ID: {id}).</div>;
   }
 
-  // 2. Obtener el historial de esta empresa
-  const { data: historial } = await supabase
-    .from('registro_proveedores_carga')
-    .select('id, fecha, hora_llegada, conductor, autorizado')
-    .eq('empresa_proveedor', proveedor.empresa_proveedor)
-    .order('fecha', { ascending: false })
-    .limit(8);
+  // 2 y 3. Historial de ingresos y evidencias vinculadas (en paralelo)
+  let [
+    { data: historial },
+    { data: evidenciasResult }
+  ] = await Promise.all([
+    supabase
+      .from('registro_proveedores_carga')
+      .select('id, fecha, hora_llegada, conductor, autorizado')
+      .eq('empresa_proveedor', proveedor.empresa_proveedor)
+      .order('fecha', { ascending: false })
+      .limit(8),
+    supabase
+      .from('evidencias_fotograficas')
+      .select('*')
+      .eq('vinculado_a_registro_id', id)
+  ]);
 
-  // 3. Obtener evidencias fotográficas vinculadas
-  let { data: evidencias } = await supabase
-    .from('evidencias_fotograficas')
-    .select('*')
-    .eq('vinculado_a_registro_id', id);
+  let evidencias = evidenciasResult;
 
   // Simulación de evidencias si no hay reales
   if (!evidencias || evidencias.length === 0) {

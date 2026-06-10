@@ -33,12 +33,12 @@ const chartConfig = {
 
 export function OperationalPerformance() {
   return (
-    <Card className="bg-black/40 border-white/10 backdrop-blur-xl h-full">
+    <Card className="bg-white/60 dark:bg-black/40 border-black/10 dark:border-white/10 backdrop-blur-xl shadow-lg dark:shadow-none h-full">
       <CardHeader>
-        <CardTitle className="text-sm font-black uppercase tracking-widest text-white">
+        <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white">
           Rendimiento Operativo Semanal
         </CardTitle>
-        <CardDescription className="text-xs text-gray-500">
+        <CardDescription className="text-xs text-gray-600 dark:text-gray-500">
           Volumen consolidado de ingresos por categoría
         </CardDescription>
       </CardHeader>

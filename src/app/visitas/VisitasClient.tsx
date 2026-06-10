@@ -7,21 +7,18 @@ import Link from 'next/link';
 import VisualCalendar from '@/components/ui/VisualCalendar';
 
 export default function VisitasClient({ initialVisitas }: { initialVisitas: any[] }) {
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-
   // Grouping logic for the calendar dots
   const availableDates = useMemo(() => {
     return Array.from(new Set(initialVisitas?.map(v => v.fecha) || []));
   }, [initialVisitas]);
 
-  // Set initial selected date
-  useEffect(() => {
-    if (availableDates.length > 0 && !selectedDate) {
-      const sorted = [...availableDates].sort((a, b) => b.localeCompare(a));
-      setSelectedDate(sorted[0]);
+  const [selectedDate, setSelectedDate] = useState<string | null>(() => {
+    if (availableDates.length > 0) {
+      return [...availableDates].sort((a, b) => b.localeCompare(a))[0];
     }
-  }, [availableDates, selectedDate]);
+    return null;
+  });
+  const [searchTerm, setSearchTerm] = useState('');
 
   const filteredByDate = useMemo(() => {
     if (!selectedDate) return [];
@@ -71,13 +68,16 @@ export default function VisitasClient({ initialVisitas }: { initialVisitas: any[
               placeholder="Buscar en la fecha..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              aria-label="Buscar en la fecha"
               className="w-full bg-white/5 border border-white/10 rounded-lg py-2 pl-9 pr-4 text-[11px] text-white focus:outline-none focus:border-orange-500/50 transition-all"
             />
           </div>
           <button 
+            type="button"
             onClick={handleExport}
             className="p-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-all shadow-lg shadow-orange-500/20"
             title="Exportar fecha seleccionada"
+            aria-label="Exportar fecha seleccionada a CSV"
           >
             <Download className="w-4 h-4" />
           </button>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Header from '@/components/layout/Header';
 import { 
   Camera, 
@@ -25,15 +25,51 @@ export default function VisitaClient({ visita, historial, evidencias }: { visita
   const [showDniModal, setShowDniModal] = useState<boolean>(false);
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
 
-  const fotoDniUrl = evidencias?.find((e: any) => e.tipo_evidencia === 'DNI')?.url_foto || 'https://images.unsplash.com/photo-1633265486064-086b219458ce?q=80&w=800&auto=format&fit=crop';
+  // Parse JSON observations if any
+  const parsedObs = useMemo(() => {
+    if (!visita.observaciones) return { texto: '', fotos: {} };
+    try {
+      const parsed = JSON.parse(visita.observaciones);
+      return {
+        texto: parsed.texto || '',
+        fotos: parsed.fotos || {}
+      };
+    } catch {
+      return { texto: visita.observaciones, fotos: {} };
+    }
+  }, [visita.observaciones]);
+
+  let baseFotoDniUrl = evidencias?.find((e: any) => e.tipo_evidencia === 'DNI')?.url_foto;
+  const fotoDniUrl = parsedObs.fotos.dni || baseFotoDniUrl || 'https://images.unsplash.com/photo-1633265486064-086b219458ce?q=80&w=800&auto=format&fit=crop';
+
+  const mergedEvidencias = useMemo(() => {
+    let ev = [...(evidencias || [])];
+    if (parsedObs.fotos.dni) {
+      ev.push({
+        id: 'json-dni',
+        url_foto: parsedObs.fotos.dni,
+        tipo_evidencia: 'DNI',
+        etiqueta: 'Foto de Documento',
+        fecha_captura: new Date().toISOString()
+      });
+    }
+    return ev;
+  }, [evidencias, parsedObs]);
 
   return (
     <div className="min-h-screen p-8 font-[family-name:var(--font-geist-sans)] relative">
       {/* MODAL LIGHTBOX */}
       {(showDniModal || selectedImg) && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md transition-opacity" onClick={() => { setShowDniModal(false); setSelectedImg(null); }}>
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md transition-opacity" 
+          onClick={() => { setShowDniModal(false); setSelectedImg(null); }}
+          onKeyDown={(e) => { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') { setShowDniModal(false); setSelectedImg(null); } }}
+          role="button"
+          tabIndex={0}
+        >
           <div className="relative max-w-4xl w-full flex flex-col items-center" onClick={e => e.stopPropagation()}>
             <button 
+              type="button"
               onClick={() => { setShowDniModal(false); setSelectedImg(null); }}
               className="absolute -top-14 right-0 p-3 bg-white/10 hover:bg-white/20 hover:text-red-400 rounded-full text-white transition-all shadow-lg"
             >
@@ -72,7 +108,7 @@ export default function VisitaClient({ visita, historial, evidencias }: { visita
         </Link>
         <div className="flex items-center gap-2 bg-purple-500/10 px-4 py-2 rounded-xl border border-purple-500/20 w-full sm:w-auto justify-center sm:justify-end">
           <span className="text-[10px] font-black text-purple-400 uppercase tracking-widest">ID AUDITORÍA</span>
-          <span className="text-sm font-mono font-bold text-white tracking-tighter">#{visita.id.split('-')[0]}</span>
+          <span className="text-sm font-mono font-bold text-white tracking-tighter">#{String(visita.id).split('-')[0]}</span>
         </div>
       </div>
 
@@ -87,6 +123,7 @@ export default function VisitaClient({ visita, historial, evidencias }: { visita
                   <User className="w-12 h-12 text-green-400" />
                 </div>
                 <button 
+                  type="button"
                   onClick={() => setShowDniModal(true)}
                   className="absolute bottom-0 right-0 p-2 bg-green-500 text-black rounded-full hover:scale-110 transition-transform shadow-lg"
                   title="Ver DNI"
@@ -138,7 +175,7 @@ export default function VisitaClient({ visita, historial, evidencias }: { visita
                 { label: 'Pase Visita Entregado', val: visita.pase_visita_entregado, icon: <CreditCard className="w-4 h-4" /> },
                 { label: 'Pase Devuelto en Salida', val: visita.pase_devuelto_salida, icon: <ArrowLeft className="w-4 h-4" /> },
               ].map((item, i) => (
-                <div key={i} className="flex items-center justify-between bg-white/5 p-3 rounded-xl border border-white/5">
+                <div key={item.label} className="flex items-center justify-between bg-white/5 p-3 rounded-xl border border-white/5">
                   <div className="flex items-center gap-3">
                     <span className="text-gray-500">{item.icon}</span>
                     <span className="text-xs text-gray-300 font-medium">{item.label}</span>
@@ -169,9 +206,9 @@ export default function VisitaClient({ visita, historial, evidencias }: { visita
             </h3>
             
             <div className="space-y-3 flex-1 overflow-y-auto pr-2 custom-scrollbar">
-              {historial?.map((hist: any, idx: number) => (
+              {historial?.map((hist: any) => (
                 <Link 
-                  key={idx} 
+                  key={hist.id} 
                   href={`/visitas/${hist.id}`}
                   className="block group bg-white/5 hover:bg-white/10 border border-white/5 p-4 rounded-2xl transition-all"
                 >
@@ -192,7 +229,7 @@ export default function VisitaClient({ visita, historial, evidencias }: { visita
             <div className="mt-8 p-5 bg-black/40 rounded-3xl border border-white/5">
               <p className="text-[10px] text-gray-500 uppercase font-black mb-2 tracking-widest">Observaciones</p>
               <p className="text-xs text-gray-400 italic leading-relaxed">
-                "{visita.observaciones || 'No se registraron incidentes durante esta visita administrativa.'}"
+                "{parsedObs.texto || 'No se registraron incidentes durante esta visita administrativa.'}"
               </p>
             </div>
           </div>
@@ -205,13 +242,16 @@ export default function VisitaClient({ visita, historial, evidencias }: { visita
             <h2 className="text-xl font-bold text-white uppercase tracking-tight">Cámaras y Evidencia</h2>
           </div>
 
-          {evidencias && evidencias.length > 0 ? (
+          {mergedEvidencias && mergedEvidencias.length > 0 ? (
             <div className="grid grid-cols-1 gap-4 max-h-[700px] overflow-y-auto pr-2 custom-scrollbar">
-              {evidencias.map((foto: any) => (
+              {mergedEvidencias.map((foto: any, i: number) => (
                 <div 
-                  key={foto.id} 
+                  key={foto.id || i} 
                   className="bg-[#050505] border border-white/10 rounded-2xl overflow-hidden group hover:border-green-400/50 transition-all shadow-xl cursor-pointer"
                   onClick={() => setSelectedImg(foto.url_foto)}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSelectedImg(foto.url_foto); }}
+                  role="button"
+                  tabIndex={0}
                 >
                   <div className="relative aspect-video w-full overflow-hidden">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -227,7 +267,7 @@ export default function VisitaClient({ visita, historial, evidencias }: { visita
                   <div className="p-4 border-t border-white/5 flex justify-between items-center">
                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{foto.etiqueta}</p>
                     <span className="text-[9px] font-mono text-gray-500">
-                      {new Date(foto.fecha_captura).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                      {new Date(foto.fecha_captura || new Date()).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                     </span>
                   </div>
                 </div>

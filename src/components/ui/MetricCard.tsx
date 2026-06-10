@@ -51,16 +51,19 @@ export default function MetricCard({ title, subtitle, value, Icon, colorTheme, h
   const theme = colorStyles[colorTheme];
 
   return (
-    <Link href={href} className={`block glass-panel p-4 sm:p-6 rounded-2xl ${theme.hoverBorder} transition-colors cursor-pointer group`}>
-      <div className="flex justify-between items-start mb-3 sm:mb-4">
-        {/* Contenedor del ícono que reacciona al hover de la tarjeta principal (group-hover) */}
-        <div className={`p-2 sm:p-3 rounded-lg ${theme.iconBg} ${theme.iconHoverBg} transition-colors`}>
-          <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${theme.iconColor}`} />
-        </div>
-        <span className="text-xl sm:text-2xl font-bold font-mono text-white">{value}</span>
+    <Link href={href} className={`block glass-panel relative overflow-hidden p-4 sm:p-6 rounded-2xl ${theme.hoverBorder} transition-transform active:scale-95 touch-manipulation cursor-pointer group min-h-32 flex flex-col justify-end text-center`}>
+      {/* Huge Background Icon */}
+      <Icon 
+        strokeWidth={1.5}
+        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 sm:w-32 sm:h-32 ${theme.iconColor} opacity-[0.15] dark:opacity-[0.10] group-hover:scale-110 transition-transform duration-500`} 
+      />
+      
+      {/* Foreground Content */}
+      <div className="relative z-10 mt-auto pt-8 flex flex-col items-center">
+        <span className="text-3xl sm:text-4xl font-black font-mono text-black dark:text-white drop-shadow-sm mb-2">{value}</span>
+        <h2 className="text-lg sm:text-xl font-bold text-black dark:text-white leading-tight">{title}</h2>
+        <p className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-1 ${theme.iconColor} drop-shadow-sm`}>{subtitle}</p>
       </div>
-      <h2 className="text-base sm:text-lg font-semibold text-white truncate">{title}</h2>
-      <p className="text-[10px] sm:text-sm text-gray-400 mt-1 leading-snug line-clamp-2 sm:line-clamp-1">{subtitle}</p>
     </Link>
   );
 }

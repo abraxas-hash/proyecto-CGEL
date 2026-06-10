@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Header from '@/components/layout/Header';
 import { 
   Camera, 
@@ -23,13 +23,60 @@ import Link from 'next/link';
 export default function ContratistaClient({ contratista, personal, herramientas, evidencias }: { contratista: any, personal: any[], herramientas: any[], evidencias: any[] }) {
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
 
+  // Parse JSON observations if any
+  const parsedObs = useMemo(() => {
+    if (!contratista.observaciones) return { texto: '', fotos: {} };
+    try {
+      const parsed = JSON.parse(contratista.observaciones);
+      return {
+        texto: parsed.texto || '',
+        fotos: parsed.fotos || {}
+      };
+    } catch {
+      return { texto: contratista.observaciones, fotos: {} };
+    }
+  }, [contratista.observaciones]);
+
+  const mergedEvidencias = useMemo(() => {
+    let ev = [...(evidencias || [])];
+    
+    const nowISO = new Date().toISOString();
+    
+    if (parsedObs.fotos.sctr) {
+      ev.push({
+        id: 'json-sctr',
+        url_foto: parsedObs.fotos.sctr,
+        tipo_evidencia: 'SCTR',
+        etiqueta: 'Foto de SCTR',
+        fecha_captura: nowISO
+      });
+    }
+    if (parsedObs.fotos.herramientas) {
+      ev.push({
+        id: 'json-herramientas',
+        url_foto: parsedObs.fotos.herramientas,
+        tipo_evidencia: 'HERRAMIENTAS',
+        etiqueta: 'Foto de Herramientas',
+        fecha_captura: nowISO
+      });
+    }
+    return ev;
+  }, [evidencias, parsedObs]);
+
   return (
     <div className="min-h-screen p-8 font-[family-name:var(--font-geist-sans)] relative">
       {/* MODAL ZOOM EVIDENCIA */}
       {selectedImg && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-lg transition-opacity" onClick={() => setSelectedImg(null)}>
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-lg transition-opacity" 
+          onClick={() => setSelectedImg(null)}
+          onKeyDown={(e) => { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') setSelectedImg(null); }}
+          role="button"
+          tabIndex={0}
+        >
           <div className="relative max-w-5xl w-full flex flex-col items-center" onClick={e => e.stopPropagation()}>
             <button 
+              type="button"
               onClick={() => setSelectedImg(null)}
               className="absolute -top-14 right-0 p-3 bg-white/10 hover:bg-white/20 hover:text-red-400 rounded-full text-white transition-all shadow-lg"
             >
@@ -68,7 +115,7 @@ export default function ContratistaClient({ contratista, personal, herramientas,
         </Link>
         <div className="flex items-center gap-2 bg-purple-500/10 px-4 py-2 rounded-xl border border-purple-500/20 w-full sm:w-auto justify-center sm:justify-end">
           <span className="text-[10px] font-black text-purple-400 uppercase tracking-widest">ID AUDITORÍA</span>
-          <span className="text-sm font-mono font-bold text-white tracking-tighter">#{contratista.id.split('-')[0]}</span>
+          <span className="text-sm font-mono font-bold text-white tracking-tighter">#{String(contratista.id).split('-')[0]}</span>
         </div>
       </div>
 
@@ -109,7 +156,7 @@ export default function ContratistaClient({ contratista, personal, herramientas,
                 <div className="p-5 bg-black/40 rounded-3xl border border-white/5">
                   <p className="text-[10px] text-gray-500 uppercase font-black mb-3 tracking-widest">Observaciones de Seguridad</p>
                   <p className="text-xs text-gray-400 italic leading-relaxed">
-                    "{contratista.observaciones || 'No se registraron observaciones para este servicio técnico.'}"
+                    "{parsedObs.texto || 'No se registraron observaciones para este servicio técnico.'}"
                   </p>
                 </div>
               </div>
@@ -150,7 +197,7 @@ export default function ContratistaClient({ contratista, personal, herramientas,
             
             <div className="space-y-3">
               {personal.map((p, idx) => (
-                <div key={idx} className="bg-white/5 border border-white/5 p-4 rounded-2xl hover:bg-white/10 transition-all">
+                <div key={p.id || p.dni_ce || idx} className="bg-white/5 border border-white/5 p-4 rounded-2xl hover:bg-white/10 transition-all">
                   <div className="flex justify-between items-start mb-2">
                     <div>
                       <p className="text-white font-bold capitalize">{p.nombre_completo?.toLowerCase()}</p>
@@ -186,7 +233,7 @@ export default function ContratistaClient({ contratista, personal, herramientas,
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {herramientas.map((h, idx) => (
-                <div key={idx} className="flex items-center gap-4 bg-black/20 p-4 rounded-2xl border border-white/5">
+                <div key={h.id || idx} className="flex items-center gap-4 bg-black/20 p-4 rounded-2xl border border-white/5">
                   <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center font-black text-orange-400 border border-orange-500/20">
                     {h.cantidad}
                   </div>
@@ -209,11 +256,14 @@ export default function ContratistaClient({ contratista, personal, herramientas,
             </div>
 
             <div className="space-y-4 max-h-[800px] overflow-y-auto pr-2 custom-scrollbar">
-              {evidencias.map((foto: any, idx: number) => (
+              {mergedEvidencias.map((foto: any, idx: number) => (
                 <div 
-                  key={idx} 
+                  key={foto.id || idx} 
                   className="bg-[#050505] border border-white/10 rounded-2xl overflow-hidden group hover:border-yellow-500/50 transition-all shadow-xl cursor-pointer"
                   onClick={() => setSelectedImg(foto.url_foto)}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSelectedImg(foto.url_foto); }}
+                  role="button"
+                  tabIndex={0}
                 >
                   <div className="relative aspect-square w-full overflow-hidden">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -228,7 +278,7 @@ export default function ContratistaClient({ contratista, personal, herramientas,
                   </div>
                 </div>
               ))}
-              {evidencias.length === 0 && (
+              {mergedEvidencias.length === 0 && (
                 <div className="h-64 flex flex-col items-center justify-center border-2 border-dashed border-white/10 rounded-3xl bg-white/5 text-center p-8">
                   <Camera className="w-10 h-10 text-gray-800 mb-4" />
                   <p className="text-gray-700 font-black uppercase tracking-widest text-[8px]">Sin registros fotográficos de obra</p>

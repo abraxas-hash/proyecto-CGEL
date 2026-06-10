@@ -10,23 +10,30 @@ import { OperationalPerformance } from '@/components/dashboard/OperationalPerfor
 
 export const dynamic = 'force-dynamic';
 
+const HOURLY_DATA = [
+  { hour: '06:00', total: 2 },
+  { hour: '08:00', total: 8 },
+  { hour: '10:00', total: 15 },
+  { hour: '12:00', total: 12 },
+  { hour: '14:00', total: 20 },
+  { hour: '16:00', total: 14 },
+  { hour: '18:00', total: 5 },
+  { hour: '20:00', total: 3 },
+];
+
 export default async function Home() {
   const supabase = createAdminClient();
-  const { count: countRepartidores } = await supabase
-    .from('registro_diario_repartidores')
-    .select('*', { count: 'exact', head: true });
-
-  const { count: countVisitas } = await supabase
-    .from('registro_visitas')
-    .select('*', { count: 'exact', head: true });
-
-  const { count: countProveedores } = await supabase
-    .from('registro_proveedores_carga')
-    .select('*', { count: 'exact', head: true });
-
-  const { count: countContratistas } = await supabase
-    .from('registro_contratistas')
-    .select('*', { count: 'exact', head: true });
+  const [
+    { count: countRepartidores },
+    { count: countVisitas },
+    { count: countProveedores },
+    { count: countContratistas }
+  ] = await Promise.all([
+    supabase.from('registro_diario_repartidores').select('*', { count: 'exact', head: true }),
+    supabase.from('registro_visitas').select('*', { count: 'exact', head: true }),
+    supabase.from('registro_proveedores_carga').select('*', { count: 'exact', head: true }),
+    supabase.from('registro_contratistas').select('*', { count: 'exact', head: true })
+  ]);
 
   const counts = {
     repartidores: countRepartidores || 0,
@@ -42,36 +49,19 @@ export default async function Home() {
     { name: 'Contratistas', value: countContratistas || 0 },
   ];
 
-  const hourlyData = [
-    { hour: '06:00', total: 2 },
-    { hour: '08:00', total: 8 },
-    { hour: '10:00', total: 15 },
-    { hour: '12:00', total: 12 },
-    { hour: '14:00', total: 20 },
-    { hour: '16:00', total: 14 },
-    { hour: '18:00', total: 5 },
-    { hour: '20:00', total: 3 },
-  ];
+  const hourlyData = HOURLY_DATA;
 
-  const { count: countInsideVisitas } = await supabase
-    .from('registro_visitas')
-    .select('*', { count: 'exact', head: true })
-    .is('hora_salida', null);
-
-  const { count: countInsideContratistas } = await supabase
-    .from('detalle_personal_contratistas')
-    .select('*', { count: 'exact', head: true })
-    .is('hora_salida', null);
-
-  const { count: countInsideRepartidores } = await supabase
-    .from('registro_diario_repartidores')
-    .select('*', { count: 'exact', head: true })
-    .is('salida_1', null);
-
-  const { count: countInsideProveedores } = await supabase
-    .from('registro_proveedores_carga')
-    .select('*', { count: 'exact', head: true })
-    .is('hora_salida', null);
+  const [
+    { count: countInsideVisitas },
+    { count: countInsideContratistas },
+    { count: countInsideRepartidores },
+    { count: countInsideProveedores }
+  ] = await Promise.all([
+    supabase.from('registro_visitas').select('*', { count: 'exact', head: true }).is('hora_salida', null),
+    supabase.from('detalle_personal_contratistas').select('*', { count: 'exact', head: true }).is('hora_salida', null),
+    supabase.from('registro_diario_repartidores').select('*', { count: 'exact', head: true }).is('salida_1', null),
+    supabase.from('registro_proveedores_carga').select('*', { count: 'exact', head: true }).is('hora_salida', null)
+  ]);
 
   const totalInside = Number(countInsideVisitas || 0) + 
                     Number(countInsideContratistas || 0) + 
@@ -95,14 +85,14 @@ export default async function Home() {
       <main>
         {/* Alertas de Seguridad en Vivo */}
         {totalInside > 0 ? (
-          <div className="mb-8 p-4 sm:p-5 bg-red-500/10 border border-red-500/20 rounded-2xl flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 animate-pulse">
+          <div id="tour-alerts" className="mb-8 p-4 sm:p-5 bg-red-500/10 border border-red-500/20 rounded-2xl flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 animate-pulse">
             <div className="flex items-center gap-3">
               <div className="w-2.5 h-2.5 bg-red-500 rounded-full shrink-0"></div>
-              <p className="text-red-500 text-xs sm:text-sm font-black uppercase tracking-widest leading-tight">
+              <p className="text-red-600 dark:text-red-500 text-xs sm:text-sm font-black uppercase tracking-widest leading-tight">
                 ALERTA DE SEGURIDAD: {totalInside} Personas/Vehículos en Planta sin salida registrada
               </p>
             </div>
-            <div className="flex flex-wrap gap-2 sm:gap-4 text-[9px] sm:text-[10px] font-bold text-red-400/80">
+            <div className="flex flex-wrap gap-2 sm:gap-4 text-[9px] sm:text-[10px] font-bold text-red-700 dark:text-red-400/80">
               <span className="bg-red-500/10 px-2 py-1 rounded">REPARTIDORES: {countInsideRepartidores || 0}</span>
               <span className="bg-red-500/10 px-2 py-1 rounded">VISITAS: {countInsideVisitas || 0}</span>
               <span className="bg-red-500/10 px-2 py-1 rounded">CONTRATISTAS: {countInsideContratistas || 0}</span>
@@ -110,14 +100,14 @@ export default async function Home() {
             </div>
           </div>
         ) : (
-          <div className="mb-8 p-4 bg-green-500/10 border border-green-500/20 rounded-2xl flex items-center gap-4">
+          <div id="tour-alerts" className="mb-8 p-4 bg-green-500/10 border border-green-500/20 rounded-2xl flex items-center gap-4">
             <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-            <p className="text-green-500 text-xs font-black uppercase tracking-widest">Planta Despejada - Sin ingresos pendientes de salida</p>
+            <p className="text-green-700 dark:text-green-500 text-xs font-black uppercase tracking-widest">Planta Despejada - Sin ingresos pendientes de salida</p>
           </div>
         )}
 
         {/* Grid de tarjetas métricas */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div id="tour-metrics" className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           <MetricCard 
             title="Repartidores" 
             subtitle="Control diario de rutas"
@@ -160,10 +150,10 @@ export default async function Home() {
 
         {/* Nuevas Joyas Analíticas: Embudo y Línea de Tiempo */}
         <div className="mt-8 grid grid-cols-1 xl:grid-cols-3 gap-6">
-          <div className="xl:col-span-2">
+          <div id="tour-funnel" className="xl:col-span-2">
             <OperationalFunnel />
           </div>
-          <div className="xl:col-span-1">
+          <div id="tour-timeline" className="xl:col-span-1">
             <SafetyTimeline />
           </div>
         </div>
