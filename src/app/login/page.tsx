@@ -1,51 +1,37 @@
 'use client';
 
 import { useState } from 'react';
-import { createBrowserClient } from '@supabase/ssr';
 import { ShieldAlert, Lock, User, Eye, EyeOff, Loader2, LayoutDashboard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AsciiArt } from "@/components/ui/ascii-art";
 
+// Importamos nuestro custom hook que maneja toda la lógica (SRP)
+import { useAuth } from '@/hooks/useAuth';
+
 /**
  * Página de Login del Sistema CGEL - Aplicativo de Garita
+ * Ahora completamente modularizada respetando el principio SOLID (SRP).
  */
 export default function LoginPage() {
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key'
-  );
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  
+  // Por defecto, si se da Enter en el form, entraremos a garita
+  const [defaultDestino, setDefaultDestino] = useState<'/garita' | '/visitas'>('/garita');
 
-  const handleLogin = async (e: React.FormEvent | React.MouseEvent, destino: '/garita' | '/visitas') => {
+  // Lógica abstraída al Hook
+  const { login, loading, error, setError } = useAuth();
+
+  const executeLogin = (destino: '/garita' | '/visitas') => {
+    login(email, password, destino);
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) {
-      setError('Por favor complete su correo y contraseña.');
-      return;
-    }
-    setLoading(true);
-    setError(null);
-
-    try {
-      const { error: authError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (authError) throw authError;
-
-      window.location.replace(destino);
-
-    } catch (err: any) {
-      setError(err.message || 'Error de autenticación. Verifique sus credenciales.');
-      setLoading(false);
-    }
+    executeLogin(defaultDestino);
   };
 
   return (
@@ -111,7 +97,7 @@ export default function LoginPage() {
             <p className="text-gray-500 text-sm font-medium">Inicie sesión para acceder al panel de garita</p>
           </div>
 
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleFormSubmit}>
             {/* Email */}
             <div className="space-y-2">
               <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Email Corporativo</Label>
@@ -163,12 +149,13 @@ export default function LoginPage() {
             <div className="grid grid-cols-2 gap-3 mt-6">
               {/* Agente de Garita */}
               <Button
-                type="button"
+                type="submit" // Al ser el primer submit, tomará el "Enter" por defecto si no se cambia
                 disabled={loading}
-                onClick={(e) => handleLogin(e, '/garita')}
+                onClick={() => executeLogin('/garita')}
+                onMouseEnter={() => setDefaultDestino('/garita')}
                 className="w-full bg-[#00d4ff] hover:bg-[#00d4ff]/80 text-black font-black uppercase text-[10px] h-16 rounded-xl transition-all shadow-[0_10px_30px_rgba(0,212,255,0.15)] active:scale-[0.98] flex flex-col gap-1"
               >
-                {loading ? (
+                {loading && defaultDestino === '/garita' ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <ShieldAlert className="w-5 h-5" />
@@ -180,10 +167,11 @@ export default function LoginPage() {
               <Button
                 type="button"
                 disabled={loading}
-                onClick={(e) => handleLogin(e, '/visitas')}
+                onClick={() => executeLogin('/visitas')}
+                onMouseEnter={() => setDefaultDestino('/visitas')}
                 className="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white font-black uppercase text-[10px] h-16 rounded-xl transition-all active:scale-[0.98] flex flex-col gap-1"
               >
-                {loading ? (
+                {loading && defaultDestino === '/visitas' ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <LayoutDashboard className="w-5 h-5" />
