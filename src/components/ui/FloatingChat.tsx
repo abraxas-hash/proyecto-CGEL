@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { usePathname } from 'next/navigation';
 import { MessageSquare, X, Send, Bot, User, Sparkles, Loader2 } from 'lucide-react';
 
 type Message = {
@@ -10,6 +11,7 @@ type Message = {
 };
 
 export function FloatingChat() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
@@ -29,6 +31,11 @@ export function FloatingChat() {
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
+
+  // Ocultar el chat flotante en la página de login o raíz
+  if (pathname === '/login' || pathname === '/') {
+    return null;
+  }
 
   const sendMessage = useCallback(async () => {
     const userText = input.trim();
