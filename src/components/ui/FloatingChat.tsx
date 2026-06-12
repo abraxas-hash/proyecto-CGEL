@@ -32,10 +32,7 @@ export function FloatingChat() {
     }
   }, [isOpen]);
 
-  // Ocultar el chat flotante en la página de login o raíz
-  if (pathname === '/login' || pathname === '/') {
-    return null;
-  }
+  // Eliminar el early return que viola las reglas de los hooks
 
   const sendMessage = useCallback(async () => {
     const userText = input.trim();
@@ -116,6 +113,12 @@ export function FloatingChat() {
       sendMessage();
     }
   };
+
+  // Ocultar el chat flotante en la página de login o raíz
+  // (Debe hacerse DESPUÉS de declarar todos los hooks para no violar las Reglas de React)
+  if (pathname === '/login' || pathname === '/') {
+    return null;
+  }
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
