@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   description: "Plataforma de Inteligencia Operativa y Seguridad",
 };
 
-import HexagonBackground from "@/components/ui/HexagonBackground";
+import WaveBackground from "@/components/ui/WaveBackground";
 import { FloatingChat } from "@/components/ui/FloatingChat";
 
 export default function RootLayout({
@@ -43,7 +43,7 @@ export default function RootLayout({
         <ThemeProvider>
           {children}
           <FloatingChat />
-          <HexagonBackground />
+          <WaveBackground />
         </ThemeProvider>
       </body>
     </html>
