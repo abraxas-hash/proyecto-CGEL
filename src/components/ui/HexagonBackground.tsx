@@ -4,19 +4,19 @@ import React, { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 
 const DARK_COLORS = [
-  '#527E8E', // Slate Blue
-  '#5FE2C0', // Aqua
-  '#FFDF58', // Yellow
-  '#FC9C47', // Orange
-  '#F36F62', // Coral
+  'rgba(15, 23, 42, 0.7)',    // slate-900
+  'rgba(30, 41, 59, 0.4)',    // slate-800
+  'rgba(2, 6, 23, 0.9)',      // slate-950
+  'rgba(14, 165, 233, 0.03)', // sky-500 glow
+  'rgba(15, 23, 42, 0.5)',    // slate-900
 ];
 
 const LIGHT_COLORS = [
-  '#527E8E', // Slate Blue
-  '#5FE2C0', // Aqua
-  '#FFDF58', // Yellow
-  '#FC9C47', // Orange
-  '#F36F62', // Coral
+  'rgba(241, 245, 249, 0.7)', // slate-100
+  'rgba(248, 250, 252, 0.9)', // slate-50
+  'rgba(226, 232, 240, 0.4)', // slate-200
+  'rgba(14, 165, 233, 0.03)', // sky-500 glow
+  'rgba(241, 245, 249, 0.5)', // slate-100
 ];
 
 export default function HexagonBackground() {
@@ -95,8 +95,8 @@ export default function HexagonBackground() {
             points={points}
             transform={`translate(${hex.x}, ${hex.y})`}
             fill={hex.color}
-            stroke={isDark ? "rgba(0,0,0,0.15)" : "rgba(255,255,255,0.8)"}
-            strokeWidth="2"
+            stroke={isDark ? "rgba(14, 165, 233, 0.15)" : "rgba(14, 165, 233, 0.2)"}
+            strokeWidth="1"
             className="transition-colors duration-1000"
           />
         ))}
