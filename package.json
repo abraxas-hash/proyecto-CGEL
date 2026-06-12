@@ -18,6 +18,7 @@
     "ai": "^6.0.197",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "date-fns": "^4.4.0",
     "dotenv": "^17.4.2",
     "driver.js": "^1.4.0",
     "lucide-react": "^1.14.0",

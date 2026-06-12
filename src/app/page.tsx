@@ -1,4 +1,5 @@
 import { createAdminClient } from '@/lib/supabaseClient';
+import { ComunicadosWidget } from '@/components/dashboard/ComunicadosWidget';
 import { ShieldCheck, Truck, Users, Wrench } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import MetricCard from '@/components/ui/MetricCard';
@@ -105,6 +106,11 @@ export default async function Home() {
             <p className="text-green-700 dark:text-green-500 text-xs font-black uppercase tracking-widest">Planta Despejada - Sin ingresos pendientes de salida</p>
           </div>
         )}
+
+        {/* Módulo de Comunicaciones Oficiales */}
+        <div className="mb-8">
+          <ComunicadosWidget />
+        </div>
 
         {/* Grid de tarjetas métricas */}
         <div id="tour-metrics" className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
