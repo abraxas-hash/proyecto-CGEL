@@ -111,7 +111,7 @@ export default function Header() {
       </div>
 
       {/* Navigation - Centered and Mobile Friendly */}
-      <nav className="flex items-center justify-center gap-1 md:gap-2 w-full md:w-auto md:flex-1 overflow-x-auto no-scrollbar py-1">
+      <nav className="flex items-center justify-start md:justify-center gap-1 md:gap-2 w-full md:w-auto md:flex-1 overflow-x-auto no-scrollbar py-2 px-1">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
@@ -119,7 +119,7 @@ export default function Header() {
               <Link 
                 key={item.name}
                 href={item.href} 
-                className={`flex items-center gap-1.5 px-2 md:px-3 py-1.5 md:py-2 rounded-lg md:rounded-xl text-[9px] md:text-[10px] font-black transition-all whitespace-nowrap ${
+                className={`shrink-0 flex items-center gap-1.5 px-2.5 md:px-3 py-2 rounded-lg md:rounded-xl text-[9px] md:text-[10px] font-black transition-all whitespace-nowrap ${
                   isActive 
                     ? `${item.activeBg} ${item.color} border border-black/10 dark:border-white/10 shadow-sm` 
                     : `text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5`
