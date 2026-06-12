@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Truck, Users, ShieldCheck, Wrench, LogOut, Clock, MapPin } from 'lucide-react';
+import { Home, Truck, Users, ShieldCheck, ShieldAlert, Wrench, LogOut, Clock, MapPin } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { ModeToggle } from '@/components/ui/ModeToggle';
 import { GuidedTourButton } from '@/components/ui/GuidedTourButton';
@@ -46,6 +46,7 @@ export default function Header() {
 
   const navItems = [
     { name: 'RESUMEN', href: '/', icon: Home, color: 'text-gray-400', activeBg: 'bg-white/10', hoverBg: 'hover:bg-white/10' },
+    { name: 'GARITA', href: '/garita', icon: ShieldAlert, color: 'text-red-400', activeBg: 'bg-red-500/20', hoverBg: 'hover:bg-red-500/20' },
     { name: 'REPARTIDORES', href: '/repartidores', icon: Truck, color: 'text-[#00d4ff]', activeBg: 'bg-[#00d4ff]/20', hoverBg: 'hover:bg-[#00d4ff]/20' },
     { name: 'VISITAS', href: '/visitas', icon: Users, color: 'text-purple-400', activeBg: 'bg-purple-500/20', hoverBg: 'hover:bg-purple-500/20' },
     { name: 'PROVEEDORES', href: '/proveedores', icon: ShieldCheck, color: 'text-green-400', activeBg: 'bg-green-500/20', hoverBg: 'hover:bg-green-500/20' },
