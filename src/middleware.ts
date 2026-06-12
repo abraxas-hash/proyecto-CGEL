@@ -7,7 +7,7 @@ export async function middleware(request: NextRequest) {
   // Leer la sesión directo desde la cookie (sin llamada de red a Supabase)
   // El token de sesión de Supabase viene en una cookie que empieza con 'sb-'
   const hasSession = request.cookies.getAll().some(
-    (c) => c.name.startsWith('sb-') && c.name.endsWith('-auth-token')
+    (c) => c.name.startsWith('sb-') && c.name.includes('-auth-token')
   )
 
   // Sin sesión y no estamos en login → redirigir a login
