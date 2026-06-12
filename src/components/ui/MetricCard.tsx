@@ -51,7 +51,10 @@ export default function MetricCard({ title, subtitle, value, Icon, colorTheme, h
   const theme = colorStyles[colorTheme];
 
   return (
-    <Link href={href} className={`block glass-panel relative overflow-hidden p-4 sm:p-6 rounded-2xl ${theme.hoverBorder} transition-transform active:scale-95 touch-manipulation cursor-pointer group min-h-32 flex flex-col justify-end text-center`}>
+    <Link 
+      href={href} 
+      className={`block relative overflow-hidden p-4 sm:p-6 rounded-2xl ${theme.hoverBorder} transition-transform active:scale-95 touch-manipulation cursor-pointer group min-h-32 flex flex-col justify-end text-center bg-white/60 dark:bg-white/5 backdrop-blur-xl border border-black/5 dark:border-white/10 shadow-xl`}
+    >
       {/* Huge Background Icon */}
       <Icon 
         strokeWidth={1.5}
