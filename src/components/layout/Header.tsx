@@ -72,7 +72,7 @@ export default function Header() {
         </div>
 
         {/* Navigation (Flexible y scrolleable en el medio) */}
-        <nav className="flex-1 flex items-center justify-start md:justify-center gap-1 md:gap-2 overflow-x-auto no-scrollbar py-1">
+        <nav className="flex-1 min-w-0 flex items-center justify-start md:justify-center gap-1 md:gap-2 overflow-x-auto no-scrollbar py-1">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
