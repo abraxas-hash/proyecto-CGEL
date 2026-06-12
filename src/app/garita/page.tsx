@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Truck, Users, Package, HardHat, BookOpen, LogOut, FileText } from 'lucide-react';
+import { Truck, Users, Package, HardHat, BookOpen, LayoutDashboard, FileText } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 
@@ -62,11 +62,6 @@ const MENU_ITEMS = [
 export default function GaritaMenu() {
   const router = useRouter();
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push('/login');
-  };
-
   const menuItems = MENU_ITEMS;
 
   return (
@@ -79,10 +74,11 @@ export default function GaritaMenu() {
           <p className="text-xl font-black text-white">Panel Garita</p>
         </div>
         <button 
-          onClick={handleLogout}
-          className="neu-button p-3 text-red-500 rounded-xl transition-all"
+          onClick={() => router.push('/')}
+          className="neu-button p-3 text-[#00d4ff] rounded-xl transition-all"
+          title="Ir al Dashboard"
         >
-          <LogOut className="w-5 h-5" />
+          <LayoutDashboard className="w-5 h-5" />
         </button>
       </div>
 
