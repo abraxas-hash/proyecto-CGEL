@@ -76,29 +76,25 @@ export const GlowingEffect = ({
   return (
     <div
       ref={containerRef}
-      className="absolute inset-0 -z-10 overflow-hidden rounded-[inherit] pointer-events-none"
-      style={{
-        padding: borderWidth,
-        margin: -borderWidth,
-      }}
+      className="absolute inset-0 z-0 overflow-hidden rounded-[inherit] pointer-events-none"
     >
       <motion.div
-        className="absolute inset-0 opacity-0 transition-opacity duration-300"
+        className="absolute inset-0 opacity-0 transition-opacity duration-300 rounded-[inherit]"
         style={{
           opacity,
           background: useMotionTemplate`
             radial-gradient(
-              ${spread}px circle at ${mouseX}px ${mouseY}px,
-              var(--glow-color, rgba(14, 165, 233, 0.4)),
+              ${spread * 1.5}px circle at ${mouseX}px ${mouseY}px,
+              var(--glow-color, rgba(14, 165, 233, 0.8)),
               transparent 100%
             )
           `,
           filter: blur > 0 ? `blur(${blur}px)` : "none",
+          padding: borderWidth,
+          WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+          WebkitMaskComposite: "xor",
+          maskComposite: "exclude",
         }}
-      />
-      {/* Inner mask to cut out the center, leaving only the border */}
-      <div className="absolute inset-[var(--border-width)] rounded-[inherit] bg-white dark:bg-[#111] z-0" 
-           style={{ '--border-width': `${borderWidth}px` } as any} 
       />
     </div>
   );
