@@ -1,6 +1,7 @@
 import React from 'react';
 import { LucideIcon } from 'lucide-react';
 import Link from 'next/link';
+import { GlowingEffect } from '@/components/ui/glowing-effect';
 
 /**
  * Interface que define las propiedades que necesita la tarjeta.
@@ -51,7 +52,16 @@ export default function MetricCard({ title, subtitle, value, Icon, colorTheme, h
   const theme = colorStyles[colorTheme];
 
   return (
-    <Link href={href} className={`block glass-panel relative overflow-hidden p-4 sm:p-6 rounded-2xl ${theme.hoverBorder} transition-transform active:scale-95 touch-manipulation cursor-pointer group min-h-32 flex flex-col justify-end text-center`}>
+    <Link href={href} className={`block glass-panel relative p-4 sm:p-6 rounded-2xl ${theme.hoverBorder} transition-transform active:scale-95 touch-manipulation cursor-pointer group min-h-32 flex flex-col justify-end text-center`}>
+      <GlowingEffect
+        blur={0}
+        borderWidth={2}
+        spread={80}
+        glow={true}
+        disabled={false}
+        proximity={64}
+        inactiveZone={0.01}
+      />
       {/* Huge Background Icon */}
       <Icon 
         strokeWidth={1.5}
