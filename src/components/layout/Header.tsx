@@ -56,8 +56,8 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-black/5 dark:border-white/5 bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md px-2 md:px-4 py-2 transition-colors duration-500">
-      <div className="flex items-center justify-between gap-2 md:gap-4 max-w-full">
-        
+      <div className="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-4 max-w-full">
+        <div className="flex items-center justify-between w-full md:w-auto">
         {/* Logo & Version */}
         <Link href="/" className="flex items-center gap-2 shrink-0">
           <div className="bg-black/5 dark:bg-white/5 p-1.5 rounded-lg border border-black/10 dark:border-white/10">
@@ -69,31 +69,7 @@ export default function Header() {
           </div>
         </Link>
 
-        {/* Navigation - Centered and Mobile Friendly */}
-        <nav className="flex items-center justify-center gap-1 md:gap-2 flex-1 overflow-x-auto no-scrollbar py-1">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
-            return (
-              <Link 
-                key={item.name}
-                href={item.href} 
-                className={`flex items-center gap-1.5 px-2 md:px-3 py-1.5 md:py-2 rounded-lg md:rounded-xl text-[9px] md:text-[10px] font-black transition-all whitespace-nowrap ${
-                  isActive 
-                    ? `${item.activeBg} ${item.color} border border-black/10 dark:border-white/10 shadow-sm` 
-                    : `text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5`
-                }`}
-                title={item.name} // Para que se vea el nombre en tooltip en celular si está oculto
-              >
-                <Icon className="w-4 h-4 md:w-3.5 md:h-3.5" />
-                {/* Ocultamos el texto en mobile para evitar que se vea feo/amontonado, lo mostramos desde lg */}
-                <span className="hidden lg:block">{item.name}</span>
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* User & Info */}
+        {/* User & Info (Moved here for mobile top row) */}
         <div className="flex items-center gap-1 md:gap-3 shrink-0">
           <div className="hidden xl:flex flex-col items-end border-r border-black/10 dark:border-white/10 pr-3 mr-1">
              <div className="flex items-center gap-2 text-[9px] font-mono font-bold text-gray-600 dark:text-gray-400">
@@ -118,15 +94,11 @@ export default function Header() {
           <button 
             onClick={async () => {
               try {
-                // Importamos el cliente global en vez de crear uno nuevo al vuelo
                 const { supabase } = await import('@/lib/supabaseClient');
                 await supabase.auth.signOut();
-                // Limpiar cualquier estado local y forzar redirección limpia
                 localStorage.clear();
                 window.location.replace('/login');
               } catch (err) {
-                console.error("Error signing out:", err);
-                // Fallback seguro en caso de error
                 window.location.replace('/login');
               }
             }}
@@ -136,6 +108,31 @@ export default function Header() {
             <LogOut className="w-4 h-4" />
           </button>
         </div>
+      </div>
+
+      {/* Navigation - Centered and Mobile Friendly */}
+      <nav className="flex items-center justify-center gap-1 md:gap-2 w-full md:w-auto md:flex-1 overflow-x-auto no-scrollbar py-1">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+            return (
+              <Link 
+                key={item.name}
+                href={item.href} 
+                className={`flex items-center gap-1.5 px-2 md:px-3 py-1.5 md:py-2 rounded-lg md:rounded-xl text-[9px] md:text-[10px] font-black transition-all whitespace-nowrap ${
+                  isActive 
+                    ? `${item.activeBg} ${item.color} border border-black/10 dark:border-white/10 shadow-sm` 
+                    : `text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5`
+                }`}
+                title={item.name} // Para que se vea el nombre en tooltip en celular si está oculto
+              >
+                <Icon className="w-4 h-4 md:w-3.5 md:h-3.5" />
+                {/* Ocultamos el texto en mobile para evitar que se vea feo/amontonado, lo mostramos desde lg */}
+                <span className="hidden lg:block">{item.name}</span>
+              </Link>
+            );
+          })}
+        </nav>
       </div>
     </header>
   );
