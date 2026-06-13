@@ -6,15 +6,7 @@ import {
   AreaChart, Area, RadialBarChart, RadialBar, Cell, Legend, PolarGrid,
   ScatterChart, Scatter, ZAxis
 } from 'recharts';
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 
-const mixChartConfig = {
-  value: { label: "Ingresos" },
-  repartidores: { label: "Repartidores", color: "#00d4ff" },
-  visitas: { label: "Visitas", color: "#a855f7" },
-  proveedores: { label: "Proveedores", color: "#22c55e" },
-  contratistas: { label: "Contratistas", color: "#f97316" },
-} satisfies ChartConfig;
 import { 
   Card, CardContent, CardDescription, CardHeader, CardTitle 
 } from '@/components/ui/card';
