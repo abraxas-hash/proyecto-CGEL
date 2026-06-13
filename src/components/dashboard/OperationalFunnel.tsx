@@ -44,7 +44,7 @@ export function OperationalFunnel() {
 
         {/* Gráfica AreaChart como fondo/sparkline */}
         <div className="w-full h-[140px] -mx-2 -mb-2 mt-auto">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
             <AreaChart data={funnelData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">

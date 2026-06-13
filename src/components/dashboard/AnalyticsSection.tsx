@@ -122,7 +122,7 @@ export default function AnalyticsSection({ data }: { data: any }) {
           </CardHeader>
           <CardContent className="flex-1 pb-6 flex flex-col items-center justify-center z-10 relative">
             <div className="h-[200px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                 <RadialBarChart 
                   data={[
                     { name: 'Repartidores', value: data.counts.repartidores || 1, fill: COLORS.blue },
