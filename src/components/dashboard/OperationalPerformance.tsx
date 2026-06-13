@@ -19,15 +19,15 @@ const weeklyData = [
 const chartConfig = {
   repartidores: {
     label: "Repartidores",
-    color: "hsl(var(--chart-1))",
+    color: "var(--chart-1)",
   },
   contratistas: {
     label: "Contratistas",
-    color: "hsl(var(--chart-2))",
+    color: "var(--chart-2)",
   },
   visitas: {
     label: "Visitas",
-    color: "hsl(var(--chart-3))",
+    color: "var(--chart-3)",
   },
 } satisfies ChartConfig;
 
