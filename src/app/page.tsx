@@ -6,7 +6,7 @@ import MetricCard from '@/components/ui/MetricCard';
 import SafeAnalytics from '@/components/dashboard/SafeAnalytics';
 import SafetyObservations from '@/components/dashboard/SafetyObservations';
 import { OperationalFunnel } from '@/components/dashboard/OperationalFunnel';
-import { SafetyTimeline } from '@/components/dashboard/SafetyTimeline';
+import { LiveEventsFeed } from '@/components/dashboard/LiveEventsFeed';
 export const dynamic = 'force-dynamic';
 
 const HOURLY_DATA = [
@@ -152,13 +152,13 @@ export default async function Home() {
         {/* Panel de Observaciones Críticas de Seguridad (SSOMA) */}
         <SafetyObservations />
 
-        {/* Nuevas Joyas Analíticas: Embudo y Línea de Tiempo en 2 columnas simétricas */}
+        {/* Nuevas Joyas Analíticas: Embudo y Feed de Eventos en 2 columnas simétricas */}
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div id="tour-funnel">
             <OperationalFunnel />
           </div>
           <div id="tour-timeline">
-            <SafetyTimeline />
+            <LiveEventsFeed />
           </div>
         </div>
 
