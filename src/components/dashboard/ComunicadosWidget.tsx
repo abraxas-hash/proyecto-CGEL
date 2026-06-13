@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
-import { ShieldCheck, AlertTriangle, MessageSquare, FileText, Download, ExternalLink, Clock } from 'lucide-react';
+import { ShieldCheck, AlertTriangle, MessageSquare, FileText, Download, Clock } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 interface Comunicado {
   id: string;
@@ -69,26 +70,30 @@ export function ComunicadosWidget() {
 
   if (comunicados.length === 0) {
     return (
-      <div className="w-full bg-white dark:bg-[#111] border border-black/5 dark:border-white/5 rounded-2xl p-6 shadow-sm">
-        <h3 className="text-lg font-black text-gray-900 dark:text-white flex items-center gap-2 mb-4">
-          <MessageSquare className="w-5 h-5 text-blue-500" />
-          Comunicados Oficiales
-        </h3>
-        <p className="text-gray-500 text-sm">No hay comunicados recientes de Gerencia o SSOMA.</p>
-      </div>
+      <Card className="glass-panel border-black/5 dark:border-white/5 relative overflow-hidden group w-full">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white flex items-center gap-2">
+            <MessageSquare className="w-4 h-4 text-[#00d4ff]" />
+            Bandeja Oficial
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-xs text-gray-500">No hay comunicados recientes de Gerencia o SSOMA.</p>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <div className="w-full bg-white dark:bg-[#111] border border-black/5 dark:border-white/5 rounded-2xl p-6 shadow-sm">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-black text-gray-900 dark:text-white flex items-center gap-2 uppercase tracking-tight">
-          <MessageSquare className="w-5 h-5 text-blue-500" />
+    <Card className="glass-panel border-black/5 dark:border-white/5 relative overflow-hidden group w-full mb-8">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white flex items-center gap-2">
+          <MessageSquare className="w-4 h-4 text-[#00d4ff]" />
           Bandeja Oficial
-        </h3>
-      </div>
-
-      <div className="space-y-4">
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
         {comunicados.map((item) => {
           // Estilos según tipo
           const isAlerta = item.tipo === 'Alerta';
@@ -109,27 +114,27 @@ export function ComunicadosWidget() {
           const Icon = isAlerta ? AlertTriangle : isDoc ? FileText : ShieldCheck;
 
           return (
-            <div key={item.id} className={`p-4 rounded-xl border ${bgClass} transition-all hover:scale-[1.01]`}>
+            <div key={item.id} className={`p-4 rounded-xl border ${bgClass} backdrop-blur-md transition-all hover:bg-white/[0.04] dark:hover:bg-white/[0.02]`}>
               <div className="flex items-start gap-3">
-                <div className={`mt-1 w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${isAlerta ? 'bg-red-500/20' : isDoc ? 'bg-purple-500/20' : 'bg-blue-500/20'}`}>
+                <div className={`mt-0.5 w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${isAlerta ? 'bg-red-500/20' : isDoc ? 'bg-purple-500/20' : 'bg-[#00d4ff]/20'}`}>
                   <Icon className={`w-4 h-4 ${iconClass}`} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
-                    <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-sm ${isAlerta ? 'bg-red-500 text-white' : 'bg-black/10 dark:bg-white/10 text-gray-600 dark:text-gray-300'}`}>
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-sm ${isAlerta ? 'bg-red-500 text-black' : 'bg-black/10 dark:bg-white/10 text-gray-600 dark:text-gray-300'}`}>
                       {item.autor_rol}
                     </span>
-                    <span className="text-[10px] text-gray-500 flex items-center gap-1 font-mono">
+                    <span className="text-[10px] text-gray-500 font-bold flex items-center gap-1 uppercase tracking-wider">
                       <Clock className="w-3 h-3" />
                       {formatDistanceToNow(new Date(item.created_at), { addSuffix: true, locale: es })}
                     </span>
                   </div>
                   
-                  <h4 className={`text-sm md:text-base font-bold mb-1 ${isAlerta ? 'text-red-700 dark:text-red-400' : 'text-gray-900 dark:text-white'}`}>
+                  <h4 className={`text-sm font-black mb-1.5 tracking-wide ${isAlerta ? 'text-red-500' : 'text-black dark:text-white'}`}>
                     {item.titulo}
                   </h4>
                   
-                  <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-wrap">
+                  <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-wrap font-medium">
                     {item.contenido}
                   </p>
 
@@ -138,7 +143,7 @@ export function ComunicadosWidget() {
                       href={item.enlace_documento}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold rounded-lg transition-colors"
+                      className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-400 border border-purple-500/20 text-[10px] font-black uppercase tracking-widest rounded-lg transition-colors"
                     >
                       <Download className="w-4 h-4" />
                       Descargar Documento
@@ -149,7 +154,8 @@ export function ComunicadosWidget() {
             </div>
           );
         })}
-      </div>
-    </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
