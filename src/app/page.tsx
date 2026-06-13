@@ -7,6 +7,7 @@ import SafeAnalytics from '@/components/dashboard/SafeAnalytics';
 import SafetyObservations from '@/components/dashboard/SafetyObservations';
 import { OperationalFunnel } from '@/components/dashboard/OperationalFunnel';
 import { LiveEventsFeed } from '@/components/dashboard/LiveEventsFeed';
+import { EmotionManagementWidget } from '@/components/dashboard/EmotionManagementWidget';
 export const dynamic = 'force-dynamic';
 
 const HOURLY_DATA = [
@@ -152,9 +153,14 @@ export default async function Home() {
         {/* Panel de Observaciones Críticas de Seguridad (SSOMA) */}
         <SafetyObservations />
 
-        {/* Embudo de Operaciones (Full Width) */}
-        <div className="mt-8" id="tour-funnel">
-          <OperationalFunnel />
+        {/* Embudo y Gestión Emocional en 2 columnas */}
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div id="tour-funnel">
+            <OperationalFunnel />
+          </div>
+          <div id="tour-emotions">
+            <EmotionManagementWidget />
+          </div>
         </div>
 
         {/* Analíticas Avanzadas */}
