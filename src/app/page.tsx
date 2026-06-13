@@ -152,16 +152,12 @@ export default async function Home() {
         {/* Panel de Observaciones Críticas de Seguridad (SSOMA) */}
         <SafetyObservations />
 
-        {/* Nuevas Joyas Analíticas: Embudo y Feed de Eventos en 2 columnas simétricas */}
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div id="tour-funnel">
-            <OperationalFunnel />
-          </div>
-          <div id="tour-timeline">
-            <LiveEventsFeed />
-          </div>
+        {/* Embudo de Operaciones (Full Width) */}
+        <div className="mt-8" id="tour-funnel">
+          <OperationalFunnel />
         </div>
 
+        {/* Analíticas Avanzadas */}
         <div className="mt-8">
           <SafeAnalytics 
             data={{
@@ -171,6 +167,11 @@ export default async function Home() {
               counts: counts
             }}
           />
+        </div>
+
+        {/* Feed de Eventos (Full Width en la base) */}
+        <div className="mt-8 mb-8" id="tour-timeline">
+          <LiveEventsFeed />
         </div>
       </main>
     </div>
