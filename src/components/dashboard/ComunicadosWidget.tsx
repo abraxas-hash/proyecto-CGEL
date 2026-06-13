@@ -114,8 +114,13 @@ export function ComunicadosWidget() {
           const Icon = isAlerta ? AlertTriangle : isDoc ? FileText : ShieldCheck;
 
           return (
-            <div key={item.id} className={`p-4 rounded-xl border ${bgClass} backdrop-blur-md transition-all hover:bg-white/[0.04] dark:hover:bg-white/[0.02]`}>
-              <div className="flex items-start gap-3">
+            <div key={item.id} className={`relative p-4 rounded-xl border ${bgClass} backdrop-blur-md transition-all hover:bg-white/[0.04] dark:hover:bg-white/[0.02] overflow-hidden`}>
+              {/* Efecto de parpadeo (Pulse) solo para Alertas */}
+              {isAlerta && (
+                <div className="absolute inset-0 rounded-xl border-2 border-red-500/80 shadow-[inset_0_0_20px_rgba(239,68,68,0.2)] animate-pulse pointer-events-none"></div>
+              )}
+              
+              <div className="flex items-start gap-3 relative z-10">
                 <div className={`mt-0.5 w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${isAlerta ? 'bg-red-500/20' : isDoc ? 'bg-purple-500/20' : 'bg-[#00d4ff]/20'}`}>
                   <Icon className={`w-4 h-4 ${iconClass}`} />
                 </div>
