@@ -19,24 +19,32 @@ interface MetricCardProps {
  */
 const colorStyles = {
   blue: {
+    cardBg: 'bg-blue-50 dark:bg-[#00d4ff]/5',
+    cardBorder: 'border-blue-200 dark:border-[#00d4ff]/20',
     hoverBorder: 'hover:border-[#00d4ff]/50',
     iconBg: 'bg-[#00d4ff]/10',
     iconHoverBg: 'group-hover:bg-[#00d4ff]/20',
     iconColor: 'text-[#00d4ff]'
   },
   purple: {
+    cardBg: 'bg-purple-50 dark:bg-purple-500/5',
+    cardBorder: 'border-purple-200 dark:border-purple-500/20',
     hoverBorder: 'hover:border-purple-500/50',
     iconBg: 'bg-purple-500/10',
     iconHoverBg: 'group-hover:bg-purple-500/20',
     iconColor: 'text-purple-400'
   },
   green: {
+    cardBg: 'bg-green-50 dark:bg-green-500/5',
+    cardBorder: 'border-green-200 dark:border-green-500/20',
     hoverBorder: 'hover:border-green-500/50',
     iconBg: 'bg-green-500/10',
     iconHoverBg: 'group-hover:bg-green-500/20',
     iconColor: 'text-green-400'
   },
   orange: {
+    cardBg: 'bg-orange-50 dark:bg-orange-500/5',
+    cardBorder: 'border-orange-200 dark:border-orange-500/20',
     hoverBorder: 'hover:border-orange-500/50',
     iconBg: 'bg-orange-500/10',
     iconHoverBg: 'group-hover:bg-orange-500/20',
@@ -53,7 +61,7 @@ export default function MetricCard({ title, subtitle, value, Icon, colorTheme, h
   return (
     <Link 
       href={href} 
-      className={`block relative overflow-hidden p-4 sm:p-6 rounded-2xl ${theme.hoverBorder} transition-transform active:scale-95 touch-manipulation cursor-pointer group min-h-32 flex flex-col justify-end text-center bg-white/60 dark:bg-white/5 backdrop-blur-xl border border-black/5 dark:border-white/10 shadow-xl`}
+      className={`block glass-panel ${theme.cardBg} ${theme.cardBorder} relative overflow-hidden p-4 sm:p-6 rounded-2xl ${theme.hoverBorder} transition-transform active:scale-95 touch-manipulation cursor-pointer group min-h-32 flex flex-col justify-end text-center`}
     >
       {/* Huge Background Icon */}
       <Icon 
