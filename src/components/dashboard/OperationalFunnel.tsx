@@ -14,19 +14,17 @@ const funnelData = [
 
 export function OperationalFunnel() {
   return (
-    <Card className="glass-panel bg-blue-50 dark:bg-[#00d4ff]/5 border-blue-200 dark:border-[#00d4ff]/20 overflow-hidden relative">
-      <CardContent className="p-4 sm:p-5 flex flex-col h-full relative z-10">
+    <Card className="glass-panel border-black/5 dark:border-white/5 relative overflow-hidden group">
+      <CardContent className="p-0 sm:p-6 sm:pb-0 flex flex-col h-full relative z-10">
         
         {/* Encabezado minimalista */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-md bg-[#00d4ff]/10">
+        <div className="flex items-center justify-between mb-4 sm:pt-0 pt-4 px-4 sm:px-0">
+          <div>
+            <h3 className="text-sm font-black uppercase tracking-widest text-black dark:text-white flex items-center gap-2">
               <Filter className="w-4 h-4 text-[#00d4ff]" />
-            </div>
-            <div>
-              <h3 className="text-sm font-bold text-black dark:text-white leading-none">Embudo de Operaciones</h3>
-              <p className="text-[10px] text-gray-500 mt-1 uppercase tracking-wider">Flujo de Auditoría</p>
-            </div>
+              Embudo de Operaciones
+            </h3>
+            <p className="text-xs text-gray-600 dark:text-gray-500 mt-1">Flujo y conversión de auditoría SOMA</p>
           </div>
         </div>
 

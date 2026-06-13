@@ -13,7 +13,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { 
   ShieldCheck, AlertTriangle, Users, Activity, 
-  ArrowUpRight, Clock, Zap, Globe, HardHat
+  ArrowUpRight, Clock, Zap
 } from 'lucide-react';
 
 // Colores del sistema Nexus (Paleta Shadboard)
@@ -50,10 +50,10 @@ export default function AnalyticsSection({ data }: { data: any }) {
       
 
       {/* 2. ANALYTICS CENTER */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
-        {/* Gráfica de Tendencia (Area Smooth) - 8 Columnas */}
-        <Card className="lg:col-span-8 glass-panel border-black/5 dark:border-white/5 relative overflow-hidden group">
+        {/* Gráfica de Tendencia (Area Smooth) */}
+        <Card className="glass-panel border-black/5 dark:border-white/5 relative overflow-hidden group">
           <CardHeader className="flex flex-row items-center justify-between z-10 relative">
             <div>
               <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white flex items-center gap-2">
@@ -114,8 +114,8 @@ export default function AnalyticsSection({ data }: { data: any }) {
           </CardContent>
         </Card>
 
-        {/* Distribución Radial (Concéntrica) - 4 Columnas -> Convertida a Donut interactivo */}
-        <Card className="lg:col-span-4 h-fit glass-panel border-black/5 dark:border-white/5 flex flex-col justify-center relative overflow-hidden group">
+        {/* Distribución Radial (Concéntrica) -> Convertida a Donut interactivo */}
+        <Card className="h-full glass-panel border-black/5 dark:border-white/5 flex flex-col justify-center relative overflow-hidden group">
           <CardHeader className="pb-2 z-10 relative">
             <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white">Mix de Seguridad</CardTitle>
             <CardDescription className="text-xs text-gray-600 dark:text-gray-500 mt-1">Distribución por categoría</CardDescription>
@@ -175,8 +175,11 @@ export default function AnalyticsSection({ data }: { data: any }) {
         </Card>
       </div>
 
-      {/* 3. SCATTER PLOT: MAPA DE CALOR DE INGRESOS (NEW) */}
-      <Card className="glass-panel border-black/5 dark:border-white/5 relative overflow-hidden group">
+      {/* 3. SCATTER PLOT & ACTIVITY FEED (2 Columnas) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+        
+        {/* Mapa de Calor */}
+        <Card className="glass-panel border-black/5 dark:border-white/5 relative overflow-hidden group">
         <CardHeader className="flex flex-row items-center justify-between z-10 relative">
           <div>
             <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white flex items-center gap-2">
@@ -294,20 +297,15 @@ export default function AnalyticsSection({ data }: { data: any }) {
         </CardContent>
       </Card>
 
-      {/* 4. ACTIVITY FEED & SYSTEM HEALTH */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
         {/* Timeline de Actividad (Shadboard Style) */}
-        <Card className="lg:col-span-2 bg-white/60 dark:bg-black/40 border-black/10 dark:border-white/10 backdrop-blur-xl">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-red-500/10 rounded-lg">
+        <Card className="glass-panel border-black/5 dark:border-white/5 relative overflow-hidden group h-full">
+          <CardHeader className="flex flex-row items-center justify-between z-10 relative">
+            <div>
+              <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white flex items-center gap-2">
                 <Zap className="w-4 h-4 text-red-500" />
-              </div>
-              <div>
-                <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white">Eventos Críticos en Tiempo Real</CardTitle>
-                <CardDescription className="text-xs text-gray-600 dark:text-gray-500">Reporte de discrepancias y alertas de seguridad</CardDescription>
-              </div>
+                Eventos Críticos en Tiempo Real
+              </CardTitle>
+              <CardDescription className="text-xs text-gray-600 dark:text-gray-500 mt-1">Reporte de discrepancias y alertas de seguridad</CardDescription>
             </div>
             <Button variant="ghost" className="text-[10px] font-black text-[#00d4ff] hover:bg-[#00d4ff]/5 uppercase tracking-widest">
               Live Feed
@@ -343,53 +341,6 @@ export default function AnalyticsSection({ data }: { data: any }) {
             </div>
           </CardContent>
         </Card>
-
-        {/* Global Security Metrics (Shadboard Style) */}
-        <div className="space-y-6">
-          <Card className="bg-white/60 dark:bg-black/40 border-black/10 dark:border-white/10 backdrop-blur-xl relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-[#00d4ff]/10 to-transparent opacity-50"></div>
-            <CardHeader className="relative z-10">
-              <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white flex items-center gap-2">
-                <Globe className="w-4 h-4 text-[#00d4ff]" />
-                Presencia en Planta
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="relative z-10 space-y-4">
-              {[
-                { label: 'Repartidores', count: data.counts.repartidores, percent: 65, color: COLORS.blue },
-                { label: 'Contratistas', count: data.counts.contratistas, percent: 15, color: COLORS.orange },
-                { label: 'Visitas', count: data.counts.visitas, percent: 20, color: COLORS.purple }
-              ].map((item, i) => (
-                <div key={i} className="space-y-1.5">
-                  <div className="flex justify-between text-[10px] font-black uppercase tracking-tighter">
-                    <span className="text-gray-600 dark:text-gray-400">{item.label}</span>
-                    <span className="text-black dark:text-white">{item.count} PAX</span>
-                  </div>
-                  <div className="h-1.5 w-full bg-black/5 dark:bg-white/5 rounded-full overflow-hidden">
-                    <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${item.percent}%`, backgroundColor: item.color }}></div>
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-red-500/20 via-black/40 to-black/40 border-red-500/20 backdrop-blur-xl border-t-4 border-t-red-500">
-            <CardHeader>
-              <CardTitle className="text-xs font-black uppercase tracking-widest text-red-500 flex items-center gap-2">
-                <HardHat className="w-4 h-4" />
-                Auditoría SOMA
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-[10px] text-gray-600 dark:text-gray-400 leading-relaxed font-medium">
-                Se detectaron <span className="text-black dark:text-white font-black underline">3 brechas críticas</span> de seguridad en el patio de maniobras (Nave 1) durante el último ciclo de recojo.
-              </p>
-              <Button className="w-full bg-red-500 hover:bg-red-600 text-black text-[9px] font-black uppercase tracking-[0.2em] h-10 transition-all shadow-lg shadow-red-500/20">
-                ACTUALIZAR IPERC
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
 
       </div>
     </div>

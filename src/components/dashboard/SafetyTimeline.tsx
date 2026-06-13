@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { CheckCircle2, AlertCircle, Info, ShieldAlert } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Info, ShieldAlert, Clock } from 'lucide-react';
 
 const activities = [
   {
@@ -36,12 +36,17 @@ const activities = [
 
 export function SafetyTimeline() {
   return (
-    <Card className="bg-white/60 dark:bg-black/40 border-black/10 dark:border-white/10 backdrop-blur-xl shadow-lg dark:shadow-none h-full">
-      <CardHeader>
-        <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white">Línea de Tiempo SSOMA</CardTitle>
-        <CardDescription className="text-xs text-gray-600 dark:text-gray-500">Eventos críticos de seguridad y auditoría en tiempo real</CardDescription>
+    <Card className="glass-panel border-black/5 dark:border-white/5 relative overflow-hidden group h-full">
+      <CardHeader className="flex flex-row items-center justify-between z-10 relative">
+        <div>
+          <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white flex items-center gap-2">
+            <Clock className="w-4 h-4 text-[#f97316]" />
+            Línea de Tiempo SSOMA
+          </CardTitle>
+          <CardDescription className="text-xs text-gray-600 dark:text-gray-500 mt-1">Eventos críticos de seguridad y auditoría en tiempo real</CardDescription>
+        </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="relative z-10">
         <div className="relative space-y-6">
           {/* Línea vertical de fondo */}
           <div className="absolute left-[11px] top-2 bottom-0 w-[1px] bg-black/10 dark:bg-white/5" />
