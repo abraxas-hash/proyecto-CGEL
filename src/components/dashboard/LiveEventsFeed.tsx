@@ -37,10 +37,14 @@ export function LiveEventsFeed() {
         </Button>
       </CardHeader>
       <CardContent>
-        <div className="relative pl-6 space-y-6 before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[1px] before:bg-black/5 dark:bg-white/5">
+        <div className="relative pl-8 space-y-4 before:absolute before:left-[15px] before:top-6 before:bottom-6 before:w-[2px] before:bg-black/10 dark:before:bg-white/10">
           {LIVE_EVENTS.map((row, i) => (
             <div key={i} className="relative group">
-              <div className={`absolute -left-[20px] top-1.5 w-2.5 h-2.5 rounded-full border-2 border-[#050505] z-10 transition-transform group-hover:scale-150`} style={{ backgroundColor: row.color }}></div>
+              {/* Dot centered on the vertical line and aligned with the text vertically */}
+              <div 
+                className={`absolute -left-[22px] top-[22px] w-2.5 h-2.5 rounded-full border-2 border-white dark:border-[#050505] z-10 transition-transform group-hover:scale-150 shadow-sm`} 
+                style={{ backgroundColor: row.color }}
+              ></div>
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 p-4 rounded-2xl bg-white/[0.02] border border-black/5 dark:border-white/5 group-hover:bg-white/[0.04] group-hover:border-white/10 transition-all">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
