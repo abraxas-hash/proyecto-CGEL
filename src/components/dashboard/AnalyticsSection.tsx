@@ -61,29 +61,35 @@ export default function AnalyticsSection({ data }: { data: any }) {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         {/* Gráfica de Tendencia (Area Smooth) - 8 Columnas */}
-        <Card className="lg:col-span-8 bg-white/60 dark:bg-black/40 border-black/10 dark:border-white/10 backdrop-blur-xl">
-          <CardHeader className="flex flex-row items-center justify-between">
+        <Card className="lg:col-span-8 glass-panel border-black/5 dark:border-white/5 relative overflow-hidden group">
+          <CardHeader className="flex flex-row items-center justify-between z-10 relative">
             <div>
-              <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white">Performance Operativo</CardTitle>
-              <CardDescription className="text-xs text-gray-600 dark:text-gray-500">Volumen de ingresos y auditorías por ciclo semanal</CardDescription>
+              <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white flex items-center gap-2">
+                <Activity className="w-4 h-4 text-[#00d4ff]" />
+                Performance Operativo
+              </CardTitle>
+              <CardDescription className="text-xs text-gray-600 dark:text-gray-500 mt-1">Volumen de ingresos y auditorías por ciclo semanal</CardDescription>
             </div>
             <div className="flex gap-2">
-              <div className="flex items-center gap-1.5 px-3 py-1 bg-black/5 dark:bg-white/5 rounded-full border border-black/5 dark:border-white/5">
-                <div className="w-2 h-2 rounded-full bg-[#00d4ff]"></div>
-                <span className="text-[9px] font-black text-black dark:text-white uppercase">Ingresos</span>
+              <div className="flex items-center gap-1.5 px-3 py-1 bg-[#00d4ff]/10 rounded-full border border-[#00d4ff]/20">
+                <div className="w-2 h-2 rounded-full bg-[#00d4ff] animate-pulse"></div>
+                <span className="text-[9px] font-black text-[#00d4ff] uppercase tracking-widest">Live</span>
               </div>
             </div>
           </CardHeader>
-          <CardContent className="h-[280px] mt-4">
+          <CardContent className="h-[280px] mt-4 z-10 relative p-0 sm:p-6 sm:pt-0">
             <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
-              <AreaChart data={data.weekly}>
+              <AreaChart data={data.weekly} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor={COLORS.blue} stopOpacity={0.3}/>
+                    <stop offset="5%" stopColor={COLORS.blue} stopOpacity={0.4}/>
                     <stop offset="95%" stopColor={COLORS.blue} stopOpacity={0}/>
                   </linearGradient>
+                  <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="4" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                  </filter>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
                 <XAxis 
                   dataKey="day" 
                   stroke="#475569" 
@@ -91,58 +97,88 @@ export default function AnalyticsSection({ data }: { data: any }) {
                   fontWeight="bold"
                   axisLine={false}
                   tickLine={false}
-                  tickMargin={10}
-                />
-                <YAxis 
-                  stroke="#475569" 
-                  fontSize={10} 
-                  fontWeight="bold"
-                  axisLine={false}
-                  tickLine={false}
+                  tickMargin={15}
+                  tick={{ fill: '#64748b' }}
                 />
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#050505', border: '1px solid #ffffff10', borderRadius: '16px', backdropFilter: 'blur(10px)' }}
-                  itemStyle={{ fontSize: '10px', fontWeight: 'bold', color: '#fff' }}
-                  labelStyle={{ color: '#64748b', marginBottom: '4px', fontWeight: '900', fontSize: '9px', textTransform: 'uppercase' }}
+                  cursor={{ stroke: 'rgba(0, 212, 255, 0.2)', strokeWidth: 2, strokeDasharray: '4 4' }}
+                  contentStyle={{ backgroundColor: 'rgba(5, 5, 5, 0.9)', border: '1px solid rgba(0, 212, 255, 0.2)', borderRadius: '12px', backdropFilter: 'blur(10px)', padding: '12px', boxShadow: '0 10px 25px -5px rgba(0, 212, 255, 0.2)' }}
+                  itemStyle={{ fontSize: '14px', fontWeight: '900', color: '#00d4ff' }}
+                  labelStyle={{ color: '#94a3b8', marginBottom: '8px', fontWeight: 'bold', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em' }}
                 />
                 <Area 
                   type="monotone" 
                   dataKey="total" 
                   stroke={COLORS.blue} 
-                  strokeWidth={4}
+                  strokeWidth={3}
                   fillOpacity={1} 
                   fill="url(#colorTotal)" 
-                  animationDuration={2000}
+                  activeDot={{ r: 6, fill: '#000', stroke: '#00d4ff', strokeWidth: 3, filter: 'url(#glow)' }}
+                  animationDuration={1500}
+                  animationEasing="ease-out"
                 />
               </AreaChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
 
-        {/* Distribución Radial (Concéntrica) - 4 Columnas */}
-        <Card className="lg:col-span-4 h-fit bg-white/60 dark:bg-black/40 border-black/10 dark:border-white/10 backdrop-blur-xl flex flex-col justify-center">
-          <CardHeader className="pb-2">
+        {/* Distribución Radial (Concéntrica) - 4 Columnas -> Convertida a Donut interactivo */}
+        <Card className="lg:col-span-4 h-fit glass-panel border-black/5 dark:border-white/5 flex flex-col justify-center relative overflow-hidden group">
+          <CardHeader className="pb-2 z-10 relative">
             <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white">Mix de Seguridad</CardTitle>
-            <CardDescription className="text-xs text-gray-600 dark:text-gray-500">Distribución por categoría de ingreso</CardDescription>
+            <CardDescription className="text-xs text-gray-600 dark:text-gray-500 mt-1">Distribución por categoría</CardDescription>
           </CardHeader>
-          <CardContent className="flex-1 pb-4 flex items-center justify-center">
-            <ChartContainer
-              config={mixChartConfig}
-              className="mx-auto aspect-square w-full max-h-[300px]"
-            >
-              <RadialBarChart 
-                data={radialData} 
-                innerRadius={30} 
-                outerRadius={110}
-              >
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent hideLabel nameKey="category" />}
-                />
-                <PolarGrid gridType="circle" />
-                <RadialBar dataKey="value" cornerRadius={5} />
-              </RadialBarChart>
-            </ChartContainer>
+          <CardContent className="flex-1 pb-6 flex flex-col items-center justify-center z-10 relative">
+            <div className="h-[200px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <RadialBarChart 
+                  data={[
+                    { name: 'Repartidores', value: data.counts.repartidores || 1, fill: COLORS.blue },
+                    { name: 'Visitas', value: data.counts.visitas || 1, fill: COLORS.purple },
+                    { name: 'Proveedores', value: data.counts.proveedores || 1, fill: COLORS.green },
+                    { name: 'Contratistas', value: data.counts.contratistas || 1, fill: COLORS.orange },
+                  ]} 
+                  innerRadius="30%" 
+                  outerRadius="100%" 
+                  barSize={12} 
+                  startAngle={90} 
+                  endAngle={-270}
+                >
+                  <PolarGrid gridType="circle" stroke="rgba(255,255,255,0.05)" />
+                  <Tooltip 
+                    cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                    contentStyle={{ backgroundColor: 'rgba(5, 5, 5, 0.9)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '12px', backdropFilter: 'blur(10px)', padding: '12px' }}
+                    itemStyle={{ fontSize: '12px', fontWeight: 'bold' }}
+                  />
+                  <RadialBar 
+                    background={{ fill: 'rgba(255,255,255,0.02)' }} 
+                    dataKey="value" 
+                    cornerRadius={10} 
+                    animationDuration={1500}
+                    animationEasing="ease-out"
+                  />
+                </RadialBarChart>
+              </ResponsiveContainer>
+            </div>
+            {/* Custom Legend */}
+            <div className="grid grid-cols-2 gap-x-4 gap-y-2 w-full mt-4 px-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#00d4ff]"></div><span className="text-[10px] text-gray-400 font-bold uppercase">Repartidores</span></div>
+                <span className="text-[10px] text-white font-black">{data.counts.repartidores}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#a855f7]"></div><span className="text-[10px] text-gray-400 font-bold uppercase">Visitas</span></div>
+                <span className="text-[10px] text-white font-black">{data.counts.visitas}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#22c55e]"></div><span className="text-[10px] text-gray-400 font-bold uppercase">Proveedores</span></div>
+                <span className="text-[10px] text-white font-black">{data.counts.proveedores}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#f97316]"></div><span className="text-[10px] text-gray-400 font-bold uppercase">Contratistas</span></div>
+                <span className="text-[10px] text-white font-black">{data.counts.contratistas}</span>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
