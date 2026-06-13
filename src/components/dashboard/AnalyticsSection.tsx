@@ -184,25 +184,39 @@ export default function AnalyticsSection({ data }: { data: any }) {
       </div>
 
       {/* 3. SCATTER PLOT: MAPA DE CALOR DE INGRESOS (NEW) */}
-      <Card className="bg-white/60 dark:bg-black/40 border-black/10 dark:border-white/10 backdrop-blur-xl">
-        <CardHeader className="flex flex-row items-center justify-between">
+      <Card className="glass-panel border-black/5 dark:border-white/5 relative overflow-hidden group">
+        <CardHeader className="flex flex-row items-center justify-between z-10 relative">
           <div>
-            <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white">Mapa de Calor de Ingresos</CardTitle>
-            <CardDescription className="text-xs text-gray-600 dark:text-gray-500">Densidad operativa y detección de anomalías por franja horaria</CardDescription>
+            <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white flex items-center gap-2">
+              <Activity className="w-4 h-4 text-[#f97316]" />
+              Mapa de Calor de Ingresos
+            </CardTitle>
+            <CardDescription className="text-xs text-gray-600 dark:text-gray-500 mt-1">Densidad operativa y detección de anomalías por franja horaria</CardDescription>
           </div>
-          <div className="hidden sm:flex gap-2">
-             <div className="flex items-center gap-4 text-[9px] font-black uppercase tracking-widest">
-                <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#00d4ff]"></div> Rep</span>
-                <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#a855f7]"></div> Vis</span>
-                <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#22c55e]"></div> Pro</span>
-                <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#f97316]"></div> Con</span>
+          <div className="hidden sm:flex gap-3">
+             <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-gray-400">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#00d4ff] shadow-[0_0_8px_rgba(0,212,255,0.8)]"></div> Rep
+             </div>
+             <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-gray-400">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#a855f7] shadow-[0_0_8px_rgba(168,85,247,0.8)]"></div> Vis
+             </div>
+             <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-gray-400">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#22c55e] shadow-[0_0_8px_rgba(34,197,94,0.8)]"></div> Pro
+             </div>
+             <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-gray-400">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#f97316] shadow-[0_0_8px_rgba(249,115,22,0.8)]"></div> Con
              </div>
           </div>
         </CardHeader>
-        <CardContent className="h-[300px] mt-4 relative">
+        <CardContent className="h-[250px] mt-2 relative z-10 p-0 sm:p-6 sm:pt-0">
           <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
-            <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
+            <ScatterChart margin={{ top: 10, right: 20, bottom: 0, left: -20 }}>
+              <defs>
+                <filter id="glow-scatter" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+              </defs>
               <XAxis 
                 type="number" 
                 dataKey="hour" 
@@ -214,6 +228,8 @@ export default function AnalyticsSection({ data }: { data: any }) {
                 fontWeight="bold"
                 axisLine={false}
                 tickLine={false}
+                tickMargin={10}
+                tick={{ fill: '#64748b' }}
               />
               <YAxis 
                 type="number" 
@@ -229,25 +245,25 @@ export default function AnalyticsSection({ data }: { data: any }) {
                   return '';
                 }}
                 stroke="#475569" 
-                fontSize={10} 
-                fontWeight="bold"
+                fontSize={9} 
+                fontWeight="900"
                 axisLine={false}
                 tickLine={false}
+                tick={{ fill: '#64748b' }}
               />
-              <ZAxis type="number" dataKey="size" range={[50, 400]} />
+              <ZAxis type="number" dataKey="size" range={[80, 500]} />
               <Tooltip 
-                cursor={{ strokeDasharray: '3 3', stroke: '#ffffff20' }}
+                cursor={{ strokeDasharray: '3 3', stroke: 'rgba(255,255,255,0.1)', strokeWidth: 1 }}
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
                     const data = payload[0].payload;
                     return (
-                      <div className="bg-black/90 border border-white/10 p-3 rounded-xl backdrop-blur-xl shadow-2xl">
-                        <p className="text-[10px] font-black text-black dark:text-white uppercase mb-1">{data.name}</p>
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 rounded-full" style={{ backgroundColor: data.fill }}></div>
-                          <span className="text-[9px] font-bold text-gray-600 dark:text-gray-400 uppercase tracking-widest">{data.category}</span>
+                      <div className="bg-black/90 border border-white/10 p-4 rounded-xl backdrop-blur-xl shadow-2xl" style={{ boxShadow: `0 10px 30px -10px ${data.fill}50` }}>
+                        <p className="text-[12px] font-black text-white uppercase mb-2 leading-none" style={{ color: data.fill }}>{data.name}</p>
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{data.category}</span>
                         </div>
-                        <p className="text-[9px] text-gray-600 dark:text-gray-500 mt-2">HORA DE INGRESO: <span className="text-black dark:text-white">{data.hour}:00</span></p>
+                        <p className="text-[10px] text-gray-500 font-bold">HORA REGISTRADA: <span className="text-white ml-1">{data.hour}:00</span></p>
                       </div>
                     );
                   }
@@ -278,7 +294,7 @@ export default function AnalyticsSection({ data }: { data: any }) {
               >
                 {/* Efecto de Brillo para los puntos */}
                 {Array.from({ length: 13 }).map((_, index) => (
-                  <Cell key={`cell-${index}`} />
+                  <Cell key={`cell-${index}`} style={{ filter: 'url(#glow-scatter)' }} />
                 ))}
               </Scatter>
             </ScatterChart>
