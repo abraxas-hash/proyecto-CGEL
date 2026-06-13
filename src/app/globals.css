@@ -224,14 +224,24 @@ body {
   scrollbar-width: none;  /* Firefox */
 }
 
-/* Fix for square borders on chart click (v2.8.3) */
+/* Fix for square borders on chart click */
 .recharts-wrapper:focus, 
+.recharts-wrapper:focus-visible,
 .recharts-surface:focus,
+.recharts-surface:focus-visible,
 .recharts-sector:focus,
-.recharts-legend-item:focus {
+.recharts-sector:focus-visible,
+.recharts-legend-item:focus,
+.recharts-legend-item:focus-visible,
+.recharts-responsive-container:focus,
+.recharts-responsive-container:focus-visible {
   outline: none !important;
-  border: none !important;
+  box-shadow: none !important;
   -webkit-tap-highlight-color: transparent;
+}
+
+.recharts-wrapper * {
+  outline: none !important;
 }
 
 /*
