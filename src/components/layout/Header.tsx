@@ -119,9 +119,15 @@ export default function Header() {
           <button 
             onClick={async () => {
               try {
-                const { supabase } = await import('@/lib/supabaseClient');
+                const { createBrowserClient } = await import('@supabase/ssr');
+                const supabase = createBrowserClient(
+                  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+                  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+                );
                 await supabase.auth.signOut();
                 localStorage.clear();
+                // Limpiar cookies explícitamente por si acaso
+                document.cookie = 'sb-' + process.env.NEXT_PUBLIC_SUPABASE_URL?.split('//')[1].split('.')[0] + '-auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
                 window.location.replace('/login');
               } catch (err) {
                 window.location.replace('/login');
