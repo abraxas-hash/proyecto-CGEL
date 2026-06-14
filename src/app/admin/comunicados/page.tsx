@@ -94,7 +94,7 @@ export default function ComunicadosPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white p-4 md:p-8 font-[family-name:var(--font-geist-sans)]">
+    <div className="min-h-screen bg-[#0a0a0a] text-slate-800 dark:text-white p-4 md:p-8 font-[family-name:var(--font-geist-sans)]">
       {/* Header */}
       <div className="max-w-3xl mx-auto flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
@@ -103,11 +103,11 @@ export default function ComunicadosPage() {
           </div>
           <div>
             <h1 className="text-2xl font-black tracking-tight">Emitir Comunicado</h1>
-            <p className="text-gray-400 text-sm">Portal exclusivo para Gerencia y SSOMA</p>
+            <p className="text-slate-500 dark:text-gray-400 text-sm">Portal exclusivo para Gerencia y SSOMA</p>
           </div>
         </div>
         <Link href="/">
-          <Button variant="outline" className="border-white/10 text-white hover:bg-white/10 gap-2">
+          <Button variant="outline" className="border-white/10 text-slate-800 dark:text-white hover:bg-white/10 gap-2">
             <Home className="w-4 h-4" />
             Volver al Dashboard
           </Button>
@@ -115,7 +115,7 @@ export default function ComunicadosPage() {
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="max-w-3xl mx-auto bg-[#151515] border border-white/5 p-6 md:p-8 rounded-3xl shadow-2xl">
+      <form onSubmit={handleSubmit} className="max-w-3xl mx-auto bg-[#151515] border border-slate-700 p-6 md:p-8 rounded-3xl shadow-2xl">
         
         {error && (
           <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-3 text-red-500 text-sm font-bold">
@@ -133,19 +133,19 @@ export default function ComunicadosPage() {
 
         {/* Autor */}
         <div className="mb-6">
-          <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Emitido Por</label>
+          <label className="block text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">Emitido Por</label>
           <div className="flex gap-4">
             <button
               type="button"
               onClick={() => setAutorRol('Gerencia')}
-              className={`flex-1 py-3 rounded-xl border font-bold transition-all ${autorRol === 'Gerencia' ? 'bg-blue-600/20 border-blue-500 text-blue-400' : 'bg-black/20 border-white/10 text-gray-400 hover:bg-white/5'}`}
+              className={`flex-1 py-3 rounded-xl border font-bold transition-all ${autorRol === 'Gerencia' ? 'bg-blue-600/20 border-blue-500 text-blue-400' : 'bg-black/20 border-white/10 text-slate-500 dark:text-gray-400 hover:bg-white/5'}`}
             >
               Gerencia General
             </button>
             <button
               type="button"
               onClick={() => setAutorRol('SSOMA')}
-              className={`flex-1 py-3 rounded-xl border font-bold transition-all ${autorRol === 'SSOMA' ? 'bg-orange-500/20 border-orange-500 text-orange-400' : 'bg-black/20 border-white/10 text-gray-400 hover:bg-white/5'}`}
+              className={`flex-1 py-3 rounded-xl border font-bold transition-all ${autorRol === 'SSOMA' ? 'bg-orange-500/20 border-orange-500 text-orange-400' : 'bg-black/20 border-white/10 text-slate-500 dark:text-gray-400 hover:bg-white/5'}`}
             >
               Dpto. SSOMA
             </button>
@@ -154,25 +154,25 @@ export default function ComunicadosPage() {
 
         {/* Tipo de Comunicado */}
         <div className="mb-6">
-          <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Tipo de Comunicado</label>
+          <label className="block text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">Tipo de Comunicado</label>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div 
               onClick={() => setTipo('Mensaje')}
-              className={`cursor-pointer border rounded-xl p-4 flex flex-col items-center gap-2 transition-all ${tipo === 'Mensaje' ? 'bg-blue-600/20 border-blue-500 text-blue-400' : 'bg-black/20 border-white/10 text-gray-400 hover:bg-white/5'}`}
+              className={`cursor-pointer border rounded-xl p-4 flex flex-col items-center gap-2 transition-all ${tipo === 'Mensaje' ? 'bg-blue-600/20 border-blue-500 text-blue-400' : 'bg-black/20 border-white/10 text-slate-500 dark:text-gray-400 hover:bg-white/5'}`}
             >
               <MessageSquare className="w-6 h-6" />
               <span className="font-bold">Mensaje Normal</span>
             </div>
             <div 
               onClick={() => setTipo('Alerta')}
-              className={`cursor-pointer border rounded-xl p-4 flex flex-col items-center gap-2 transition-all ${tipo === 'Alerta' ? 'bg-red-500/20 border-red-500 text-red-400' : 'bg-black/20 border-white/10 text-gray-400 hover:bg-white/5'}`}
+              className={`cursor-pointer border rounded-xl p-4 flex flex-col items-center gap-2 transition-all ${tipo === 'Alerta' ? 'bg-red-500/20 border-red-500 text-red-400' : 'bg-black/20 border-white/10 text-slate-500 dark:text-gray-400 hover:bg-white/5'}`}
             >
               <AlertTriangle className="w-6 h-6" />
               <span className="font-bold">Alerta de Seguridad</span>
             </div>
             <div 
               onClick={() => setTipo('Documento')}
-              className={`cursor-pointer border rounded-xl p-4 flex flex-col items-center gap-2 transition-all ${tipo === 'Documento' ? 'bg-purple-500/20 border-purple-500 text-purple-400' : 'bg-black/20 border-white/10 text-gray-400 hover:bg-white/5'}`}
+              className={`cursor-pointer border rounded-xl p-4 flex flex-col items-center gap-2 transition-all ${tipo === 'Documento' ? 'bg-purple-500/20 border-purple-500 text-purple-400' : 'bg-black/20 border-white/10 text-slate-500 dark:text-gray-400 hover:bg-white/5'}`}
             >
               <FileText className="w-6 h-6" />
               <span className="font-bold">Documento / Política</span>
@@ -182,27 +182,27 @@ export default function ComunicadosPage() {
 
         {/* Título */}
         <div className="mb-6">
-          <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Título del Comunicado</label>
+          <label className="block text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">Título del Comunicado</label>
           <input 
             type="text" 
             required
             value={titulo}
             onChange={e => setTitulo(e.target.value)}
             placeholder="Ej: Nuevas normas de EPP en almacén principal"
-            className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-blue-500 transition-colors"
+            className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-slate-800 dark:text-white placeholder:text-gray-600 focus:outline-none focus:border-blue-500 transition-colors"
           />
         </div>
 
         {/* Contenido */}
         <div className="mb-6">
-          <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Cuerpo del Mensaje</label>
+          <label className="block text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">Cuerpo del Mensaje</label>
           <textarea 
             required
             rows={5}
             value={contenido}
             onChange={e => setContenido(e.target.value)}
             placeholder="Escriba los detalles aquí..."
-            className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-blue-500 transition-colors resize-none"
+            className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-slate-800 dark:text-white placeholder:text-gray-600 focus:outline-none focus:border-blue-500 transition-colors resize-none"
           />
         </div>
 
@@ -217,7 +217,7 @@ export default function ComunicadosPage() {
               accept=".pdf,.doc,.docx,.xls,.xlsx"
               ref={fileInputRef}
               onChange={e => setFile(e.target.files?.[0] || null)}
-              className="text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-purple-500/20 file:text-purple-400 hover:file:bg-purple-500/30 w-full max-w-xs mx-auto"
+              className="text-sm text-slate-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-purple-500/20 file:text-purple-400 hover:file:bg-purple-500/30 w-full max-w-xs mx-auto"
             />
           </div>
         )}

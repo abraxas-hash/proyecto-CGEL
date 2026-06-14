@@ -13,24 +13,36 @@
 }
 
 body {
-  background-color: #0e1117 !important;
-  color: #e2e8f0;
+  @apply bg-[#BFBBAF] text-slate-800 dark:bg-[#242220] dark:text-[#e2e8f0] transition-colors duration-300 min-h-screen;
 }
 
-.glass-panel {
-  @apply bg-[#161b27] border border-white/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.2)] rounded-2xl;
+/* Modern Elevated Cards (Replacing Neumorphism) */
+.glass-panel, .soft-hud-panel {
+  @apply bg-[#BFBBAF] border border-slate-400/50 dark:border-white/5 rounded-[24px] transition-all duration-300;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.4), 0 10px 15px -5px rgba(0, 0, 0, 0.2);
 }
 
-.soft-hud-panel {
-  @apply bg-[#1c2333] border border-white/[0.06] shadow-[0_8px_30px_rgba(0,0,0,0.3)] rounded-3xl;
+.dark .glass-panel, .dark .soft-hud-panel {
+  @apply bg-[#2A2825];
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6);
+}
+
+/* Standard Inset Cards */
+.neumorphic-inset {
+  @apply bg-black/5 dark:bg-[#1A1918] border border-slate-400/30 dark:border-white/5 transition-all duration-300 rounded-xl;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dark .neumorphic-inset {
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.7);
 }
 
 .cgel-gradient {
-  background: linear-gradient(135deg, #00d4ff 0%, #0047AB 100%);
+  background: linear-gradient(135deg, #D97736 0%, #A85A24 100%);
 }
 
 .cgel-glow-cyan {
-  @apply drop-shadow-[0_0_15px_rgba(0,212,255,0.4)] dark:drop-shadow-[0_0_15px_rgba(0,212,255,0.4)];
+  @apply drop-shadow-[0_0_15px_rgba(217,119,54,0.4)] dark:drop-shadow-[0_0_15px_rgba(217,119,54,0.4)];
 }
 
 /* ==========================================================================

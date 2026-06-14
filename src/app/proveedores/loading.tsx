@@ -13,7 +13,7 @@ export default function Loading() {
 
         <div className="space-y-4">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="h-20 bg-white/5 rounded-2xl border border-white/5"></div>
+            <div key={i} className="h-20 bg-white/5 rounded-2xl border border-slate-700"></div>
           ))}
         </div>
       </main>

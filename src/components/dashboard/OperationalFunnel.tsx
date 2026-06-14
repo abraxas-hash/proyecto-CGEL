@@ -14,14 +14,14 @@ const funnelData = [
 
 export function OperationalFunnel() {
   return (
-    <Card className="glass-panel border-black/5 dark:border-white/5 relative overflow-hidden group">
+    <Card className="glass-panel border-slate-400 dark:border-slate-700 dark:border-slate-700 relative overflow-hidden group">
       <CardContent className="p-0 sm:p-6 sm:pb-0 flex flex-col h-full relative z-10">
         
         {/* Encabezado minimalista */}
         <div className="flex items-center justify-between mb-4 sm:pt-0 pt-4 px-4 sm:px-0">
           <div>
-            <h3 className="text-sm font-black uppercase tracking-widest text-black dark:text-white flex items-center gap-2">
-              <Filter className="w-4 h-4 text-[#00d4ff]" />
+            <h3 className="text-sm font-black uppercase tracking-widest text-black dark:text-slate-800 dark:text-white flex items-center gap-2">
+              <Filter className="w-4 h-4 text-slate-800 dark:text-white" />
               Embudo de Operaciones
             </h3>
             <p className="text-xs text-gray-600 dark:text-gray-500 mt-1">Flujo y conversión de auditoría SOMA</p>
@@ -32,7 +32,7 @@ export function OperationalFunnel() {
         <div className="flex justify-between items-end mb-2 z-10">
           {funnelData.map((item, idx) => (
             <div key={item.stage} className="flex flex-col text-center">
-              <span className="text-xs sm:text-sm font-black text-black dark:text-white drop-shadow-sm">
+              <span className="text-xs sm:text-sm font-black text-black dark:text-slate-800 dark:text-white drop-shadow-sm">
                 {item.value}
               </span>
               <span className="text-[8px] sm:text-[9px] font-bold text-gray-500 uppercase tracking-widest mt-0.5">

@@ -121,7 +121,7 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
           {/* Botón Cerrar Sleek */}
           <button 
             onClick={() => setZoomPhotoUrl(null)}
-            className="fixed top-8 right-8 p-3 bg-white/5 hover:bg-red-500/10 hover:text-red-400 rounded-full text-white/50 transition-all border border-white/5 z-[102] backdrop-blur-md"
+            className="fixed top-8 right-8 p-3 bg-white/5 hover:bg-red-500/10 hover:text-red-400 rounded-full text-white/50 transition-all border border-slate-700 z-[102] backdrop-blur-md"
             title="Cerrar (Esc)"
           >
             <X className="w-5 h-5" />
@@ -130,7 +130,7 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
           {/* Navegación HUD Minimalista */}
           <button 
             onClick={(e) => { e.stopPropagation(); handlePrevPhoto(); }}
-            className="fixed left-8 top-1/2 -translate-y-1/2 p-4 bg-white/5 hover:bg-white/10 rounded-full text-white/40 hover:text-white transition-all border border-white/5 z-[102] backdrop-blur-md group"
+            className="fixed left-8 top-1/2 -translate-y-1/2 p-4 bg-white/5 hover:bg-white/10 rounded-full text-slate-700 dark:text-white/60 hover:text-slate-800 dark:text-slate-800 dark:text-white transition-all border border-slate-700 z-[102] backdrop-blur-md group"
             title="Anterior"
           >
             <ChevronLeft className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" />
@@ -138,14 +138,14 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
 
           <button 
             onClick={(e) => { e.stopPropagation(); handleNextPhoto(); }}
-            className="fixed right-8 top-1/2 -translate-y-1/2 p-4 bg-white/5 hover:bg-white/10 rounded-full text-white/40 hover:text-white transition-all border border-white/5 z-[102] backdrop-blur-md group"
+            className="fixed right-8 top-1/2 -translate-y-1/2 p-4 bg-white/5 hover:bg-white/10 rounded-full text-slate-700 dark:text-white/60 hover:text-slate-800 dark:text-slate-800 dark:text-white transition-all border border-slate-700 z-[102] backdrop-blur-md group"
             title="Siguiente"
           >
             <ChevronRight className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" />
           </button>
 
           <div className="relative max-w-5xl w-full flex flex-col items-center" onClick={e => e.stopPropagation()}>
-            <div className="bg-[#050505] border border-white/5 p-1 rounded-2xl shadow-2xl w-full ring-1 ring-white/10">
+            <div className="bg-slate-100 dark:bg-[#050505] border border-slate-700 p-1 rounded-2xl shadow-2xl w-full ring-1 ring-white/10">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img 
                 src={zoomPhotoUrl} 
@@ -168,7 +168,7 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
                 <div className="flex items-center gap-6">
                   <div className="flex flex-col items-end">
                     <span className="text-[9px] text-white/20 font-black uppercase tracking-widest">Secuencia</span>
-                    <span className="text-xs font-mono text-white/60">
+                    <span className="text-xs font-mono text-slate-800 dark:text-white/80">
                       {evidenciasFiltradas.findIndex((f: any) => f.url_foto === zoomPhotoUrl) + 1} <span className="text-white/20">/</span> {evidenciasFiltradas.length}
                     </span>
                   </div>
@@ -191,11 +191,11 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
           <div className="relative max-w-4xl w-full flex flex-col items-center" onClick={e => e.stopPropagation()}>
             <button 
               onClick={() => setShowDniModal(false)}
-              className="absolute -top-14 right-0 p-3 bg-white/10 hover:bg-white/20 hover:text-red-400 rounded-full text-white transition-all shadow-lg"
+              className="absolute -top-14 right-0 p-3 bg-white/10 hover:bg-white/20 hover:text-red-400 rounded-full text-slate-800 dark:text-slate-800 dark:text-white transition-all shadow-lg"
             >
               <X className="w-6 h-6" />
             </button>
-            <div className="bg-[#050505] border border-white/20 p-3 rounded-2xl shadow-2xl w-full">
+            <div className="bg-slate-100 dark:bg-[#050505] border border-white/20 p-3 rounded-2xl shadow-2xl w-full">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img 
                 src={fotoDniUrl} 
@@ -204,8 +204,8 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
               />
               <div className="p-5 flex justify-between items-center bg-white/5 mt-3 rounded-xl">
                 <div>
-                  <p className="text-white font-bold text-xl">{repartidor.conductor_apellido}</p>
-                  <p className="text-gray-400 text-sm flex items-center gap-2 mt-1">
+                  <p className="text-slate-800 dark:text-slate-800 dark:text-white font-bold text-xl">{repartidor.conductor_apellido}</p>
+                  <p className="text-slate-500 dark:text-slate-500 dark:text-gray-400 text-sm flex items-center gap-2 mt-1">
                     <IdCard className="w-4 h-4" />
                     Documento de Identidad Nacional (DNI)
                   </p>
@@ -221,14 +221,14 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
 
       <Header />
 
-      <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
-        <Link href="/repartidores" className="flex items-center gap-2 text-[#00d4ff] hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-4 py-2.5 rounded-xl border border-white/5 text-sm font-bold w-full sm:w-auto justify-center sm:justify-start">
+      <div className="mt-6 sm:mt-8 mb-4 sm:mb-6 flex flex-col sm:flex-row justify-start items-start sm:items-center gap-4">
+        <Link href="/repartidores" className="flex items-center gap-2 text-slate-800 dark:text-white hover:text-slate-800 dark:text-slate-800 dark:text-white transition-colors bg-white/5 hover:bg-white/10 px-4 py-2.5 rounded-xl border border-slate-700 text-sm font-bold w-full sm:w-auto justify-center sm:justify-start shrink-0">
           <ArrowLeft className="w-4 h-4" />
           Volver a la tabla
         </Link>
         <div className="flex items-center gap-2 bg-purple-500/10 px-4 py-2 rounded-xl border border-purple-500/20 w-full sm:w-auto justify-center sm:justify-end">
           <span className="text-[10px] font-black text-purple-400 uppercase tracking-widest">ID AUDITORÍA</span>
-          <span className="text-sm font-mono font-bold text-white tracking-tighter">#{String(repartidor.id).split('-')[0]}</span>
+          <span className="text-sm font-mono font-bold text-slate-800 dark:text-slate-800 dark:text-white tracking-tighter">#{String(repartidor.id).split('-')[0]}</span>
         </div>
       </div>
 
@@ -240,8 +240,8 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
             <div className="absolute top-0 left-0 w-1 bg-[#00d4ff] h-full"></div>
             <div className="flex flex-col gap-1 mb-6 border-b border-white/10 pb-4">
               <div className="flex items-center gap-3">
-                <FileText className="text-[#00d4ff] w-6 h-6" />
-                <h2 className="text-xl font-bold text-white">Datos del Registro</h2>
+                <FileText className="text-slate-800 dark:text-white w-6 h-6" />
+                <h2 className="text-xl font-bold text-slate-800 dark:text-slate-800 dark:text-white">Datos del Registro</h2>
               </div>
               <span className="text-xs text-gray-500 font-mono mt-2 bg-white/5 w-fit px-2 py-1 rounded">COD: F-OPER-REP-03</span>
             </div>
@@ -250,11 +250,11 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
               <div>
                 <p className="text-xs text-gray-500 uppercase">Conductor Identificado</p>
                 <div className="flex items-center gap-4 mt-1">
-                  <p className="text-2xl font-bold text-white">{repartidor.conductor_apellido}</p>
+                  <p className="text-2xl font-bold text-slate-800 dark:text-slate-800 dark:text-white">{repartidor.conductor_apellido}</p>
                   <button 
                     type="button"
                     onClick={() => setShowDniModal(true)}
-                    className="p-2 bg-[#00d4ff]/10 hover:bg-[#00d4ff]/20 border border-[#00d4ff]/30 rounded-xl text-[#00d4ff] transition-all group shadow-[0_0_10px_rgba(0,212,255,0.1)] hover:shadow-[0_0_15px_rgba(0,212,255,0.3)]"
+                    className="p-2 bg-[#00d4ff]/10 hover:bg-[#00d4ff]/20 border border-[#00d4ff]/30 rounded-xl text-slate-800 dark:text-white transition-all group shadow-[0_0_10px_rgba(0,212,255,0.1)] hover:shadow-[0_0_15px_rgba(0,212,255,0.3)]"
                     title="Ver DNI a pantalla completa"
                   >
                     <IdCard className="w-5 h-5 group-hover:scale-110 transition-transform" />
@@ -264,21 +264,21 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-white/5 p-3 rounded-lg">
                   <p className="text-xs text-gray-500">Transporte</p>
-                  <p className="text-sm font-bold text-[#00d4ff]">{repartidor.empresa_abreviatura}</p>
+                  <p className="text-sm font-bold text-slate-800 dark:text-white">{repartidor.empresa_abreviatura}</p>
                 </div>
                 <div className="bg-white/5 p-3 rounded-lg">
                   <p className="text-xs text-gray-500">Placa</p>
-                  <p className="text-sm font-mono text-white">{repartidor.placa}</p>
+                  <p className="text-sm font-mono text-slate-800 dark:text-slate-800 dark:text-white">{repartidor.placa}</p>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-xs text-gray-500">Fecha Operativa</p>
-                  <p className="text-sm font-mono text-white">{repartidor.fecha}</p>
+                  <p className="text-sm font-mono text-slate-800 dark:text-slate-800 dark:text-white">{repartidor.fecha}</p>
                 </div>
                 <div>
                   <p className="text-xs text-gray-500">Turno</p>
-                  <p className="text-sm text-white">{repartidor.turno}</p>
+                  <p className="text-sm text-slate-800 dark:text-slate-800 dark:text-white">{repartidor.turno}</p>
                 </div>
               </div>
               
@@ -295,7 +295,7 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
                     className={`flex justify-between items-center px-3 py-2 rounded-lg cursor-pointer transition-all border
                       ${activeCiclo === 1 ? 'bg-purple-500/20 border-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'bg-white/5 border-transparent hover:bg-white/10'}`}
                   >
-                    <span className={`text-xs font-bold ${activeCiclo === 1 ? 'text-purple-400' : 'text-gray-400'}`}>1° Reparto</span>
+                    <span className={`text-xs font-bold ${activeCiclo === 1 ? 'text-purple-400' : 'text-slate-500 dark:text-slate-500 dark:text-gray-400'}`}>1° Reparto</span>
                     <div className="flex gap-4">
                       <span className="text-sm font-mono text-green-400">In: {repartidor.entrada_1 || '--:--'}</span>
                       <span className="text-sm font-mono text-red-400">Out: {repartidor.salida_1 || '--:--'}</span>
@@ -312,7 +312,7 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
                       ${!repartidor.entrada_2 ? 'opacity-40 cursor-not-allowed bg-white/5 border-transparent' : 
                         activeCiclo === 2 ? 'bg-purple-500/20 border-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.2)] cursor-pointer' : 'bg-white/5 border-transparent hover:bg-white/10 cursor-pointer'}`}
                   >
-                    <span className={`text-xs font-bold ${activeCiclo === 2 ? 'text-purple-400' : 'text-gray-400'}`}>2° Reparto</span>
+                    <span className={`text-xs font-bold ${activeCiclo === 2 ? 'text-purple-400' : 'text-slate-500 dark:text-slate-500 dark:text-gray-400'}`}>2° Reparto</span>
                     {repartidor.entrada_2 ? (
                       <div className="flex gap-4">
                         <span className="text-sm font-mono text-green-400">In: {repartidor.entrada_2}</span>
@@ -333,7 +333,7 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
                       ${!repartidor.entrada_3 ? 'opacity-40 cursor-not-allowed bg-white/5 border-transparent' : 
                         activeCiclo === 3 ? 'bg-purple-500/20 border-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.2)] cursor-pointer' : 'bg-white/5 border-transparent hover:bg-white/10 cursor-pointer'}`}
                   >
-                    <span className={`text-xs font-bold ${activeCiclo === 3 ? 'text-purple-400' : 'text-gray-400'}`}>3° Reparto</span>
+                    <span className={`text-xs font-bold ${activeCiclo === 3 ? 'text-purple-400' : 'text-slate-500 dark:text-slate-500 dark:text-gray-400'}`}>3° Reparto</span>
                     {repartidor.entrada_3 ? (
                       <div className="flex gap-4">
                         <span className="text-sm font-mono text-green-400">In: {repartidor.entrada_3}</span>
@@ -355,11 +355,11 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
                 <History className="w-4 h-4" /> Trazabilidad de Vaciado
               </h3>
               <div className="space-y-2 text-sm">
-                <p className="text-gray-400 flex justify-between">
+                <p className="text-slate-500 dark:text-slate-500 dark:text-gray-400 flex justify-between">
                   <span>Agente Responsable:</span> 
-                  <span className="text-white font-medium">{repartidor.agente_registro}</span>
+                  <span className="text-slate-800 dark:text-slate-800 dark:text-white font-medium">{repartidor.agente_registro}</span>
                 </p>
-                <p className="text-gray-400 flex justify-between">
+                <p className="text-slate-500 dark:text-slate-500 dark:text-gray-400 flex justify-between">
                   <span>Digitalizado el:</span> 
                   <span className="text-blue-300 font-mono" suppressHydrationWarning>
                     {new Date(repartidor.creado_en).toLocaleDateString()} a las {new Date(repartidor.creado_en).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
@@ -375,7 +375,7 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
               <h3 className="text-sm font-bold text-blue-400 uppercase mb-2 tracking-wider">
                 Observaciones del Turno
               </h3>
-              <p className="text-xs text-gray-300 italic leading-relaxed">
+              <p className="text-xs text-slate-600 dark:text-slate-600 dark:text-gray-300 italic leading-relaxed">
                 {parsedObs.texto || 'Sin observaciones registradas.'}
               </p>
             </div>
@@ -383,14 +383,14 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
 
           {/* CHECKLIST DE SEGURIDAD */}
           <div className="glass-panel rounded-2xl p-6">
-            <h3 className="text-sm font-bold text-gray-400 uppercase mb-4 tracking-wider">Auditoría de Seguridad (Último Ciclo)</h3>
+            <h3 className="text-sm font-bold text-slate-500 dark:text-slate-500 dark:text-gray-400 uppercase mb-4 tracking-wider">Auditoría de Seguridad (Último Ciclo)</h3>
             <div className="space-y-3">
-              <div className="flex items-center justify-between bg-white/5 p-3 rounded-lg border border-white/5">
-                <span className="text-sm text-gray-300">Póliza SCTR Vigente</span>
+              <div className="flex items-center justify-between bg-white/5 p-3 rounded-lg border border-slate-700">
+                <span className="text-sm text-slate-600 dark:text-slate-600 dark:text-gray-300">Póliza SCTR Vigente</span>
                 {repartidor.sctr_ok ? <CheckCircle2 className="w-5 h-5 text-green-500" /> : <XCircle className="w-5 h-5 text-red-500" />}
               </div>
-              <div className="flex items-center justify-between bg-white/5 p-3 rounded-lg border border-white/5">
-                <span className="text-sm text-gray-300">Equipos EPP Completos</span>
+              <div className="flex items-center justify-between bg-white/5 p-3 rounded-lg border border-slate-700">
+                <span className="text-sm text-slate-600 dark:text-slate-600 dark:text-gray-300">Equipos EPP Completos</span>
                 {repartidor.epp_ok ? <CheckCircle2 className="w-5 h-5 text-green-500" /> : <XCircle className="w-5 h-5 text-red-500" />}
               </div>
             </div>
@@ -402,7 +402,7 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
           <div className="glass-panel rounded-2xl p-6 h-full">
             <div className="flex items-center gap-3 mb-6 border-b border-white/10 pb-4">
               <Activity className="text-orange-400 w-6 h-6" />
-              <h2 className="text-xl font-bold text-white">Inteligencia y Récord</h2>
+              <h2 className="text-xl font-bold text-slate-800 dark:text-slate-800 dark:text-white">Inteligencia y Récord</h2>
             </div>
             
             <div className="grid grid-cols-2 gap-4 mb-6">
@@ -412,14 +412,14 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
                 </div>
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 mb-2">
-                    <History className="w-3.5 h-3.5 text-orange-400/60" />
-                    <span className="text-[9px] font-black text-orange-400/60 uppercase tracking-[0.2em]">Registro Histórico</span>
+                    <History className="w-3.5 h-3.5 text-orange-800 dark:text-orange-400/80" />
+                    <span className="text-[9px] font-black text-orange-800 dark:text-orange-400/80 uppercase tracking-[0.2em]">Registro Histórico</span>
                   </div>
                   <div className="flex items-baseline gap-1">
                     <p className="text-4xl font-black text-orange-400 tracking-tighter">{historial?.length || 0}</p>
-                    <span className="text-[10px] text-orange-400/40 font-bold uppercase tracking-widest">Eventos</span>
+                    <span className="text-[10px] text-orange-800 dark:text-orange-400/80 font-bold uppercase tracking-widest">Eventos</span>
                   </div>
-                  <p className="text-[10px] font-bold text-white/40 mt-1 uppercase tracking-widest">Visitas Previas</p>
+                  <p className="text-[10px] font-bold text-slate-700 dark:text-white/60 mt-1 uppercase tracking-widest">Visitas Previas</p>
                 </div>
               </div>
 
@@ -429,19 +429,19 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
                 </div>
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 mb-2">
-                    <XCircle className="w-3.5 h-3.5 text-red-400/60" />
-                    <span className="text-[9px] font-black text-red-400/60 uppercase tracking-[0.2em]">Estado Crítico</span>
+                    <XCircle className="w-3.5 h-3.5 text-red-800 dark:text-red-400/80" />
+                    <span className="text-[9px] font-black text-red-800 dark:text-red-400/80 uppercase tracking-[0.2em]">Estado Crítico</span>
                   </div>
                   <div className="flex items-baseline gap-1">
                     <p className="text-4xl font-black text-red-400 tracking-tighter">{historial?.filter((h: any) => !h.sctr_ok).length || 0}</p>
-                    <span className="text-[10px] text-red-400/40 font-bold uppercase tracking-widest">Alertas</span>
+                    <span className="text-[10px] text-red-800 dark:text-red-400/80 font-bold uppercase tracking-widest">Alertas</span>
                   </div>
-                  <p className="text-[10px] font-bold text-white/40 mt-1 uppercase tracking-widest">Faltas SCTR</p>
+                  <p className="text-[10px] font-bold text-slate-700 dark:text-white/60 mt-1 uppercase tracking-widest">Faltas SCTR</p>
                 </div>
               </div>
             </div>
 
-            <h3 className="text-sm font-bold text-gray-400 flex items-center gap-2 mb-4">
+            <h3 className="text-sm font-bold text-slate-500 dark:text-slate-500 dark:text-gray-400 flex items-center gap-2 mb-4">
               <History className="w-4 h-4" /> Historial de Entradas (Timeline)
             </h3>
             
@@ -465,7 +465,7 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
 
                 return (
                   <div key={hist.id} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active mb-6">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white/20 bg-[#0f1115] text-white/50 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow">
+                    <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white/20 bg-slate-100 dark:bg-[#0f1115] text-white/50 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow">
                       <CalendarDays className="w-4 h-4" />
                     </div>
                     
@@ -473,10 +473,10 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
                       href={`/repartidores/${hist.id}`} 
                       className="block w-[calc(100%-3rem)] md:w-[calc(50%-2rem)] bg-white/5 hover:bg-white/10 p-4 rounded-xl border border-white/10 hover:border-[#00d4ff]/50 transition-all cursor-pointer shadow-lg"
                     >
-                      <div className="flex flex-col 2xl:flex-row 2xl:justify-between 2xl:items-center gap-2 mb-3 border-b border-white/5 pb-3">
-                        <time className="font-mono text-sm font-bold text-[#00d4ff]">{hist.fecha}</time>
+                      <div className="flex flex-col 2xl:flex-row 2xl:justify-between 2xl:items-center gap-2 mb-3 border-b border-slate-700 pb-3">
+                        <time className="font-mono text-sm font-bold text-slate-800 dark:text-white">{hist.fecha}</time>
                         <div className="flex gap-2 items-center">
-                          <span className="text-xs text-gray-400 bg-black/30 px-2 py-0.5 rounded font-mono border border-white/5">
+                          <span className="text-xs text-slate-500 dark:text-slate-500 dark:text-gray-400 bg-black/30 px-2 py-0.5 rounded font-mono border border-slate-700">
                             Total: {horas}h {mins}m
                           </span>
                           {!hist.sctr_ok && <span className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]" title="Sin SCTR"></span>}
@@ -487,9 +487,9 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
                       <div className="space-y-3">
                         {hist.entrada_1 && (
                           <div>
-                            <p className="text-xs text-gray-400 flex justify-between mb-1">
+                            <p className="text-xs text-slate-500 dark:text-slate-500 dark:text-gray-400 flex justify-between mb-1">
                               <span className="font-mono tracking-tighter">C1: {hist.entrada_1.slice(0,5)} - {hist.salida_1 ? hist.salida_1.slice(0,5) : '--:--'}</span>
-                              <span className="font-bold text-gray-300">{dur1}m</span>
+                              <span className="font-bold text-slate-600 dark:text-slate-600 dark:text-gray-300">{dur1}m</span>
                             </p>
                             <div className="w-full bg-black/50 h-1.5 rounded-full overflow-hidden">
                               <div className="bg-green-500 h-full rounded-full" style={{ width: `${Math.min((dur1 / 180) * 100, 100)}%` }}></div>
@@ -498,9 +498,9 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
                         )}
                         {hist.entrada_2 && (
                           <div>
-                            <p className="text-xs text-gray-400 flex justify-between mb-1">
+                            <p className="text-xs text-slate-500 dark:text-slate-500 dark:text-gray-400 flex justify-between mb-1">
                               <span className="font-mono tracking-tighter">C2: {hist.entrada_2.slice(0,5)} - {hist.salida_2 ? hist.salida_2.slice(0,5) : '--:--'}</span>
-                              <span className="font-bold text-gray-300">{dur2}m</span>
+                              <span className="font-bold text-slate-600 dark:text-slate-600 dark:text-gray-300">{dur2}m</span>
                             </p>
                             <div className="w-full bg-black/50 h-1.5 rounded-full overflow-hidden">
                               <div className="bg-blue-500 h-full rounded-full" style={{ width: `${Math.min((dur2 / 180) * 100, 100)}%` }}></div>
@@ -509,9 +509,9 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
                         )}
                         {hist.entrada_3 && (
                           <div>
-                            <p className="text-xs text-gray-400 flex justify-between mb-1">
+                            <p className="text-xs text-slate-500 dark:text-slate-500 dark:text-gray-400 flex justify-between mb-1">
                               <span className="font-mono tracking-tighter">C3: {hist.entrada_3.slice(0,5)} - {hist.salida_3 ? hist.salida_3.slice(0,5) : '--:--'}</span>
-                              <span className="font-bold text-gray-300">{dur3}m</span>
+                              <span className="font-bold text-slate-600 dark:text-slate-600 dark:text-gray-300">{dur3}m</span>
                             </p>
                             <div className="w-full bg-black/50 h-1.5 rounded-full overflow-hidden">
                               <div className="bg-purple-500 h-full rounded-full" style={{ width: `${Math.min((dur3 / 180) * 100, 100)}%` }}></div>
@@ -520,8 +520,8 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
                         )}
                       </div>
                       
-                      <div className="mt-4 pt-3 border-t border-white/5 text-right">
-                        <span className="text-[10px] text-[#00d4ff] font-bold uppercase tracking-widest group-hover:underline">Abrir Ficha →</span>
+                      <div className="mt-4 pt-3 border-t border-slate-700 text-right">
+                        <span className="text-[10px] text-slate-800 dark:text-white font-bold uppercase tracking-widest group-hover:underline">Abrir Ficha →</span>
                       </div>
                     </Link>
                   </div>
@@ -538,7 +538,7 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
             <div className="flex items-center justify-between mb-6 border-b border-white/10 pb-4">
               <div className="flex items-center gap-3">
                 <Camera className="text-purple-400 w-6 h-6" />
-                <h2 className="text-xl font-bold text-white">Evidencia: {activeCiclo}° Reparto</h2>
+                <h2 className="text-xl font-bold text-slate-800 dark:text-slate-800 dark:text-white">Evidencia: {activeCiclo}° Reparto</h2>
               </div>
               <button 
                 type="button"
@@ -546,7 +546,7 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
                 className="bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 px-3 py-1.5 rounded-lg text-[10px] font-black border border-purple-500/30 transition-all flex items-center gap-2"
               >
                 {isGalleryOpen ? 'CONTRAER' : 'VER GALERÍA'}
-                <span className="bg-purple-500 text-white px-1.5 py-0.5 rounded-full text-[8px]">
+                <span className="bg-purple-500 text-slate-800 dark:text-slate-800 dark:text-white px-1.5 py-0.5 rounded-full text-[8px]">
                   {evidenciasFiltradas?.length || 0}
                 </span>
               </button>
@@ -554,7 +554,7 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
 
             {evidenciasFiltradas && evidenciasFiltradas.length > 0 ? (
               <div className="flex-1 flex flex-col gap-4">
-                <div className="relative group aspect-video rounded-xl overflow-hidden bg-[#050505] border border-white/10 shadow-2xl cursor-zoom-in">
+                <div className="relative group aspect-video rounded-xl overflow-hidden bg-slate-100 dark:bg-[#050505] border border-white/10 shadow-2xl cursor-zoom-in">
                   <div className="absolute inset-0 flex transition-transform duration-500 ease-out" style={{ transform: `translateX(-${photoIndex * 100}%)` }}>
                     {evidenciasFiltradas.map((foto: any, idx: number) => (
                       <div 
@@ -573,7 +573,7 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
                         />
                         <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
                           <p className="text-xs font-black text-purple-400 font-mono tracking-widest uppercase">{foto.etiqueta}</p>
-                          <p className="text-[10px] text-gray-400 mt-0.5" suppressHydrationWarning>
+                          <p className="text-[10px] text-slate-500 dark:text-slate-500 dark:text-gray-400 mt-0.5" suppressHydrationWarning>
                             {new Date(foto.fecha_captura || new Date()).toLocaleTimeString()} • {new Date(foto.fecha_captura || new Date()).toLocaleDateString()}
                           </p>
                         </div>
@@ -586,14 +586,14 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
                       <button 
                         type="button"
                         onClick={() => setPhotoIndex((prev) => (prev > 0 ? prev - 1 : evidenciasFiltradas.length - 1))}
-                        className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 border border-white/10 text-white flex items-center justify-center backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all hover:bg-purple-500/40"
+                        className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 border border-white/10 text-slate-800 dark:text-slate-800 dark:text-white flex items-center justify-center backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all hover:bg-purple-500/40"
                       >
                         <ArrowLeft className="w-4 h-4" />
                       </button>
                       <button 
                         type="button"
                         onClick={() => setPhotoIndex((prev) => (prev < evidenciasFiltradas.length - 1 ? prev + 1 : 0))}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 border border-white/10 text-white flex items-center justify-center backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all hover:bg-purple-500/40"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 border border-white/10 text-slate-800 dark:text-slate-800 dark:text-white flex items-center justify-center backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all hover:bg-purple-500/40"
                       >
                         <ArrowRight className="w-4 h-4" />
                       </button>
@@ -639,8 +639,8 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
           </div>
 
           <div className="glass-panel rounded-2xl p-6 border-t-4 border-t-[#00d4ff] bg-gradient-to-b from-[#00d4ff]/5 to-transparent">
-            <h3 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
-              <Activity className="w-4 h-4 text-[#00d4ff]" /> Análisis de Variables
+            <h3 className="text-sm font-black text-slate-800 dark:text-slate-800 dark:text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+              <Activity className="w-4 h-4 text-slate-800 dark:text-white" /> Análisis de Variables
             </h3>
             
             <div className="w-full mb-6">
@@ -670,11 +670,11 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
               <div className="space-y-1.5">
                 <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-gray-500">
                   <span>Puntuación de Auditoría</span>
-                  <span className="text-[#00d4ff]">
+                  <span className="text-slate-800 dark:text-white">
                     {historial?.length > 0 ? ((historial.filter((h: any) => h.sctr_ok && h.epp_ok).length / historial.length) * 10).toFixed(1) : '0.0'} / 10
                   </span>
                 </div>
-                <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden border border-white/5">
+                <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden border border-slate-700">
                   <div 
                     className="bg-gradient-to-r from-[#00d4ff] to-blue-600 h-full rounded-full transition-all duration-1000" 
                     style={{ width: `${historial?.length > 0 ? (historial.filter((h: any) => h.sctr_ok && h.epp_ok).length / historial.length) * 100 : 0}%` }}
@@ -688,7 +688,7 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
                   <div className="w-12 h-12 rounded-full border-4 border-green-500/20 border-t-green-500 flex items-center justify-center text-green-400 font-black text-xs">
                     {historial?.length > 0 ? Math.round((historial.filter((h: any) => h.sctr_ok && h.epp_ok).length / historial.length) * 100) : 0}%
                   </div>
-                  <p className="text-xs text-gray-400 leading-tight">
+                  <p className="text-xs text-slate-500 dark:text-slate-500 dark:text-gray-400 leading-tight">
                     {historial?.filter((h: any) => !h.sctr_ok).length > 0 
                       ? `El conductor presenta ${historial.filter((h: any) => !h.sctr_ok).length} incidentes de SCTR en sus últimos registros.` 
                       : 'El conductor mantiene un historial íntegro con 0 incidentes reportados en este periodo.'}

@@ -38,7 +38,7 @@ export function ImageUpload({ label, onImageChange, required = false }: ImageUpl
 
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block">
+      <label className="text-[10px] text-slate-500 dark:text-gray-400 font-bold uppercase tracking-widest block">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
       
@@ -52,14 +52,14 @@ export function ImageUpload({ label, onImageChange, required = false }: ImageUpl
             <img src={preview} alt="Preview" className="absolute inset-0 w-full h-full object-cover opacity-80" />
             <button 
               onClick={clearImage}
-              className="absolute top-2 right-2 bg-black/70 rounded-full p-1 text-white hover:bg-red-500 transition-colors z-10"
+              className="absolute top-2 right-2 bg-black/70 rounded-full p-1 text-slate-800 dark:text-white hover:bg-red-500 transition-colors z-10"
               type="button"
             >
               <X className="w-5 h-5" />
             </button>
           </>
         ) : (
-          <div className="flex flex-col items-center justify-center py-6 gap-3 text-gray-400 cursor-pointer">
+          <div className="flex flex-col items-center justify-center py-6 gap-3 text-slate-500 dark:text-gray-400 cursor-pointer">
             <div className="flex gap-4">
               <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center shadow-inner">
                 <Camera className="w-5 h-5 text-purple-400" />

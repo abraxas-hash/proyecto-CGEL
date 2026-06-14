@@ -92,8 +92,8 @@ export default function OcurrenciasPage() {
         <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mb-6">
           <CheckCircle2 className="w-10 h-10 text-green-500" />
         </div>
-        <h2 className="text-2xl font-black text-white mb-2">¡Ocurrencia Guardada!</h2>
-        <p className="text-gray-400">El reporte de turno ha sido registrado con éxito.</p>
+        <h2 className="text-2xl font-black text-slate-800 dark:text-white mb-2">¡Ocurrencia Guardada!</h2>
+        <p className="text-slate-900 dark:text-slate-300 font-black">El reporte de turno ha sido registrado con éxito.</p>
       </div>
     );
   }
@@ -105,22 +105,22 @@ export default function OcurrenciasPage() {
       <div className="flex items-center gap-4 mb-2">
         <Link 
           href="/garita"
-          className="w-10 h-10 rounded-xl neu-button flex items-center justify-center text-white"
+          className="w-10 h-10 rounded-xl glass-panel hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer flex items-center justify-center text-slate-800 dark:text-white"
           aria-label="Volver al menú de garita"
         >
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div>
-          <h2 className="text-xl font-black text-white leading-tight">Cuaderno Virtual</h2>
-          <p className="text-[11px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">Reporte de Novedades</p>
+          <h2 className="text-xl font-black text-slate-800 dark:text-white leading-tight">Cuaderno Virtual</h2>
+          <p className="text-[11px] text-slate-900 dark:text-slate-300 font-black font-bold uppercase tracking-wider mt-0.5">Reporte de Novedades</p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         
         {/* Turno Selector */}
-        <div className="neu-flat p-4 rounded-2xl">
-          <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block mb-3">Turno Actual</div>
+        <div className="glass-panel p-4 rounded-2xl">
+          <div className="text-[10px] text-slate-900 dark:text-slate-300 font-black font-bold uppercase tracking-widest block mb-3">Turno Actual</div>
           <div className="grid grid-cols-3 gap-2">
             {['MAÑANA', 'TARDE', 'NOCHE'].map((t) => (
               <button
@@ -129,8 +129,8 @@ export default function OcurrenciasPage() {
                 onClick={() => setTurno(t)}
                 className={`py-3 rounded-xl text-xs font-bold transition-all ${
                   turno === t 
-                    ? 'bg-[#00d4ff] text-black shadow-[0_0_15px_rgba(0,212,255,0.3)]' 
-                    : 'neu-button text-gray-400'
+                    ? 'bg-[#D97736] text-black shadow-[0_0_15px_rgba(217,119,54,0.3)]' 
+                    : 'glass-panel hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer text-slate-900 dark:text-slate-300 font-black'
                 }`}
               >
                 {t}
@@ -140,8 +140,8 @@ export default function OcurrenciasPage() {
         </div>
 
         {/* Novedades */}
-        <div className="neu-flat p-4 rounded-2xl">
-          <label htmlFor="input-novedades" className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block mb-3 flex justify-between items-center">
+        <div className="glass-panel p-4 rounded-2xl">
+          <label htmlFor="input-novedades" className="text-[10px] text-slate-900 dark:text-slate-300 font-black font-bold uppercase tracking-widest block mb-3 flex justify-between items-center">
             Novedades del Turno
             <span className="text-red-400">* Obligatorio</span>
           </label>
@@ -151,13 +151,13 @@ export default function OcurrenciasPage() {
             value={novedades}
             onChange={(e) => setNovedades(e.target.value)}
             placeholder="Escribe aquí si hubo algún incidente, rondas realizadas, o 'Sin novedades especiales'..."
-            className="w-full h-32 neu-input rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#00d4ff]/50 resize-none custom-scrollbar"
+            className="w-full h-32 neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-[#D97736]/50 resize-none custom-scrollbar"
           />
         </div>
 
         {/* Estado Equipos */}
-        <div className="neu-flat p-4 rounded-2xl">
-          <label htmlFor="input-estado-equipos" className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block mb-3">
+        <div className="glass-panel p-4 rounded-2xl">
+          <label htmlFor="input-estado-equipos" className="text-[10px] text-slate-900 dark:text-slate-300 font-black font-bold uppercase tracking-widest block mb-3">
             Estado de Equipos (PDAs, Radios)
           </label>
           <textarea 
@@ -165,13 +165,13 @@ export default function OcurrenciasPage() {
             value={estadoEquipos}
             onChange={(e) => setEstadoEquipos(e.target.value)}
             placeholder="Ej: Se entregan 3 PDAs operativas y 2 radios con batería cargada."
-            className="w-full h-20 neu-input rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#00d4ff]/50 resize-none custom-scrollbar"
+            className="w-full h-20 neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-[#D97736]/50 resize-none custom-scrollbar"
           />
         </div>
 
         {/* Cámara / Evidencia */}
-        <div className="neu-flat p-4 rounded-2xl">
-          <label htmlFor="input-foto" className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block mb-3">Evidencia Fotográfica</label>
+        <div className="glass-panel p-4 rounded-2xl">
+          <label htmlFor="input-foto" className="text-[10px] text-slate-900 dark:text-slate-300 font-black font-bold uppercase tracking-widest block mb-3">Evidencia Fotográfica</label>
           
           <input 
             id="input-foto"
@@ -190,7 +190,7 @@ export default function OcurrenciasPage() {
               <button 
                 type="button"
                 onClick={() => { setPhoto(null); setPhotoPreview(null); }}
-                className="absolute top-3 right-3 p-2 bg-black/50 backdrop-blur text-white rounded-lg border border-white/20"
+                className="absolute top-3 right-3 p-2 bg-black/50 backdrop-blur text-slate-800 dark:text-white rounded-lg border border-white/20"
               >
                 Cambiar foto
               </button>
@@ -199,10 +199,10 @@ export default function OcurrenciasPage() {
             <button 
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="w-full py-8 border-2 border-dashed border-white/10 rounded-xl flex flex-col items-center justify-center gap-3 text-gray-400 hover:bg-white/5 hover:border-[#00d4ff]/50 transition-all active:scale-[0.98]"
+              className="w-full py-8 border-2 border-dashed border-white/10 rounded-xl flex flex-col items-center justify-center gap-3 text-slate-900 dark:text-slate-300 font-black hover:bg-white/5 hover:border-[#00d4ff]/50 transition-all active:scale-[0.98]"
             >
               <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center">
-                <Camera className="w-6 h-6 text-[#00d4ff]" />
+                <Camera className="w-6 h-6 text-slate-800 dark:text-white" />
               </div>
               <span className="text-sm font-bold">Tomar Foto con Celular</span>
             </button>
@@ -213,7 +213,7 @@ export default function OcurrenciasPage() {
         <button 
           type="submit"
           disabled={isSubmitting || !novedades}
-          className="w-full py-4 mt-2 bg-gradient-to-r from-[#0047AB] to-[#00d4ff] text-white rounded-2xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,212,255,0.3)] active:scale-[0.98] transition-all disabled:opacity-50 disabled:grayscale"
+          className="w-full py-4 mt-2 bg-gradient-to-r from-[#0047AB] to-[#00d4ff] text-slate-800 dark:text-white rounded-2xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(217,119,54,0.3)] active:scale-[0.98] transition-all disabled:opacity-50 disabled:grayscale"
         >
           {isSubmitting ? 'GUARDANDO...' : 'FIRMAR Y GUARDAR REPORTE'}
           {!isSubmitting && <Send className="w-4 h-4" />}

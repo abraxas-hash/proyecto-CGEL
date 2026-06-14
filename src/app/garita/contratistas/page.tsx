@@ -91,8 +91,8 @@ export default function ContratistasForm() {
         <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mb-6">
           <CheckCircle2 className="w-10 h-10 text-green-500" />
         </div>
-        <h2 className="text-2xl font-black text-white mb-2">¡Contratista Registrado!</h2>
-        <p className="text-gray-400">El inicio de labores ha sido guardado.</p>
+        <h2 className="text-2xl font-black text-slate-800 dark:text-white mb-2">¡Contratista Registrado!</h2>
+        <p className="text-slate-500 dark:text-gray-400">El inicio de labores ha sido guardado.</p>
       </div>
     );
   }
@@ -102,17 +102,17 @@ export default function ContratistasForm() {
       <div className="flex items-center gap-4 mb-2">
         <Link 
           href="/garita"
-          className="w-10 h-10 rounded-xl neu-button flex items-center justify-center text-white"
+          className="w-10 h-10 rounded-xl glass-panel hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer flex items-center justify-center text-slate-800 dark:text-white"
           aria-label="Volver al menú de garita"
         >
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl neu-pressed flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl neumorphic-inset bg-black/5 dark:bg-white/5 flex items-center justify-center">
             <HardHat className="text-orange-400 w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-xl font-black text-white leading-tight">Contratistas</h2>
+            <h2 className="text-xl font-black text-slate-800 dark:text-white leading-tight">Contratistas</h2>
             <p className="text-[11px] text-orange-400 font-bold uppercase tracking-wider mt-0.5">Trabajos Internos</p>
           </div>
         </div>
@@ -120,9 +120,9 @@ export default function ContratistasForm() {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-5 pb-8">
         
-        <div className="neu-flat p-4 rounded-2xl flex flex-col gap-4">
+        <div className="glass-panel p-4 rounded-2xl flex flex-col gap-4">
           <div>
-            <label htmlFor="input-empresa" className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block mb-2">Empresa Contratista</label>
+            <label htmlFor="input-empresa" className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest block mb-2">Empresa Contratista</label>
             <input 
               id="input-empresa"
               required
@@ -130,26 +130,26 @@ export default function ContratistasForm() {
               placeholder="Ej: SERVICIOS GENERALES SAC"
               value={empresa}
               onChange={(e) => setEmpresa(e.target.value)}
-              className="w-full neu-input rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500/50 uppercase"
+              className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-[#D97736]/50 uppercase"
             />
           </div>
 
           <div>
-            <label htmlFor="input-actividad" className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block mb-2">Actividad / Trabajo a realizar</label>
+            <label htmlFor="input-actividad" className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest block mb-2">Actividad / Trabajo a realizar</label>
             <textarea 
               id="input-actividad"
               required
               placeholder="Mantenimiento de techos, pintura, etc."
               value={actividad}
               onChange={(e) => setActividad(e.target.value)}
-              className="w-full h-24 neu-input rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500/50 resize-none custom-scrollbar uppercase"
+              className="w-full h-24 neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-[#D97736]/50 resize-none custom-scrollbar uppercase"
             />
           </div>
         </div>
 
-        <div className="neu-flat p-4 rounded-2xl flex flex-col gap-4">
+        <div className="glass-panel p-4 rounded-2xl flex flex-col gap-4">
           <div>
-            <label htmlFor="input-supervisor" className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block mb-2">Supervisor Responsable</label>
+            <label htmlFor="input-supervisor" className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest block mb-2">Supervisor Responsable</label>
             <input 
               id="input-supervisor"
               required
@@ -157,12 +157,12 @@ export default function ContratistasForm() {
               placeholder="Nombres y Apellidos"
               value={supervisor}
               onChange={(e) => setSupervisor(e.target.value)}
-              className="w-full neu-input rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500/50 uppercase"
+              className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-[#D97736]/50 uppercase"
             />
           </div>
 
           <div>
-            <label htmlFor="input-personal" className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block mb-2">Cantidad de Personal Aprox.</label>
+            <label htmlFor="input-personal" className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest block mb-2">Cantidad de Personal Aprox.</label>
             <input 
               id="input-personal"
               required
@@ -170,12 +170,12 @@ export default function ContratistasForm() {
               min="1"
               value={personalAproximado}
               onChange={(e) => setPersonalAproximado(e.target.value)}
-              className="w-full neu-input rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500/50"
+              className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-[#D97736]/50"
             />
           </div>
         </div>
         
-        <div className="neu-flat p-4 rounded-2xl flex flex-col gap-4">
+        <div className="glass-panel p-4 rounded-2xl flex flex-col gap-4">
           <ImageUpload 
             label="Foto de Seguro SCTR (Listado)" 
             onImageChange={setSctrFile} 
@@ -187,14 +187,14 @@ export default function ContratistasForm() {
           />
           
           <div>
-            <label htmlFor="input-observaciones" className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block mb-2">Observaciones (Opcional)</label>
+            <label htmlFor="input-observaciones" className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest block mb-2">Observaciones (Opcional)</label>
             <textarea 
               id="input-observaciones"
               placeholder="Notas adicionales..."
               value={observacionesTexto}
               onChange={(e) => setObservacionesTexto(e.target.value)}
               rows={2}
-              className="w-full neu-input rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500/50 resize-none"
+              className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-[#D97736]/50 resize-none"
             />
           </div>
         </div>
@@ -202,7 +202,7 @@ export default function ContratistasForm() {
         <button 
           type="submit"
           disabled={isSubmitting || !empresa || !supervisor || !actividad}
-          className="w-full py-4 bg-gradient-to-r from-orange-600 to-orange-400 text-white rounded-2xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(249,115,22,0.3)] active:scale-[0.98] transition-all disabled:opacity-50 disabled:grayscale"
+          className="w-full py-4 bg-gradient-to-r from-orange-600 to-orange-400 text-slate-800 dark:text-white rounded-2xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(249,115,22,0.3)] active:scale-[0.98] transition-all disabled:opacity-50 disabled:grayscale"
         >
           {isSubmitting ? 'GUARDANDO...' : 'REGISTRAR INGRESO'}
           {!isSubmitting && <Send className="w-4 h-4" />}

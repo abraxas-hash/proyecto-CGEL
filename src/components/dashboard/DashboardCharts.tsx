@@ -35,7 +35,7 @@ export default function DashboardCharts({ distribution, hourly, weekly }: ChartP
     <div className="space-y-6 mt-8">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Gráfica de Torta: Distribución de Operaciones */}
-        <div className="lg:col-span-4 glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-white/[0.02] to-transparent">
+        <div className="lg:col-span-4 glass-panel rounded-3xl p-6 border border-slate-400 dark:border-slate-700 dark:border-slate-700 bg-gradient-to-br from-white/[0.02] to-transparent">
           <h3 className="text-xs font-black text-gray-600 dark:text-gray-500 uppercase tracking-[0.2em] mb-6">Distribución de Carga</h3>
           <div className="h-[250px] w-full">
             <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
@@ -64,17 +64,17 @@ export default function DashboardCharts({ distribution, hourly, weekly }: ChartP
             {distribution.map((item, index) => (
               <div key={item.name} className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full" style={{ backgroundColor: COLORS[index] }}></div>
-                <span className="text-[10px] font-bold text-gray-600 dark:text-gray-400 uppercase">{item.name}</span>
+                <span className="text-[10px] font-bold text-gray-600 dark:text-slate-500 dark:text-slate-500 dark:text-gray-400 uppercase">{item.name}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Gráfica de Áreas: Flujo Horario */}
-        <div className="lg:col-span-8 glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-white/[0.02] to-transparent">
+        <div className="lg:col-span-8 glass-panel rounded-3xl p-6 border border-slate-400 dark:border-slate-700 dark:border-slate-700 bg-gradient-to-br from-white/[0.02] to-transparent">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-xs font-black text-gray-600 dark:text-gray-500 uppercase tracking-[0.2em]">Flujo de Ingresos (Picos de Carga)</h3>
-            <span className="px-2 py-1 bg-[#00d4ff]/10 text-[#00d4ff] text-[10px] font-bold rounded uppercase">Hoy</span>
+            <span className="px-2 py-1 bg-[#00d4ff]/10 text-slate-800 dark:text-white text-[10px] font-bold rounded uppercase">Hoy</span>
           </div>
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
@@ -101,7 +101,7 @@ export default function DashboardCharts({ distribution, hourly, weekly }: ChartP
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Gráfica de Barras: Afluencia Semanal */}
-        <div className="lg:col-span-7 glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-white/[0.02] to-transparent">
+        <div className="lg:col-span-7 glass-panel rounded-3xl p-6 border border-slate-400 dark:border-slate-700 dark:border-slate-700 bg-gradient-to-br from-white/[0.02] to-transparent">
           <div className="flex justify-between items-center mb-6">
             <div>
               <h3 className="text-xs font-black text-gray-600 dark:text-gray-500 uppercase tracking-[0.2em]">Análisis de Afluencia Semanal</h3>
@@ -130,40 +130,40 @@ export default function DashboardCharts({ distribution, hourly, weekly }: ChartP
         <div className="lg:col-span-5 glass-panel rounded-3xl p-6 border border-white/10 bg-black/40 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 blur-[60px] rounded-full -mr-16 -mt-16"></div>
           
-          <h3 className="text-xs font-black text-black dark:text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+          <h3 className="text-xs font-black text-black dark:text-slate-800 dark:text-slate-800 dark:text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
             <Calendar className="w-4 h-4 text-purple-400" />
             Inteligencia Mensual
           </h3>
 
           <div className="space-y-6">
-            <div className="p-4 bg-black/5 dark:bg-white/5 rounded-2xl border border-black/5 dark:border-white/5">
+            <div className="p-4 bg-black/5 dark:bg-white/5 rounded-2xl border border-slate-400 dark:border-slate-700 dark:border-slate-700">
               <div className="flex items-center gap-3 mb-2">
-                <CheckCircle2 className="w-4 h-4 text-[#00d4ff]" />
-                <span className="text-[10px] font-black text-gray-300 uppercase">Resumen de Operaciones</span>
+                <CheckCircle2 className="w-4 h-4 text-slate-800 dark:text-white" />
+                <span className="text-[10px] font-black text-slate-600 dark:text-slate-600 dark:text-gray-300 uppercase">Resumen de Operaciones</span>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+              <p className="text-sm text-gray-600 dark:text-slate-500 dark:text-slate-500 dark:text-gray-400 leading-relaxed">
                 Este mes se observa un incremento del **12%** en el flujo de **Proveedores**. El día de mayor afluencia promedio ha sido el **Lunes**, concentrando el **28%** de los ingresos totales.
               </p>
             </div>
 
-            <div className="p-4 bg-black/5 dark:bg-white/5 rounded-2xl border border-black/5 dark:border-white/5">
+            <div className="p-4 bg-black/5 dark:bg-white/5 rounded-2xl border border-slate-400 dark:border-slate-700 dark:border-slate-700">
               <div className="flex items-center gap-3 mb-2">
                 <AlertCircle className="w-4 h-4 text-orange-400" />
-                <span className="text-[10px] font-black text-gray-300 uppercase">Alertas de Seguridad</span>
+                <span className="text-[10px] font-black text-slate-600 dark:text-slate-600 dark:text-gray-300 uppercase">Alertas de Seguridad</span>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+              <p className="text-sm text-gray-600 dark:text-slate-500 dark:text-slate-500 dark:text-gray-400 leading-relaxed">
                 Se detectaron **4 incidencias** menores relacionadas con SCTR vencido en contratistas. Se recomienda reforzar la validación previa vía Telegram.
               </p>
             </div>
 
-            <div className="flex justify-between items-center pt-4 border-t border-black/5 dark:border-white/5">
+            <div className="flex justify-between items-center pt-4 border-t border-slate-400 dark:border-slate-700 dark:border-slate-700">
               <div className="text-center">
                 <p className="text-[8px] text-gray-600 uppercase font-black tracking-widest">Total Mes</p>
-                <p className="text-2xl font-black text-black dark:text-white">1,248</p>
+                <p className="text-2xl font-black text-black dark:text-slate-800 dark:text-slate-800 dark:text-white">1,248</p>
               </div>
               <div className="text-center">
                 <p className="text-[8px] text-gray-600 uppercase font-black tracking-widest">Promedio Día</p>
-                <p className="text-2xl font-black text-[#00d4ff]">42</p>
+                <p className="text-2xl font-black text-slate-800 dark:text-white">42</p>
               </div>
               <div className="text-center">
                 <p className="text-[8px] text-gray-600 uppercase font-black tracking-widest">Auditados</p>

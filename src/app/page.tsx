@@ -82,29 +82,7 @@ export default async function Home() {
     <div className="min-h-screen p-4 sm:p-8 font-[family-name:var(--font-geist-sans)]">
       <Header />
 
-      <main>
-        {/* Alertas de Seguridad en Vivo */}
-        {totalInside > 0 ? (
-          <div id="tour-alerts" className="mb-8 p-4 sm:p-5 bg-red-500/10 border border-red-500/20 rounded-2xl flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 animate-pulse">
-            <div className="flex items-center gap-3">
-              <div className="w-2.5 h-2.5 bg-red-500 rounded-full shrink-0"></div>
-              <p className="text-red-600 dark:text-red-500 text-xs sm:text-sm font-black uppercase tracking-widest leading-tight">
-                ALERTA DE SEGURIDAD: {totalInside} Personas/Vehículos en Planta sin salida registrada
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2 sm:gap-4 text-[9px] sm:text-[10px] font-bold text-red-700 dark:text-red-400/80">
-              <span className="bg-red-500/10 px-2 py-1 rounded">REPARTIDORES: {countInsideRepartidores || 0}</span>
-              <span className="bg-red-500/10 px-2 py-1 rounded">VISITAS: {countInsideVisitas || 0}</span>
-              <span className="bg-red-500/10 px-2 py-1 rounded">CONTRATISTAS: {countInsideContratistas || 0}</span>
-              <span className="bg-red-500/10 px-2 py-1 rounded">PROVEEDORES: {countInsideProveedores || 0}</span>
-            </div>
-          </div>
-        ) : (
-          <div id="tour-alerts" className="mb-8 p-4 bg-green-500/10 border border-green-500/20 rounded-2xl flex items-center gap-4">
-            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-            <p className="text-green-700 dark:text-green-500 text-xs font-black uppercase tracking-widest">Planta Despejada - Sin ingresos pendientes de salida</p>
-          </div>
-        )}
+      <main className="mt-6 sm:mt-8">
 
         {/* Módulo de Comunicaciones Oficiales */}
         <div className="mb-8">
@@ -150,8 +128,15 @@ export default async function Home() {
           />
         </div>
 
+        {/* Feed de Eventos Críticos (Diseño Horizontal Compacto) */}
+        <div className="mt-8" id="tour-timeline">
+          <LiveEventsFeed />
+        </div>
+
         {/* Panel de Observaciones Críticas de Seguridad (SSOMA) */}
-        <SafetyObservations />
+        <div className="mt-8">
+          <SafetyObservations />
+        </div>
 
         {/* Embudo y Gestión Emocional en 2 columnas */}
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -164,7 +149,7 @@ export default async function Home() {
         </div>
 
         {/* Analíticas Avanzadas */}
-        <div className="mt-8">
+        <div className="mt-8 mb-8">
           <SafeAnalytics 
             data={{
               distribution: distributionData,
@@ -173,11 +158,6 @@ export default async function Home() {
               counts: counts
             }}
           />
-        </div>
-
-        {/* Feed de Eventos (Full Width en la base) */}
-        <div className="mt-8 mb-8" id="tour-timeline">
-          <LiveEventsFeed />
         </div>
       </main>
     </div>

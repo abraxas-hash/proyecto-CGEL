@@ -1,23 +1,21 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { MessageSquare, X, Send, Bot, User, Sparkles, Loader2 } from 'lucide-react';
-
-type Message = {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-};
+import { MessageSquare, X, Send, Bot, User, Sparkles, Loader2, Mic, MicOff } from 'lucide-react';
 
 export function FloatingChat() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const [input, setInput] = useState('');
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [isRecording, setIsRecording] = useState(false);
+  
+  const [messages, setMessages] = useState<Array<{role: string, content: string, id: string}>>([]);
+  const [myInput, setMyInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const recognitionRef = useRef<any>(null);
 
   // Auto-scroll al último mensaje
   useEffect(() => {
@@ -32,91 +30,96 @@ export function FloatingChat() {
     }
   }, [isOpen]);
 
-  // Eliminar el early return que viola las reglas de los hooks
+  // Configuración de Reconocimiento de Voz
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        recognitionRef.current = new SpeechRecognition();
+        recognitionRef.current.continuous = false;
+        recognitionRef.current.interimResults = false;
+        recognitionRef.current.lang = 'es-ES';
 
-  const sendMessage = useCallback(async () => {
-    const userText = input.trim();
-    if (!userText || isLoading) return;
+        recognitionRef.current.onresult = (event: any) => {
+          const transcript = event.results[0][0].transcript;
+          setMyInput((prev) => prev ? prev + ' ' + transcript : transcript);
+          setIsRecording(false);
+        };
 
-    // Añadir mensaje del usuario a la UI inmediatamente
-    const userMsg: Message = { id: Date.now().toString(), role: 'user', content: userText };
-    const newMessages = [...messages, userMsg];
-    setMessages(newMessages);
-    setInput('');
+        recognitionRef.current.onerror = (event: any) => {
+          console.error('Speech recognition error', event.error);
+          setIsRecording(false);
+        };
+
+        recognitionRef.current.onend = () => {
+          setIsRecording(false);
+        };
+      }
+    }
+  }, []);
+
+  const toggleRecording = () => {
+    if (isRecording) {
+      recognitionRef.current?.stop();
+      setIsRecording(false);
+    } else {
+      if (recognitionRef.current) {
+        setMyInput(''); // Limpiar antes de grabar
+        recognitionRef.current.start();
+        setIsRecording(true);
+      } else {
+        alert('Tu navegador no soporta dictado por voz. Usa Google Chrome o Edge.');
+      }
+    }
+  };
+
+  const sendMessage = async () => {
+    if (!myInput.trim() || isLoading) return;
+    
+    const userMessage = { id: Date.now().toString(), role: 'user', content: myInput };
+    setMessages(prev => [...prev, userMessage]);
+    const currentInput = myInput;
+    setMyInput('');
     setIsLoading(true);
-
-    // Placeholder del asistente para ir rellenando con streaming
-    const assistantId = (Date.now() + 1).toString();
-    const assistantMsg: Message = { id: assistantId, role: 'assistant', content: '' };
-    setMessages(prev => [...prev, assistantMsg]);
 
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: newMessages.map(m => ({ role: m.role, content: m.content })),
-        }),
+        body: JSON.stringify({ messages: [...messages, userMessage] })
       });
-
-      if (!res.ok) {
-        // Intentar leer el mensaje de error del servidor
-        let errMsg = `Error del servidor (HTTP ${res.status})`;
-        try {
-          const errJson = await res.json();
-          errMsg = errJson.details || errJson.error || errMsg;
-        } catch {}
-        throw new Error(errMsg);
-      }
-
-      // Leer la respuesta JSON simple
+      
       const data = await res.json();
-      const responseText = data.text || '';
-
-      if (!responseText) {
-        throw new Error('La IA no generó respuesta');
+      
+      if (!res.ok) {
+        throw new Error(data.error || 'Error del servidor');
       }
 
-      // Simular efecto de escritura letra por letra
-      let displayed = '';
-      for (let i = 0; i < responseText.length; i++) {
-        displayed += responseText[i];
-        const snap = displayed;
-        setMessages(prev =>
-          prev.map(m => m.id === assistantId ? { ...m, content: snap } : m)
-        );
-        // Pequeña pausa para el efecto typewriter (~15ms por carácter)
-        if (i % 3 === 0) await new Promise(r => setTimeout(r, 12));
-      }
-    } catch (err: any) {
-      console.error('Chat error:', err);
-      setMessages(prev =>
-        prev.map(m => m.id === assistantId ? {
-          ...m,
-          content: '⚠️ No pude conectarme con el asistente en este momento. Por favor intenta de nuevo en unos segundos.'
-        } : m)
-      );
+      setMessages(prev => [...prev, { id: Date.now().toString() + '1', role: 'assistant', content: data.content }]);
+    } catch (error: any) {
+      console.error('[Chat] Error:', error);
+      alert('Error de conexión con la IA: ' + error.message);
+      setMyInput(currentInput); // Restaurar el input en caso de error
     } finally {
       setIsLoading(false);
       setTimeout(() => inputRef.current?.focus(), 100);
     }
-  }, [input, isLoading, messages]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    sendMessage();
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
   };
 
-  // Ocultar el chat flotante en la página de login o raíz
-  // (Debe hacerse DESPUÉS de declarar todos los hooks para no violar las Reglas de React)
-  if (pathname === '/login' || pathname === '/') {
+  const onSafeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    sendMessage();
+  };
+
+  // Ocultar el chat flotante en la página de login o en la app de garita
+  if (pathname === '/login' || pathname?.startsWith('/garita')) {
     return null;
   }
 
@@ -127,25 +130,19 @@ export function FloatingChat() {
         <div className="mb-4 w-80 sm:w-96 h-[520px] max-h-[80vh] flex flex-col glass-panel rounded-2xl shadow-2xl overflow-hidden border border-black/10 dark:border-white/10 animate-in slide-in-from-bottom-5 fade-in duration-300">
           
           {/* Header del Chat */}
-          <div className="flex items-center justify-between p-4 border-b border-black/5 dark:border-white/5 bg-gradient-to-r from-blue-600/20 to-purple-600/10">
+          <div className="flex items-center justify-between p-4 border-b border-slate-400 dark:border-slate-700 bg-gradient-to-r from-blue-600/20 to-purple-600/10">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
-                <Sparkles className="w-4 h-4 text-white" />
+                <Sparkles className="w-4 h-4 text-slate-800 dark:text-white" />
               </div>
               <div>
-                <h3 className="text-sm font-black text-slate-900 dark:text-white leading-none">Nexus AI</h3>
+                <h3 className="text-sm font-black text-slate-900 dark:text-slate-800 dark:text-white leading-none">Nexus AI</h3>
                 <div className="flex items-center gap-1.5 mt-0.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div>
                   <span className="text-[10px] text-emerald-500 dark:text-emerald-400 font-bold uppercase tracking-widest">En línea</span>
                 </div>
               </div>
             </div>
-            <button 
-              onClick={() => setIsOpen(false)}
-              className="p-2 text-slate-500 hover:text-slate-700 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 rounded-lg transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
           </div>
 
           {/* Área de Mensajes */}
@@ -156,63 +153,88 @@ export function FloatingChat() {
                   <Bot className="w-6 h-6 text-blue-500/60" />
                 </div>
                 <p className="font-semibold text-slate-700 dark:text-slate-300">Hola, soy Nexus AI</p>
-                <p className="mt-1 text-slate-500">Estoy aquí para ayudarte con el sistema de control operativo. ¿En qué te puedo asistir?</p>
+                <p className="mt-1 text-slate-500">Puedes dictarme audios o preguntarme sobre el dashboard y los accesos de garita en tiempo real.</p>
               </div>
             )}
             
-            {messages.map((m) => (
-              <div key={m.id} className={`flex gap-2 ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                {m.role === 'assistant' && (
-                  <div className="w-6 h-6 shrink-0 rounded-full bg-blue-600/20 border border-blue-500/30 flex items-center justify-center mt-1">
-                    <Bot className="w-3 h-3 text-blue-500" />
+            {messages.map((m) => {
+              const isUser = m.role === 'user';
+
+              return (
+                <div key={m.id} className={`flex flex-col gap-1 ${isUser ? 'items-end' : 'items-start'}`}>
+                  <div className={`flex gap-2 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
+                    <div className={`w-6 h-6 shrink-0 rounded-full flex items-center justify-center mt-1 ${
+                      isUser ? 'bg-slate-200 dark:bg-slate-700' : 'bg-blue-600/20 border border-blue-500/30'
+                    }`}>
+                      {isUser ? <User className="w-3 h-3 text-slate-500" /> : <Bot className="w-3 h-3 text-blue-500" />}
+                    </div>
+                    
+                    <div className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
+                      isUser 
+                        ? 'bg-blue-600 text-slate-800 dark:text-white rounded-tr-sm shadow-sm shadow-blue-500/20' 
+                        : 'bg-white dark:bg-[#1e1e1e] text-slate-700 dark:text-slate-200 border border-slate-400 dark:border-slate-700 rounded-tl-sm shadow-sm'
+                    }`}>
+                      {m.content && <p className="whitespace-pre-wrap">{m.content}</p>}
+                    </div>
                   </div>
-                )}
-                
-                <div className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
-                  m.role === 'user' 
-                    ? 'bg-blue-600 text-white rounded-tr-sm shadow-sm shadow-blue-500/20' 
-                    : 'bg-white dark:bg-[#1e1e1e] text-slate-700 dark:text-slate-200 border border-black/5 dark:border-white/5 rounded-tl-sm shadow-sm'
-                }`}>
-                  {m.content ? (
-                    <p className="whitespace-pre-wrap">{m.content}</p>
-                  ) : (
-                    <span className="flex gap-1 py-0.5">
-                      <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                      <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                      <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
-                    </span>
-                  )}
                 </div>
+              );
+            })}
 
-                {m.role === 'user' && (
-                  <div className="w-6 h-6 shrink-0 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center mt-1">
-                    <User className="w-3 h-3 text-slate-500" />
-                  </div>
-                )}
+            {isLoading && (
+              <div className="flex gap-2 justify-start">
+                <div className="w-6 h-6 shrink-0 rounded-full bg-blue-600/20 border border-blue-500/30 flex items-center justify-center mt-1">
+                  <Bot className="w-3 h-3 text-blue-500" />
+                </div>
+                <div className="max-w-[80%] rounded-2xl px-3.5 py-2.5 bg-white dark:bg-[#1e1e1e] border border-slate-400 dark:border-slate-700 rounded-tl-sm shadow-sm flex items-center">
+                   <span className="flex gap-1 py-0.5">
+                    <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                    <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                    <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                  </span>
+                </div>
               </div>
-            ))}
-
+            )}
             <div ref={messagesEndRef} />
           </div>
 
           {/* Input */}
-          <form onSubmit={handleSubmit} className="p-3 bg-white dark:bg-[#0d0d0d] border-t border-black/5 dark:border-white/5">
+          <form onSubmit={onSafeSubmit} className="p-3 bg-white dark:bg-[#0d0d0d] border-t border-slate-400 dark:border-slate-700 relative">
+            {isRecording && (
+              <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-red-500 text-white text-[10px] px-3 py-1 rounded-full animate-pulse flex items-center gap-1 font-bold tracking-widest shadow-lg">
+                <span className="w-1.5 h-1.5 bg-white rounded-full animate-ping"></span>
+                ESCUCHANDO...
+              </div>
+            )}
             <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={toggleRecording}
+                className={`w-10 h-10 shrink-0 flex items-center justify-center rounded-xl transition-all ${
+                  isRecording 
+                    ? 'bg-red-500 text-white shadow-lg shadow-red-500/40 animate-pulse' 
+                    : 'bg-slate-100 dark:bg-[#1a1a1a] text-slate-500 hover:text-slate-800 dark:hover:text-white border border-slate-200 dark:border-slate-800'
+                }`}
+                title="Dictar por voz"
+              >
+                {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+              </button>
+
               <input
                 ref={inputRef}
-                className="flex-1 bg-slate-100 dark:bg-[#1a1a1a] border border-transparent focus:border-blue-500/60 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none transition-colors placeholder:text-slate-400"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
+                className={`flex-1 bg-slate-100 dark:bg-[#1a1a1a] border border-transparent focus:border-blue-500/60 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none transition-colors placeholder:text-slate-400 ${isRecording ? 'opacity-50' : ''}`}
+                value={myInput}
+                onChange={(e) => setMyInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Pregunta sobre el sistema..."
-                disabled={isLoading}
+                placeholder={isRecording ? "Habla ahora..." : "Pregunta o busca un DNI..."}
+                disabled={isLoading || isRecording}
                 autoComplete="off"
-                aria-label="Pregunta sobre el sistema"
               />
+              
               <button 
                 type="submit"
-                disabled={!input.trim() || isLoading}
-                className="w-10 h-10 shrink-0 flex items-center justify-center bg-blue-600 hover:bg-blue-500 disabled:bg-slate-200 disabled:dark:bg-slate-800 disabled:cursor-not-allowed text-white rounded-xl transition-all hover:scale-105 active:scale-95 shadow-md shadow-blue-500/20"
+                disabled={!myInput.trim() || isLoading || isRecording}
+                className="w-10 h-10 shrink-0 flex items-center justify-center bg-blue-600 hover:bg-blue-500 disabled:bg-slate-200 disabled:dark:bg-slate-800 disabled:cursor-not-allowed text-slate-800 dark:text-white rounded-xl transition-all hover:scale-105 active:scale-95 shadow-md shadow-blue-500/20"
               >
                 {isLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -232,8 +254,8 @@ export function FloatingChat() {
         aria-label={isOpen ? "Cerrar chat de ayuda" : "Abrir chat de ayuda"}
         className={`relative w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 ${
           isOpen 
-            ? 'bg-slate-700 dark:bg-slate-600 shadow-slate-500/20 text-white' 
-            : 'bg-blue-600 hover:bg-blue-500 shadow-blue-500/30 text-white'
+            ? 'bg-slate-700 dark:bg-slate-600 shadow-slate-500/20 text-slate-800 dark:text-white' 
+            : 'bg-blue-600 hover:bg-blue-500 shadow-blue-500/30 text-slate-800 dark:text-white'
         }`}
       >
         <div className={`transition-all duration-200 ${isOpen ? 'rotate-0' : 'rotate-0'}`}>

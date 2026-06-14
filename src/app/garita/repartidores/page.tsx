@@ -30,11 +30,11 @@ const VEHICULOS = [
 ];
 
 const COLOR_MAP: Record<string, string> = {
-  WJ:  'text-[#00d4ff]  border-[#00d4ff]/30  bg-[#00d4ff]/5',
-  JC:  'text-purple-400 border-purple-400/30 bg-purple-400/5',
-  TRJ: 'text-orange-400 border-orange-400/30 bg-orange-400/5',
-  TF:  'text-green-400  border-green-400/30  bg-green-400/5',
-  IND: 'text-gray-400   border-gray-400/30   bg-gray-400/5',
+  WJ:  'text-blue-700 dark:text-blue-400 border-blue-500/30 bg-blue-500/5',
+  JC:  'text-purple-700 dark:text-purple-400 border-purple-500/30 bg-purple-500/5',
+  TRJ: 'text-orange-700 dark:text-orange-400 border-orange-500/30 bg-orange-500/5',
+  TF:  'text-green-700 dark:text-green-400 border-green-500/30 bg-green-500/5',
+  IND: 'text-slate-700 dark:text-gray-400 border-gray-500/30 bg-gray-500/5',
 };
 
 type VehiculoData = typeof VEHICULOS[number];
@@ -143,9 +143,9 @@ export default function RepartidoresForm() {
         <div className="w-24 h-24 bg-green-500/20 rounded-full flex items-center justify-center">
           <CheckCircle2 className="w-12 h-12 text-green-500" />
         </div>
-        <h2 className="text-2xl font-black text-white">¡Registrado!</h2>
-        <p className="text-gray-400 text-sm">
-          <span className="text-white font-bold">{placa}</span> — {conductor}
+        <h2 className="text-2xl font-black text-slate-800 dark:text-white">¡Registrado!</h2>
+        <p className="text-slate-700 dark:text-slate-300 text-sm font-bold">
+          <span className="text-slate-800 dark:text-white font-bold">{placa}</span> — {conductor}
         </p>
         <p className="text-green-400 font-bold text-xs uppercase tracking-widest">
           Salida N°{numSalida} guardada correctamente
@@ -160,17 +160,17 @@ export default function RepartidoresForm() {
       <button
         type="button"
         onClick={() => step === 2 ? setStep(1) : router.push('/garita')}
-        className="w-10 h-10 rounded-xl neu-button flex items-center justify-center text-white"
+        className="w-10 h-10 rounded-xl glass-panel hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer flex items-center justify-center text-slate-800 dark:text-white"
       >
         <ArrowLeft className="w-5 h-5" />
       </button>
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl neu-pressed flex items-center justify-center">
-          <Truck className="text-[#00d4ff] w-6 h-6" />
+        <div className="w-10 h-10 rounded-xl neumorphic-inset bg-black/5 dark:bg-white/5 flex items-center justify-center">
+          <Truck className="text-slate-800 dark:text-white w-6 h-6" />
         </div>
         <div>
-          <h2 className="text-xl font-black text-white leading-tight">Repartidores</h2>
-          <p className="text-[11px] text-[#00d4ff] font-bold uppercase tracking-wider mt-0.5">
+          <h2 className="text-xl font-black text-slate-800 dark:text-white leading-tight">Repartidores</h2>
+          <p className="text-[11px] text-slate-800 dark:text-white font-bold uppercase tracking-wider mt-0.5">
             {step === 1 ? 'Paso 1 · Selecciona el vehículo' : 'Paso 2 · Número de salida y fotos'}
           </p>
         </div>
@@ -186,8 +186,8 @@ export default function RepartidoresForm() {
       <div className="flex flex-col gap-6">
         <Header />
 
-        <div className="neu-flat p-4 rounded-2xl">
-          <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-3">
+        <div className="glass-panel p-4 rounded-2xl">
+          <div className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest mb-3">
             Vehículos autorizados — Toca para registrar
           </div>
           <div className="grid grid-cols-3 gap-2">
@@ -198,10 +198,10 @@ export default function RepartidoresForm() {
                   key={v.placa}
                   type="button"
                   onClick={() => handleSelectVehiculo(v)}
-                  className={`neu-button rounded-xl p-2.5 flex flex-col gap-0.5 text-left border transition-all active:scale-95 ${c}`}
+                  className={`glass-panel hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer rounded-xl p-2.5 flex flex-col gap-0.5 text-left border transition-all active:scale-95 ${c}`}
                 >
                   <span className="text-sm font-black tracking-wider">{v.placa}</span>
-                  <span className="text-[9px] opacity-50 uppercase tracking-widest">{v.empresa}</span>
+                  <span className="text-[9px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest">{v.empresa}</span>
                 </button>
               );
             })}
@@ -209,8 +209,8 @@ export default function RepartidoresForm() {
         </div>
 
         {/* Ingreso manual para vehículos no listados */}
-        <div className="neu-flat p-4 rounded-2xl flex flex-col gap-3">
-          <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+        <div className="glass-panel p-4 rounded-2xl flex flex-col gap-3">
+          <div className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest">
             Vehículo no listado — Ingreso manual
           </div>
           <input
@@ -218,27 +218,27 @@ export default function RepartidoresForm() {
             placeholder="Placa (ej: ABC-123)"
             value={placaManual}
             onChange={(e) => setPlacaManual(e.target.value.toUpperCase())}
-            className="w-full neu-input rounded-xl p-3 text-sm text-white font-bold uppercase tracking-widest focus:outline-none focus:border-[#00d4ff]/50"
+            className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white font-bold uppercase tracking-widest focus:outline-none focus:border-slate-500"
           />
           <input
             type="text"
             placeholder="Empresa (ej: WJ, JC, TRJ)"
             value={empresaManual}
             onChange={(e) => setEmpresaManual(e.target.value.toUpperCase())}
-            className="w-full neu-input rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#00d4ff]/50 uppercase"
+            className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-slate-500 uppercase"
           />
           <input
             type="text"
             placeholder="Apellido conductor"
             value={conductorManual}
             onChange={(e) => setConductorManual(e.target.value.toUpperCase())}
-            className="w-full neu-input rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#00d4ff]/50 uppercase"
+            className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-slate-500 uppercase"
           />
           <button
             type="button"
             disabled={!placaManual || !empresaManual || !conductorManual}
             onClick={handleManualNext}
-            className="w-full py-3 rounded-xl neu-button text-[#00d4ff] font-black uppercase text-xs tracking-widest disabled:opacity-30"
+            className="w-full py-3 rounded-xl glass-panel hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer text-slate-800 dark:text-white font-black uppercase text-xs tracking-widest disabled:opacity-30"
           >
             Continuar →
           </button>
@@ -255,24 +255,24 @@ export default function RepartidoresForm() {
       <Header />
 
       {/* Resumen del vehículo seleccionado */}
-      <div className={`neu-flat p-4 rounded-2xl border ${COLOR_MAP[empresa] ?? COLOR_MAP.IND} flex items-center justify-between`}>
+      <div className={`glass-panel p-4 rounded-2xl border ${COLOR_MAP[empresa] ?? COLOR_MAP.IND} flex items-center justify-between`}>
         <div>
-          <p className="text-xl font-black text-white tracking-widest">{placa}</p>
-          <p className="text-sm font-bold text-gray-300">{conductor}</p>
+          <p className="text-xl font-black text-slate-800 dark:text-white tracking-widest">{placa}</p>
+          <p className="text-sm font-bold text-slate-600 dark:text-gray-300">{conductor}</p>
           <p className="text-[10px] font-bold opacity-50 uppercase tracking-widest">{empresa}</p>
         </div>
         <button
           type="button"
           onClick={() => { setVehiculo(null); setStep(1); }}
-          className="neu-button p-3 rounded-xl text-gray-400 flex items-center gap-1.5 text-xs font-bold"
+          className="glass-panel hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer p-3 rounded-xl text-slate-500 dark:text-gray-400 flex items-center gap-1.5 text-xs font-bold"
         >
           <RefreshCw className="w-4 h-4" /> Cambiar
         </button>
       </div>
 
       {/* Número de salida */}
-      <div className="neu-flat p-4 rounded-2xl">
-        <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-3">
+      <div className="glass-panel p-4 rounded-2xl">
+        <div className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest mb-3">
           ¿Es la 1ra, 2da o 3ra salida del día?
         </div>
         <div className="grid grid-cols-3 gap-3">
@@ -283,8 +283,8 @@ export default function RepartidoresForm() {
               onClick={() => setNumSalida(n)}
               className={`py-4 rounded-xl flex flex-col items-center gap-1 transition-all font-black text-sm ${
                 numSalida === n
-                  ? 'neu-pressed text-[#00d4ff]'
-                  : 'neu-button text-gray-500'
+                  ? 'neumorphic-inset bg-black/5 dark:bg-white/5 text-slate-800 dark:text-white'
+                  : 'glass-panel hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer text-slate-900 dark:text-slate-300 font-black'
               }`}
             >
               <span className="text-2xl">{n}°</span>
@@ -295,8 +295,8 @@ export default function RepartidoresForm() {
       </div>
 
       {/* Fotos */}
-      <div className="neu-flat p-4 rounded-2xl flex flex-col gap-4">
-        <div className="flex items-center gap-2 text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+      <div className="glass-panel p-4 rounded-2xl flex flex-col gap-4">
+        <div className="flex items-center gap-2 text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest">
           <Camera className="w-4 h-4" /> Evidencias fotográficas
         </div>
         <ImageUpload
@@ -312,31 +312,31 @@ export default function RepartidoresForm() {
           value={observaciones}
           onChange={(e) => setObservaciones(e.target.value)}
           rows={2}
-          className="w-full neu-input rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#00d4ff]/50 resize-none"
+          className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-slate-500 resize-none"
         />
       </div>
 
       {/* SCTR / EPP */}
-      <div className="neu-flat p-4 rounded-2xl grid grid-cols-2 gap-4">
+      <div className="glass-panel p-4 rounded-2xl grid grid-cols-2 gap-4">
         <div
           role="button"
           tabIndex={0}
           onClick={() => setSctrOk(!sctrOk)}
           onKeyDown={(e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); setSctrOk(!sctrOk); } }}
-          className={`p-4 rounded-xl cursor-pointer transition-all flex flex-col items-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#00d4ff]/50 ${sctrOk ? 'neu-pressed' : 'neu-button'}`}
+          className={`p-4 rounded-xl cursor-pointer transition-all flex flex-col items-center gap-2 focus:outline-none focus:ring-2 focus:ring-slate-500 ${sctrOk ? 'neumorphic-inset bg-black/5 dark:bg-white/5' : 'glass-panel hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer'}`}
         >
-          <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">SCTR Vigente</span>
-          <span className={`text-xl font-black ${sctrOk ? 'text-[#00d4ff]' : 'text-red-500'}`}>{sctrOk ? '✓ OK' : '✗ NO'}</span>
+          <span className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest">SCTR Vigente</span>
+          <span className={`text-xl font-black ${sctrOk ? 'text-slate-800 dark:text-white' : 'text-red-500'}`}>{sctrOk ? '✓ OK' : '✗ NO'}</span>
         </div>
         <div
           role="button"
           tabIndex={0}
           onClick={() => setEppOk(!eppOk)}
           onKeyDown={(e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); setEppOk(!eppOk); } }}
-          className={`p-4 rounded-xl cursor-pointer transition-all flex flex-col items-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#00d4ff]/50 ${eppOk ? 'neu-pressed' : 'neu-button'}`}
+          className={`p-4 rounded-xl cursor-pointer transition-all flex flex-col items-center gap-2 focus:outline-none focus:ring-2 focus:ring-slate-500 ${eppOk ? 'neumorphic-inset bg-black/5 dark:bg-white/5' : 'glass-panel hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer'}`}
         >
-          <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Usa EPP</span>
-          <span className={`text-xl font-black ${eppOk ? 'text-[#00d4ff]' : 'text-red-500'}`}>{eppOk ? '✓ OK' : '✗ OBS'}</span>
+          <span className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest">Usa EPP</span>
+          <span className={`text-xl font-black ${eppOk ? 'text-slate-800 dark:text-white' : 'text-red-500'}`}>{eppOk ? '✓ OK' : '✗ OBS'}</span>
         </div>
       </div>
 
@@ -345,7 +345,7 @@ export default function RepartidoresForm() {
         type="button"
         disabled={isSubmitting}
         onClick={handleSubmit}
-        className="w-full py-5 bg-gradient-to-r from-[#0047AB] to-[#00d4ff] text-white rounded-2xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,212,255,0.3)] active:scale-[0.98] transition-all disabled:opacity-50"
+        className="w-full py-5 bg-gradient-to-r from-[#0047AB] to-[#00d4ff] text-slate-800 dark:text-white rounded-2xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,212,255,0.3)] active:scale-[0.98] transition-all disabled:opacity-50"
       >
         {isSubmitting ? (
           'GUARDANDO...'

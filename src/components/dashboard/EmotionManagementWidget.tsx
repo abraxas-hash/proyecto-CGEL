@@ -54,10 +54,10 @@ export function EmotionManagementWidget() {
   const ActiveIcon = activeResponse.icon;
 
   return (
-    <Card className="glass-panel border-black/5 dark:border-white/5 relative overflow-hidden group h-full flex flex-col">
+    <Card className="glass-panel border-slate-400 dark:border-slate-700 dark:border-slate-700 relative overflow-hidden group h-full flex flex-col">
       <CardHeader className="flex flex-row items-center justify-between z-10 relative pb-2">
         <div>
-          <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white flex items-center gap-2">
+          <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-slate-800 dark:text-white flex items-center gap-2">
             <BrainCircuit className="w-4 h-4 text-[#a855f7]" />
             Gestión Emocional
           </CardTitle>
@@ -85,13 +85,13 @@ export function EmotionManagementWidget() {
               </span>
             </div>
             
-            <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">
+            <p className="text-xs font-bold text-gray-500 dark:text-slate-500 dark:text-gray-400 mb-3 uppercase tracking-wider">
               Situación: {activeResponse.context}
             </p>
             
-            <div className="bg-black/5 dark:bg-white/5 p-4 rounded-xl border border-black/5 dark:border-white/10 backdrop-blur-md relative">
-              <div className="absolute -top-3 -left-2 text-4xl text-gray-300 dark:text-gray-700/50 font-serif leading-none">"</div>
-              <p className="text-sm md:text-base font-medium text-black dark:text-white leading-relaxed relative z-10 italic">
+            <div className="bg-black/5 dark:bg-white/5 p-4 rounded-xl border border-slate-400 dark:border-slate-700 dark:border-white/10 backdrop-blur-md relative">
+              <div className="absolute -top-3 -left-2 text-4xl text-slate-600 dark:text-gray-300 dark:text-gray-700/50 font-serif leading-none">"</div>
+              <p className="text-sm md:text-base font-medium text-black dark:text-slate-800 dark:text-white leading-relaxed relative z-10 italic">
                 {activeResponse.phrase}
               </p>
             </div>

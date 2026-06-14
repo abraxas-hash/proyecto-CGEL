@@ -12,7 +12,7 @@ const MENU_ITEMS = [
     desc: "Ingreso / Salida",
     icon: Truck,
     href: "/garita/repartidores",
-    color: "text-[#00d4ff]",
+    color: "text-slate-800 dark:text-white",
     bg: "bg-[#00d4ff]/10",
     border: "border-[#00d4ff]/20"
   },
@@ -68,14 +68,14 @@ export default function GaritaMenu() {
     <div className="flex flex-col h-full gap-6">
       
       {/* Header Info */}
-      <div className="neu-flat p-4 rounded-2xl flex items-center justify-between mt-2">
+      <div className="glass-panel p-4 rounded-2xl flex items-center justify-between mt-4">
         <div>
-          <h2 className="text-sm text-gray-400 font-bold uppercase tracking-wider">Centro Logístico</h2>
-          <p className="text-xl font-black text-white">Panel Garita</p>
+          <h2 className="text-sm text-slate-900 dark:text-slate-300 font-black uppercase tracking-wider">Centro Logístico</h2>
+          <p className="text-xl font-black text-slate-800 dark:text-white">Panel Garita</p>
         </div>
         <button 
           onClick={() => router.push('/')}
-          className="neu-button p-3 text-[#00d4ff] rounded-xl transition-all"
+          className="p-3 bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-400/50 dark:border-white/10 text-slate-800 dark:text-white rounded-xl transition-all shadow-sm"
           title="Ir al Dashboard"
         >
           <LayoutDashboard className="w-5 h-5" />
@@ -89,20 +89,20 @@ export default function GaritaMenu() {
             href={item.href}
             id={item.id}
             className={`
-              neu-button rounded-2xl p-4 flex flex-col items-center justify-center text-center
+              glass-panel hover:bg-black/5 dark:hover:bg-white/5 rounded-2xl p-4 flex flex-col items-center justify-center text-center
               transition-transform active:scale-95 touch-manipulation relative overflow-hidden group
               ${item.featured ? 'col-span-2 min-h-32' : 'aspect-square'}
             `}
           >
-            {/* Huge Background Icon */}
+            {/* Huge Background Icon (High Relief / Embossed) */}
             <item.icon 
-              strokeWidth={1.5}
-              className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 sm:w-32 sm:h-32 ${item.color} opacity-[0.15] group-hover:scale-110 transition-transform duration-500`} 
+              strokeWidth={2.5}
+              className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 sm:w-32 sm:h-32 ${item.color} opacity-40 drop-shadow-[2px_4px_4px_rgba(0,0,0,0.3)] dark:drop-shadow-[2px_4px_4px_rgba(0,0,0,0.8)] group-hover:scale-110 transition-transform duration-500`} 
             />
             
             {/* Text Content in Foreground */}
             <div className="relative z-10 mt-auto pt-10">
-              <h3 className="text-lg sm:text-xl font-bold text-white leading-tight drop-shadow-md">{item.title}</h3>
+              <h3 className="text-lg sm:text-xl font-bold text-slate-800 dark:text-white leading-tight drop-shadow-md">{item.title}</h3>
               <p className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-1 drop-shadow-md ${item.color}`}>{item.desc}</p>
             </div>
           </Link>

@@ -15,7 +15,7 @@ export default async function ProveedorDetailPage({ params }: { params: Promise<
     .single();
 
   if (!proveedor) {
-    return <div className="p-8 text-white font-[family-name:var(--font-geist-sans)]">Proveedor no encontrado (ID: {id}).</div>;
+    return <div className="p-8 text-slate-800 dark:text-white font-[family-name:var(--font-geist-sans)]">Proveedor no encontrado (ID: {id}).</div>;
   }
 
   // 2 y 3. Historial de ingresos y evidencias vinculadas (en paralelo)

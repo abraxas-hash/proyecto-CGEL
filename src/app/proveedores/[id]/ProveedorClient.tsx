@@ -82,7 +82,7 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
             <button 
               type="button"
               onClick={() => { setShowDniModal(false); setSelectedImg(null); }}
-              className="absolute -top-14 right-0 p-3 bg-white/10 hover:bg-white/20 hover:text-red-400 rounded-full text-white transition-all shadow-lg"
+              className="absolute -top-14 right-0 p-3 bg-white/10 hover:bg-white/20 hover:text-red-400 rounded-full text-slate-800 dark:text-white transition-all shadow-lg"
             >
               <X className="w-6 h-6" />
             </button>
@@ -95,9 +95,9 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
               />
               <div className="p-5 flex justify-between items-center bg-white/5 mt-3 rounded-xl">
                 <div>
-                  <p className="text-white font-bold text-xl">{proveedor.conductor}</p>
-                  <p className="text-gray-400 text-sm flex items-center gap-2 mt-1">
-                    <ShieldCheck className="w-4 h-4 text-[#00d4ff]" />
+                  <p className="text-slate-800 dark:text-white font-bold text-xl">{proveedor.conductor}</p>
+                  <p className="text-slate-500 dark:text-gray-400 text-sm flex items-center gap-2 mt-1">
+                    <ShieldCheck className="w-4 h-4 text-slate-800 dark:text-white" />
                     Evidencia de Seguridad - {proveedor.empresa_proveedor}
                   </p>
                 </div>
@@ -112,14 +112,14 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
 
       <Header />
 
-      <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
-        <Link href="/proveedores" className="flex items-center gap-2 text-[#00d4ff] hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-4 py-2.5 rounded-xl border border-white/5 text-sm font-bold w-full sm:w-auto justify-center sm:justify-start">
+      <div className="mt-6 sm:mt-8 mb-4 sm:mb-6 flex flex-col sm:flex-row justify-start items-start sm:items-center gap-4">
+        <Link href="/proveedores" className="flex items-center gap-2 text-slate-800 dark:text-white hover:text-slate-800 dark:text-slate-800 dark:text-white transition-colors bg-white/5 hover:bg-white/10 px-4 py-2.5 rounded-xl border border-slate-700 text-sm font-bold w-full sm:w-auto justify-center sm:justify-start shrink-0">
           <ArrowLeft className="w-4 h-4" />
           Volver a la tabla
         </Link>
         <div className="flex items-center gap-2 bg-purple-500/10 px-4 py-2 rounded-xl border border-purple-500/20 w-full sm:w-auto justify-center sm:justify-end">
           <span className="text-[10px] font-black text-purple-400 uppercase tracking-widest">ID AUDITORÍA</span>
-          <span className="text-sm font-mono font-bold text-white tracking-tighter">#{String(proveedor.id).split('-')[0]}</span>
+          <span className="text-sm font-mono font-bold text-slate-800 dark:text-white tracking-tighter">#{String(proveedor.id).split('-')[0]}</span>
         </div>
       </div>
 
@@ -131,7 +131,7 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
             <div className="flex flex-col gap-1 mb-6 border-b border-white/10 pb-4">
               <div className="flex items-center gap-3">
                 <Truck className="text-blue-400 w-6 h-6" />
-                <h2 className="text-xl font-bold text-white uppercase tracking-tight">Ficha de Proveedor</h2>
+                <h2 className="text-xl font-bold text-slate-800 dark:text-white uppercase tracking-tight">Ficha de Proveedor</h2>
               </div>
               <span className="text-[10px] text-gray-500 font-mono mt-2 bg-white/5 w-fit px-2 py-1 rounded">COD: F-OPER-PROV-02</span>
             </div>
@@ -139,15 +139,15 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
             <div className="space-y-5">
               <div>
                 <p className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Proveedor / Empresa</p>
-                <p className="text-2xl font-black text-white mt-1 leading-tight">{proveedor.empresa_proveedor}</p>
+                <p className="text-2xl font-black text-slate-800 dark:text-white mt-1 leading-tight">{proveedor.empresa_proveedor}</p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white/5 p-3 rounded-xl border border-white/5">
+                <div className="bg-white/5 p-3 rounded-xl border border-slate-700">
                   <p className="text-[10px] text-gray-500 uppercase font-bold">Placa Vehículo</p>
-                  <p className="text-lg font-mono text-white mt-1">{proveedor.placa}</p>
+                  <p className="text-lg font-mono text-slate-800 dark:text-white mt-1">{proveedor.placa}</p>
                 </div>
-                <div className="bg-white/5 p-3 rounded-xl border border-white/5">
+                <div className="bg-white/5 p-3 rounded-xl border border-slate-700">
                   <p className="text-[10px] text-gray-500 uppercase font-bold">Hora Llegada</p>
                   <p className="text-lg font-mono text-blue-400 mt-1">{proveedor.hora_llegada?.slice(0,5)}</p>
                 </div>
@@ -155,8 +155,8 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
 
               <div>
                 <p className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Conductor</p>
-                <div className="flex items-center justify-between mt-2 bg-white/5 p-3 rounded-xl border border-white/5">
-                  <span className="text-white font-semibold text-sm capitalize">{proveedor.conductor?.toLowerCase()}</span>
+                <div className="flex items-center justify-between mt-2 bg-white/5 p-3 rounded-xl border border-slate-700">
+                  <span className="text-slate-800 dark:text-white font-semibold text-sm capitalize">{proveedor.conductor?.toLowerCase()}</span>
                   <button 
                     type="button"
                     onClick={() => setShowDniModal(true)}
@@ -171,7 +171,7 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
                 <p className="text-[10px] text-orange-400/80 uppercase font-bold mb-2 flex items-center gap-2">
                   <Package className="w-3 h-3" /> Guías de Remisión
                 </p>
-                <p className="text-sm text-gray-300 font-mono break-words bg-black/20 p-2 rounded">
+                <p className="text-sm text-slate-600 dark:text-gray-300 font-mono break-words bg-black/20 p-2 rounded">
                   {proveedor.n_guias || 'Sin guías registradas'}
                 </p>
               </div>
@@ -180,24 +180,24 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
 
           {/* CHECKLIST DE SEGURIDAD PROVEEDOR */}
           <div className="glass-panel rounded-2xl p-6 bg-gradient-to-br from-white/[0.03] to-transparent">
-            <h3 className="text-xs font-black text-gray-400 uppercase mb-5 tracking-[0.2em] flex items-center gap-2">
+            <h3 className="text-xs font-black text-slate-500 dark:text-gray-400 uppercase mb-5 tracking-[0.2em] flex items-center gap-2">
               <ClipboardCheck className="w-4 h-4 text-green-400" /> Protocolo de Seguridad
             </h3>
             <div className="space-y-2">
-              <div className="flex items-center justify-between bg-white/5 p-3 rounded-xl border border-white/5 transition-all hover:bg-white/10">
-                <span className="text-sm text-gray-300">SCTR Salud / Pensión</span>
+              <div className="flex items-center justify-between bg-white/5 p-3 rounded-xl border border-slate-700 transition-all hover:bg-white/10">
+                <span className="text-sm text-slate-600 dark:text-gray-300">SCTR Salud / Pensión</span>
                 {(proveedor.sctr_salud && proveedor.sctr_pension) ? <CheckCircle2 className="w-5 h-5 text-green-500" /> : <XCircle className="w-5 h-5 text-red-500" />}
               </div>
-              <div className="flex items-center justify-between bg-white/5 p-3 rounded-xl border border-white/5 transition-all hover:bg-white/10">
-                <span className="text-sm text-gray-300">EPP Completo (Casco/Botas)</span>
+              <div className="flex items-center justify-between bg-white/5 p-3 rounded-xl border border-slate-700 transition-all hover:bg-white/10">
+                <span className="text-sm text-slate-600 dark:text-gray-300">EPP Completo (Casco/Botas)</span>
                 {proveedor.epp_completo ? <CheckCircle2 className="w-5 h-5 text-green-500" /> : <XCircle className="w-5 h-5 text-red-500" />}
               </div>
-              <div className="flex items-center justify-between bg-white/5 p-3 rounded-xl border border-white/5 transition-all hover:bg-white/10">
-                <span className="text-sm text-gray-300">Licencia & SOAT Vigente</span>
+              <div className="flex items-center justify-between bg-white/5 p-3 rounded-xl border border-slate-700 transition-all hover:bg-white/10">
+                <span className="text-sm text-slate-600 dark:text-gray-300">Licencia & SOAT Vigente</span>
                 {proveedor.licencia_soat_ok ? <CheckCircle2 className="w-5 h-5 text-green-500" /> : <XCircle className="w-5 h-5 text-red-500" />}
               </div>
-              <div className="flex items-center justify-between bg-white/5 p-3 rounded-xl border border-white/5 transition-all hover:bg-white/10">
-                <span className="text-sm text-gray-300">Documentación Guías OK</span>
+              <div className="flex items-center justify-between bg-white/5 p-3 rounded-xl border border-slate-700 transition-all hover:bg-white/10">
+                <span className="text-sm text-slate-600 dark:text-gray-300">Documentación Guías OK</span>
                 {proveedor.guias_ok ? <CheckCircle2 className="w-5 h-5 text-green-500" /> : <XCircle className="w-5 h-5 text-red-500" />}
               </div>
             </div>
@@ -216,7 +216,7 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
           <div className="glass-panel rounded-2xl p-6 h-full flex flex-col">
             <div className="flex items-center gap-3 mb-6 border-b border-white/10 pb-4">
               <Activity className="text-blue-400 w-6 h-6" />
-              <h2 className="text-xl font-bold text-white uppercase tracking-tight">Récord de Empresa</h2>
+              <h2 className="text-xl font-bold text-slate-800 dark:text-white uppercase tracking-tight">Récord de Empresa</h2>
             </div>
             
             <div className="grid grid-cols-2 gap-4 mb-8">
@@ -242,7 +242,7 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
                   className="block group relative pl-6 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-0.5 before:bg-white/10 hover:before:bg-blue-400 transition-all"
                 >
                   <div className="flex justify-between items-center mb-1">
-                    <span className="text-xs font-bold text-gray-300 group-hover:text-white transition-colors">{hist.fecha}</span>
+                    <span className="text-xs font-bold text-slate-600 dark:text-gray-300 group-hover:text-slate-800 dark:text-white transition-colors">{hist.fecha}</span>
                     <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold border ${hist.autorizado ? 'bg-green-500/10 border-green-500/20 text-green-500' : 'bg-red-500/10 border-red-500/20 text-red-500'}`}>
                       {hist.autorizado ? 'OK' : 'DENIED'}
                     </span>
@@ -254,8 +254,8 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
               ))}
             </div>
 
-            <div className="mt-8 p-5 bg-white/5 rounded-2xl border border-white/5 italic">
-              <p className="text-xs text-gray-400 leading-relaxed">
+            <div className="mt-8 p-5 bg-white/5 rounded-2xl border border-slate-700 italic">
+              <p className="text-xs text-slate-500 dark:text-gray-400 leading-relaxed">
                 <span className="text-blue-400 font-bold not-italic uppercase text-[10px] block mb-1">Observaciones del Agente:</span>
                 "{parsedObs.texto || 'Sin observaciones adicionales registradas para este ingreso.'}"
               </p>
@@ -267,7 +267,7 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
         <div className="lg:col-span-4 glass-panel rounded-2xl p-6 bg-gradient-to-b from-transparent to-purple-900/5">
           <div className="flex items-center gap-3 mb-6 border-b border-white/10 pb-4">
             <Camera className="text-purple-400 w-6 h-6" />
-            <h2 className="text-xl font-bold text-white uppercase tracking-tight">Evidencia Fotográfica</h2>
+            <h2 className="text-xl font-bold text-slate-800 dark:text-white uppercase tracking-tight">Evidencia Fotográfica</h2>
           </div>
 
           {mergedEvidencias && mergedEvidencias.length > 0 ? (
@@ -288,13 +288,13 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
                       alt={foto.etiqueta} 
                       className="object-cover w-full h-full opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                     />
-                    <div className="absolute top-3 right-3 bg-black/80 backdrop-blur-md px-3 py-1.5 rounded-full text-[10px] font-black text-white border border-white/20 shadow-2xl">
+                    <div className="absolute top-3 right-3 bg-black/80 backdrop-blur-md px-3 py-1.5 rounded-full text-[10px] font-black text-slate-800 dark:text-white border border-white/20 shadow-2xl">
                       {foto.tipo_evidencia || 'SISTEMA'}
                     </div>
                   </div>
-                  <div className="p-5 border-t border-white/5">
+                  <div className="p-5 border-t border-slate-700">
                     <div className="flex justify-between items-start mb-2">
-                      <p className="text-xs font-black text-white uppercase tracking-widest">{foto.etiqueta}</p>
+                      <p className="text-xs font-black text-slate-800 dark:text-white uppercase tracking-widest">{foto.etiqueta}</p>
                       <span className="text-[10px] font-mono text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded">
                         {new Date(foto.fecha_captura || new Date()).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                       </span>

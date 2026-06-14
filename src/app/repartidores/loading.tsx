@@ -32,7 +32,7 @@ export default function Loading() {
             {[1, 2, 3, 4, 5, 6, 7].map((i) => (
               <div 
                 key={i} 
-                className="h-20 bg-white/5 rounded-2xl border border-white/5 animate-pulse flex items-center px-6 gap-6"
+                className="h-20 bg-white/5 rounded-2xl border border-slate-700 animate-pulse flex items-center px-6 gap-6"
                 style={{ animationDelay: `${i * 150}ms` }}
               >
                 <div className="h-10 w-10 bg-white/5 rounded-lg shrink-0"></div>

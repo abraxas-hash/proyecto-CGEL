@@ -26,6 +26,31 @@ export default function ProveedoresForm() {
   // Evidencias
   const [guiaFile, setGuiaFile] = useState<File | null>(null);
   const [estibaFile, setEstibaFile] = useState<File | null>(null);
+  const [isSearchingDni, setIsSearchingDni] = useState(false);
+
+  const handleDniBlur = async () => {
+    if (!dni || dni.length < 8) return;
+    setIsSearchingDni(true);
+    try {
+      const { data, error } = await supabase
+        .from('registro_proveedores_carga')
+        .select('conductor_nombre, empresa, placa')
+        .eq('dni', dni)
+        .order('fecha', { ascending: false })
+        .limit(1)
+        .single();
+        
+      if (data && !error) {
+        if (!conductor) setConductor(data.conductor_nombre || '');
+        if (!empresa) setEmpresa(data.empresa || '');
+        if (!placa) setPlaca(data.placa || '');
+      }
+    } catch (err) {
+      // Ignorar errores silentes
+    } finally {
+      setIsSearchingDni(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,8 +119,8 @@ export default function ProveedoresForm() {
         <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mb-6">
           <CheckCircle2 className="w-10 h-10 text-green-500" />
         </div>
-        <h2 className="text-2xl font-black text-white mb-2">¡Proveedor Registrado!</h2>
-        <p className="text-gray-400">El ingreso a zona de carga ha sido guardado.</p>
+        <h2 className="text-2xl font-black text-slate-800 dark:text-white mb-2">¡Proveedor Registrado!</h2>
+        <p className="text-slate-500 dark:text-gray-400">El ingreso a zona de carga ha sido guardado.</p>
       </div>
     );
   }
@@ -105,17 +130,17 @@ export default function ProveedoresForm() {
       <div className="flex items-center gap-4 mb-2">
         <Link 
           href="/garita"
-          className="w-10 h-10 rounded-xl neu-button flex items-center justify-center text-white"
+          className="w-10 h-10 rounded-xl glass-panel hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer flex items-center justify-center text-slate-800 dark:text-white"
           aria-label="Volver al menú de garita"
         >
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl neu-pressed flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl neumorphic-inset bg-black/5 dark:bg-white/5 flex items-center justify-center">
             <Package className="text-green-400 w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-xl font-black text-white leading-tight">Proveedores</h2>
+            <h2 className="text-xl font-black text-slate-800 dark:text-white leading-tight">Proveedores</h2>
             <p className="text-[11px] text-green-400 font-bold uppercase tracking-wider mt-0.5">Control de Carga</p>
           </div>
         </div>
@@ -123,9 +148,9 @@ export default function ProveedoresForm() {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-5 pb-8">
         
-        <div className="neu-flat p-4 rounded-2xl flex flex-col gap-4">
+        <div className="glass-panel p-4 rounded-2xl flex flex-col gap-4">
           <div>
-            <label htmlFor="input-empresa" className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block mb-2">Empresa de Transporte</label>
+            <label htmlFor="input-empresa" className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest block mb-2">Empresa de Transporte</label>
             <input 
               id="input-empresa"
               required
@@ -133,12 +158,12 @@ export default function ProveedoresForm() {
               placeholder="Ej: TRANSPORTES SAC"
               value={empresa}
               onChange={(e) => setEmpresa(e.target.value)}
-              className="w-full neu-input rounded-xl p-3 text-sm text-white focus:outline-none focus:border-green-500/50 uppercase"
+              className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-[#D97736]/50 uppercase"
             />
           </div>
 
           <div>
-            <label htmlFor="input-placa" className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block mb-2">Placa de la Unidad</label>
+            <label htmlFor="input-placa" className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest block mb-2">Placa de la Unidad</label>
             <input 
               id="input-placa"
               required
@@ -146,12 +171,12 @@ export default function ProveedoresForm() {
               placeholder="Ej: T4K-987"
               value={placa}
               onChange={(e) => setPlaca(e.target.value)}
-              className="w-full neu-input rounded-xl p-4 text-xl font-black text-white focus:outline-none focus:border-green-500/50 uppercase text-center tracking-widest"
+              className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-4 text-xl font-black text-slate-800 dark:text-white focus:outline-none focus:border-[#D97736]/50 uppercase text-center tracking-widest"
             />
           </div>
           
           <div>
-            <label htmlFor="input-tipocarga" className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block mb-2">Tipo de Carga</label>
+            <label htmlFor="input-tipocarga" className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest block mb-2">Tipo de Carga</label>
             <input 
               id="input-tipocarga"
               required
@@ -159,14 +184,14 @@ export default function ProveedoresForm() {
               placeholder="Ej: BOBINAS DE CABLE, MERCADERÍA"
               value={tipoCarga}
               onChange={(e) => setTipoCarga(e.target.value)}
-              className="w-full neu-input rounded-xl p-3 text-sm text-white focus:outline-none focus:border-green-500/50 uppercase"
+              className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-[#D97736]/50 uppercase"
             />
           </div>
         </div>
 
-        <div className="neu-flat p-4 rounded-2xl flex flex-col gap-4">
+        <div className="glass-panel p-4 rounded-2xl flex flex-col gap-4">
           <div>
-            <label htmlFor="input-conductor" className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block mb-2">Nombre del Conductor</label>
+            <label htmlFor="input-conductor" className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest block mb-2">Nombre del Conductor</label>
             <input 
               id="input-conductor"
               required
@@ -174,12 +199,15 @@ export default function ProveedoresForm() {
               placeholder="Nombres y Apellidos"
               value={conductor}
               onChange={(e) => setConductor(e.target.value)}
-              className="w-full neu-input rounded-xl p-3 text-sm text-white focus:outline-none focus:border-green-500/50 uppercase"
+              className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-[#D97736]/50 uppercase"
             />
           </div>
 
           <div>
-            <label htmlFor="input-dni" className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block mb-2">DNI del Conductor</label>
+            <label htmlFor="input-dni" className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest flex items-center gap-2 mb-2">
+              DNI del Conductor
+              {isSearchingDni && <span className="text-blue-500 animate-pulse text-[9px]">Buscando...</span>}
+            </label>
             <input 
               id="input-dni"
               required
@@ -187,12 +215,13 @@ export default function ProveedoresForm() {
               placeholder="DNI"
               value={dni}
               onChange={(e) => setDni(e.target.value)}
-              className="w-full neu-input rounded-xl p-3 text-sm text-white focus:outline-none focus:border-green-500/50"
+              onBlur={handleDniBlur}
+              className={`w-full neumorphic-inset bg-white/50 dark:bg-black/20 border ${isSearchingDni ? 'border-blue-400' : 'border-slate-400/30 dark:border-white/10'} rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-[#D97736]/50 transition-colors`}
             />
           </div>
         </div>
         
-        <div className="neu-flat p-4 rounded-2xl flex flex-col gap-4">
+        <div className="glass-panel p-4 rounded-2xl flex flex-col gap-4">
           <ImageUpload 
             label="Foto de Guía de Remisión" 
             onImageChange={setGuiaFile} 
@@ -204,19 +233,19 @@ export default function ProveedoresForm() {
           />
           
           <div>
-            <label htmlFor="input-observaciones" className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block mb-2">Observaciones (Opcional)</label>
+            <label htmlFor="input-observaciones" className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest block mb-2">Observaciones (Opcional)</label>
             <textarea 
               id="input-observaciones"
               placeholder="Notas sobre el estado de la carga..."
               value={observacionesTexto}
               onChange={(e) => setObservacionesTexto(e.target.value)}
               rows={2}
-              className="w-full neu-input rounded-xl p-3 text-sm text-white focus:outline-none focus:border-green-500/50 resize-none"
+              className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-[#D97736]/50 resize-none"
             />
           </div>
         </div>
 
-        <div className="neu-flat p-4 rounded-2xl grid grid-cols-2 gap-4">
+        <div className="glass-panel p-4 rounded-2xl grid grid-cols-2 gap-4">
           <div 
             role="button"
             tabIndex={0}
@@ -227,9 +256,9 @@ export default function ProveedoresForm() {
                 setSctrOk(!sctrOk);
               }
             }}
-            className={`p-4 rounded-xl cursor-pointer transition-all flex flex-col items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-green-500/50 ${sctrOk ? 'neu-pressed' : 'neu-button'}`}
+            className={`p-4 rounded-xl cursor-pointer transition-all flex flex-col items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#D97736]/50 ${sctrOk ? 'neumorphic-inset bg-black/5 dark:bg-white/5' : 'glass-panel hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer'}`}
           >
-            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">SCTR</span>
+            <span className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest">SCTR</span>
             <span className={`text-lg font-black ${sctrOk ? 'text-green-500' : 'text-red-500'}`}>{sctrOk ? 'VIGENTE' : 'VENCIDO'}</span>
           </div>
           
@@ -243,9 +272,9 @@ export default function ProveedoresForm() {
                 setEppOk(!eppOk);
               }
             }}
-            className={`p-4 rounded-xl cursor-pointer transition-all flex flex-col items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-green-500/50 ${eppOk ? 'neu-pressed' : 'neu-button'}`}
+            className={`p-4 rounded-xl cursor-pointer transition-all flex flex-col items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#D97736]/50 ${eppOk ? 'neumorphic-inset bg-black/5 dark:bg-white/5' : 'glass-panel hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer'}`}
           >
-            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Botas y EPP</span>
+            <span className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest">Botas y EPP</span>
             <span className={`text-lg font-black ${eppOk ? 'text-green-500' : 'text-red-500'}`}>{eppOk ? 'OK' : 'OBS'}</span>
           </div>
         </div>
@@ -253,7 +282,7 @@ export default function ProveedoresForm() {
         <button 
           type="submit"
           disabled={isSubmitting || !empresa || !placa || !conductor}
-          className="w-full py-4 bg-gradient-to-r from-green-600 to-green-400 text-white rounded-2xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(74,222,128,0.3)] active:scale-[0.98] transition-all disabled:opacity-50 disabled:grayscale"
+          className="w-full py-4 bg-gradient-to-r from-green-600 to-green-400 text-slate-800 dark:text-white rounded-2xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(74,222,128,0.3)] active:scale-[0.98] transition-all disabled:opacity-50 disabled:grayscale"
         >
           {isSubmitting ? 'GUARDANDO...' : 'REGISTRAR INGRESO'}
           {!isSubmitting && <Send className="w-4 h-4" />}

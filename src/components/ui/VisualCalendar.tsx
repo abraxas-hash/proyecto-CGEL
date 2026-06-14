@@ -55,16 +55,16 @@ export default function VisualCalendar({
   };
 
   return (
-    <div className="bg-black/[0.03] dark:bg-white/[0.03] border border-black/5 dark:border-white/5 rounded-2xl p-4 w-full select-none">
+    <div className="bg-black/[0.03] dark:bg-white/[0.03] border border-slate-400 dark:border-slate-700 dark:border-slate-700 rounded-2xl p-4 w-full select-none">
       <div className="flex items-center justify-between mb-4">
-        <h4 className="text-xs font-black text-black dark:text-white uppercase tracking-widest truncate">
+        <h4 className="text-xs font-black text-black dark:text-slate-800 dark:text-white uppercase tracking-widest truncate">
           {monthName} {year}
         </h4>
         <div className="flex gap-1">
-          <button onClick={() => changeMonth(-1)} className="p-1.5 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg transition-all text-gray-500 hover:text-black dark:hover:text-white">
+          <button onClick={() => changeMonth(-1)} className="p-1.5 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg transition-all text-gray-500 hover:text-black dark:hover:text-slate-800 dark:text-white">
             <ChevronLeft className="w-4 h-4" />
           </button>
-          <button onClick={() => changeMonth(1)} className="p-1.5 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg transition-all text-gray-500 hover:text-black dark:hover:text-white">
+          <button onClick={() => changeMonth(1)} className="p-1.5 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg transition-all text-gray-500 hover:text-black dark:hover:text-slate-800 dark:text-white">
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
@@ -101,10 +101,10 @@ export default function VisualCalendar({
                 ${active
                   ? 'border border-solid scale-105'
                   : dataAvailable
-                    ? 'bg-black/[0.04] dark:bg-white/[0.04] text-black dark:text-white border border-black/[0.06] dark:border-white/[0.06] hover:bg-black/10 dark:hover:bg-white/10 hover:scale-105 hover:border-black/20 dark:hover:border-white/20'
+                    ? 'bg-black/[0.04] dark:bg-white/[0.04] text-black dark:text-slate-800 dark:text-white border border-black/[0.06] dark:border-white/[0.06] hover:bg-black/10 dark:hover:bg-white/10 hover:scale-105 hover:border-black/20 dark:hover:border-white/20'
                     : isToday
-                      ? 'text-gray-600 dark:text-gray-400 border border-dashed border-black/15 dark:border-white/15 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white'
-                      : 'text-gray-500 dark:text-gray-600 hover:text-gray-700 dark:hover:text-gray-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.03]'
+                      ? 'text-gray-600 dark:text-slate-500 dark:text-gray-400 border border-dashed border-black/15 dark:border-white/15 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-slate-800 dark:text-white'
+                      : 'text-gray-500 dark:text-gray-600 hover:text-gray-700 dark:hover:text-slate-500 dark:text-gray-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.03]'
                 }
               `}
             >
@@ -133,7 +133,7 @@ export default function VisualCalendar({
         })}
       </div>
       
-      <div className="mt-4 pt-4 border-t border-black/5 dark:border-white/5 flex flex-col gap-2">
+      <div className="mt-4 pt-4 border-t border-slate-400 dark:border-slate-700 dark:border-slate-700 flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full" style={{ backgroundColor: accentColor }}></div>
           <span className="text-[9px] text-gray-600 dark:text-gray-500 font-bold uppercase tracking-widest">Días con registros</span>

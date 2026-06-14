@@ -15,7 +15,7 @@ export default async function ContratistaDetailPage({ params }: { params: Promis
     .single();
 
   if (!contratista) {
-    return <div className="p-8 text-white font-[family-name:var(--font-geist-sans)]">Contratista no encontrado (ID: {id}).</div>;
+    return <div className="p-8 text-slate-800 dark:text-white font-[family-name:var(--font-geist-sans)]">Contratista no encontrado (ID: {id}).</div>;
   }
 
   // 2, 3 y 4. Personal, herramientas y evidencias vinculadas (en paralelo)

@@ -26,6 +26,31 @@ const POLITICAS_STEPS = [
   { element: '#tour-politicas-matriz', popover: { title: 'Matriz de Responsabilidades', description: 'Cada rol tiene acceso restringido según sus funciones operativas.' } },
 ];
 
+const GARITA_REPARTIDORES_STEPS = [
+  { popover: { title: 'Módulo de Repartidores', description: 'Aquí gestionas el flujo diario de camiones de despacho.' } },
+  { popover: { title: 'Flujo en 2 Pasos', description: 'Primero seleccionas el vehículo autorizado y luego adjuntas las guías de remisión y fotos.' } }
+];
+
+const GARITA_VISITAS_STEPS = [
+  { popover: { title: 'Control de Visitas', description: 'Registra a cualquier persona ajena a la operación regular.' } },
+  { popover: { title: 'Captura de DNI', description: 'No olvides tomar una foto del documento de identidad por seguridad antes de permitir el ingreso.' } }
+];
+
+const GARITA_PROVEEDORES_STEPS = [
+  { popover: { title: 'Proveedores', description: 'Control estricto para el ingreso de mercadería.' } },
+  { popover: { title: 'Revisión SCTR', description: 'Es obligatorio validar que el personal del proveedor cuente con su Seguro Complementario de Trabajo de Riesgo activo.' } }
+];
+
+const GARITA_CONTRATISTAS_STEPS = [
+  { popover: { title: 'Personal Contratista', description: 'Registra los ingresos para trabajos internos de mantenimiento u obras.' } },
+  { popover: { title: 'Equipos y Herramientas', description: 'Declara cualquier equipo de valor que ingrese el contratista para evitar problemas a la salida.' } }
+];
+
+const GARITA_OCURRENCIAS_STEPS = [
+  { popover: { title: 'Cuaderno Virtual', description: 'El equivalente digital al cuaderno de garita tradicional.' } },
+  { popover: { title: 'Novedades del Turno', description: 'Redacta de manera clara cualquier incidente, relevo o ronda de seguridad realizada.' } }
+];
+
 export function GuidedTourButton() {
   const pathname = usePathname();
   const { resolvedTheme } = useTheme();
@@ -39,6 +64,16 @@ export function GuidedTourButton() {
       steps = GARITA_STEPS;
     } else if (pathname === '/politicas') {
       steps = POLITICAS_STEPS;
+    } else if (pathname?.includes('/repartidores')) {
+      steps = GARITA_REPARTIDORES_STEPS;
+    } else if (pathname?.includes('/visitas')) {
+      steps = GARITA_VISITAS_STEPS;
+    } else if (pathname?.includes('/proveedores')) {
+      steps = GARITA_PROVEEDORES_STEPS;
+    } else if (pathname?.includes('/contratistas')) {
+      steps = GARITA_CONTRATISTAS_STEPS;
+    } else if (pathname?.includes('/ocurrencias')) {
+      steps = GARITA_OCURRENCIAS_STEPS;
     } else {
       steps = [
         { popover: { title: 'Tour No Disponible', description: 'No hay un recorrido guiado configurado para esta sección específica aún.' } }
@@ -63,7 +98,7 @@ export function GuidedTourButton() {
   return (
     <button 
       onClick={handleStartTour}
-      className="p-1.5 rounded-lg text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+      className="p-1.5 rounded-lg text-gray-500 hover:text-black dark:text-slate-500 dark:text-gray-400 dark:hover:text-slate-800 dark:text-white hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
       title="Tour Guiado"
     >
       <HelpCircle className="w-5 h-5" />

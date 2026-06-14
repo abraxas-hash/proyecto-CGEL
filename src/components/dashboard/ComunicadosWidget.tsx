@@ -63,17 +63,17 @@ export function ComunicadosWidget() {
   if (loading) {
     return (
       <div className="w-full h-48 bg-black/5 dark:bg-white/5 rounded-2xl animate-pulse flex items-center justify-center">
-        <p className="text-gray-400 text-sm font-bold">Cargando comunicados...</p>
+        <p className="text-slate-500 dark:text-gray-400 text-sm font-bold">Cargando comunicados...</p>
       </div>
     );
   }
 
   if (comunicados.length === 0) {
     return (
-      <Card className="glass-panel border-black/5 dark:border-white/5 relative overflow-hidden group w-full">
+      <Card className="glass-panel border-slate-400 dark:border-slate-700 dark:border-slate-700 relative overflow-hidden group w-full">
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white flex items-center gap-2">
-            <MessageSquare className="w-4 h-4 text-[#00d4ff]" />
+          <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-slate-800 dark:text-white flex items-center gap-2">
+            <MessageSquare className="w-4 h-4 text-slate-800 dark:text-white" />
             Bandeja Oficial
           </CardTitle>
         </CardHeader>
@@ -85,10 +85,10 @@ export function ComunicadosWidget() {
   }
 
   return (
-    <Card className="glass-panel border-black/5 dark:border-white/5 relative overflow-hidden group w-full mb-8">
+    <Card className="glass-panel border-slate-400 dark:border-slate-700 dark:border-slate-700 relative overflow-hidden group w-full mb-8">
       <CardHeader className="pb-4">
-        <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white flex items-center gap-2">
-          <MessageSquare className="w-4 h-4 text-[#00d4ff]" />
+        <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-slate-800 dark:text-white flex items-center gap-2">
+          <MessageSquare className="w-4 h-4 text-slate-800 dark:text-white" />
           Bandeja Oficial
         </CardTitle>
       </CardHeader>
@@ -103,7 +103,7 @@ export function ComunicadosWidget() {
             ? 'bg-red-500/10 border-red-500/20' 
             : isDoc 
               ? 'bg-purple-500/10 border-purple-500/20'
-              : 'bg-blue-500/5 border-blue-500/10 dark:border-white/5';
+              : 'bg-blue-500/5 border-blue-500/10 dark:border-slate-700';
 
           const iconClass = isAlerta 
             ? 'text-red-500' 
@@ -126,7 +126,7 @@ export function ComunicadosWidget() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
-                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-sm ${isAlerta ? 'bg-red-500 text-black' : 'bg-black/10 dark:bg-white/10 text-gray-600 dark:text-gray-300'}`}>
+                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-sm ${isAlerta ? 'bg-red-500 text-black' : 'bg-black/10 dark:bg-white/10 text-gray-600 dark:text-slate-600 dark:text-gray-300'}`}>
                       {item.autor_rol}
                     </span>
                     <span className="text-[10px] text-gray-500 font-bold flex items-center gap-1 uppercase tracking-wider">
@@ -135,11 +135,11 @@ export function ComunicadosWidget() {
                     </span>
                   </div>
                   
-                  <h4 className={`text-sm font-black mb-1.5 tracking-wide ${isAlerta ? 'text-red-500' : 'text-black dark:text-white'}`}>
+                  <h4 className={`text-sm font-black mb-1.5 tracking-wide ${isAlerta ? 'text-red-500' : 'text-black dark:text-slate-800 dark:text-white'}`}>
                     {item.titulo}
                   </h4>
                   
-                  <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-wrap font-medium">
+                  <p className="text-xs text-gray-600 dark:text-slate-500 dark:text-gray-400 leading-relaxed whitespace-pre-wrap font-medium">
                     {item.contenido}
                   </p>
 

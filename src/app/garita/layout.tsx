@@ -1,6 +1,7 @@
 'use client';
 
 import { AsciiArt } from "@/components/ui/ascii-art";
+import { ModeToggle } from "@/components/ui/ModeToggle";
 
 export default function GaritaLayout({
   children,
@@ -8,18 +9,22 @@ export default function GaritaLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-[100dvh] w-full bg-[#111111] text-white flex flex-col font-[family-name:var(--font-geist-sans)] overflow-x-hidden relative z-50">
+    <div className="min-h-[100dvh] w-full text-slate-800 dark:text-white flex flex-col font-[family-name:var(--font-geist-sans)] overflow-x-hidden relative z-50">
       {/* Top Status Bar Decoration */}
-      <header className="h-14 shrink-0 flex items-center justify-between px-4 border-b border-white/5 bg-[#111111]/90 backdrop-blur-md sticky top-0 z-50 shadow-[0_4px_10px_rgba(0,0,0,0.5)]">
+      <header className="h-14 shrink-0 flex items-center justify-between px-4 border-b border-slate-400 dark:border-slate-700 bg-white/50 dark:bg-black/50 backdrop-blur-md sticky top-0 z-50 shadow-sm dark:shadow-[0_4px_10px_rgba(0,0,0,0.5)]">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-md bg-gradient-to-tr from-[#0047AB] to-[#00d4ff] flex items-center justify-center">
+          <div className="w-6 h-6 rounded-md bg-gradient-to-tr from-[#D97736] to-[#A85A24] flex items-center justify-center shadow-[0_0_10px_rgba(217,119,54,0.3)]">
             <span className="text-[10px] font-black text-white">CG</span>
           </div>
           <h1 className="text-sm font-bold tracking-widest uppercase">Garita Móvil</h1>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-          <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Online</span>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            <span className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-wider hidden sm:inline">Online</span>
+          </div>
+          <div className="h-6 w-px bg-slate-300 dark:bg-slate-700"></div>
+          <ModeToggle />
         </div>
       </header>
 
@@ -30,18 +35,18 @@ export default function GaritaLayout({
       
       {/* Ambient background glow & ASCII */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute inset-0 opacity-40">
+        <div className="absolute inset-0 opacity-20 dark:opacity-40">
           <AsciiArt
             src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80"
             resolution={50}
             charset="blocks"
-            color="#00d4ff"
+            color="#D97736"
             inverted={true}
             animated={true}
             className="w-full h-full object-cover"
           />
         </div>
-        <div className="absolute top-[-20%] right-[-20%] w-[60%] h-[60%] bg-[#00d4ff] rounded-full blur-[120px] opacity-10"></div>
+        <div className="absolute top-[-20%] right-[-20%] w-[60%] h-[60%] bg-[#D97736] rounded-full blur-[120px] opacity-10"></div>
       </div>
     </div>
   );

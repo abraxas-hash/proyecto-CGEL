@@ -50,13 +50,13 @@ export default function ProveedoresClient({ initialProveedores }: { initialProve
   return (
     <main className="glass-panel rounded-2xl p-2 sm:p-4 w-full h-[calc(100vh-140px)] flex flex-col overflow-hidden">
       {/* Search & Export Header (STAY FIXED) */}
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 pt-2 border-b border-white/5 pb-4 px-2 shrink-0">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 pt-2 border-b border-slate-700 pb-4 px-2 shrink-0">
         <div className="flex items-center gap-3 w-full sm:w-auto">
           <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
             <Truck className="text-blue-400 w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-lg font-black text-white leading-none uppercase">Proveedores</h2>
+            <h2 className="text-lg font-black text-slate-800 dark:text-white leading-none uppercase">Proveedores</h2>
             <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Carga Pesada</p>
           </div>
         </div>
@@ -70,7 +70,7 @@ export default function ProveedoresClient({ initialProveedores }: { initialProve
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               aria-label="Buscar en la fecha"
-              className="w-full bg-white/5 border border-white/10 rounded-lg py-2 pl-9 pr-4 text-[11px] text-white focus:outline-none focus:border-blue-400/50 transition-all"
+              className="w-full bg-white/5 border border-white/10 rounded-lg py-2 pl-9 pr-4 text-[11px] text-slate-800 dark:text-white focus:outline-none focus:border-blue-400/50 transition-all"
             />
           </div>
           <button 
@@ -87,7 +87,7 @@ export default function ProveedoresClient({ initialProveedores }: { initialProve
 
       <div className="flex flex-col md:flex-row gap-6 flex-1 min-h-0 overflow-hidden">
         {/* Left Sidebar: Visual Calendar (STAY FIXED) */}
-        <aside className="w-full md:w-72 shrink-0 border-b md:border-b-0 md:border-r border-white/5 pb-6 md:pb-0 md:pr-6 overflow-y-auto no-scrollbar">
+        <aside className="w-full md:w-72 shrink-0 border-b md:border-b-0 md:border-r border-slate-700 pb-6 md:pb-0 md:pr-6 overflow-y-auto no-scrollbar">
           <VisualCalendar 
             selectedDate={selectedDate}
             onDateSelect={setSelectedDate}
@@ -97,10 +97,10 @@ export default function ProveedoresClient({ initialProveedores }: { initialProve
           
           <div className="mt-6 hidden md:block">
             <span className="text-[9px] text-gray-600 font-black uppercase tracking-widest px-2 block mb-3">Calendario de Cargas</span>
-            <div className="bg-white/[0.02] rounded-xl p-3 border border-white/5">
+            <div className="bg-white/[0.02] rounded-xl p-3 border border-slate-700">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-[10px] text-gray-400 font-bold uppercase">Total Camiones</span>
-                <span className="text-xs text-white font-black">{filteredByDate.length}</span>
+                <span className="text-[10px] text-slate-500 dark:text-gray-400 font-bold uppercase">Total Camiones</span>
+                <span className="text-xs text-slate-800 dark:text-white font-black">{filteredByDate.length}</span>
               </div>
               <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden">
                 <div className="bg-blue-500 h-full" style={{ width: `${Math.min(filteredByDate.length * 15, 100)}%` }}></div>
@@ -114,14 +114,14 @@ export default function ProveedoresClient({ initialProveedores }: { initialProve
           {selectedDate && (
             <div className="animate-in fade-in slide-in-from-right-4 duration-500">
               <div className="flex items-center justify-between mb-4 px-2">
-                <h3 className="text-sm font-black text-white uppercase tracking-tighter flex items-center gap-2">
+                <h3 className="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tighter flex items-center gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></div>
                   Mostrando: {new Date(selectedDate + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
                 </h3>
                 <span className="text-[10px] text-gray-500 font-bold uppercase">{filteredByDate.length} Proveedores</span>
               </div>
 
-              <div className="bg-white/[0.02] border border-white/5 rounded-2xl overflow-hidden divide-y divide-white/5">
+              <div className="bg-white/[0.02] border border-slate-700 rounded-2xl overflow-hidden divide-y divide-white/5">
                 {filteredByDate.map((item) => (
                   <Link 
                     key={item.id} 
@@ -129,24 +129,24 @@ export default function ProveedoresClient({ initialProveedores }: { initialProve
                     className="group flex items-center gap-4 p-3 hover:bg-white/[0.03] transition-all"
                   >
                     <div className="flex items-center gap-3 min-w-[150px] sm:min-w-[200px]">
-                      <div className={`w-8 h-8 rounded-lg ${!item.hora_salida ? 'bg-blue-500/10' : 'bg-gray-500/10'} flex items-center justify-center border border-white/5`}>
+                      <div className={`w-8 h-8 rounded-lg ${!item.hora_salida ? 'bg-blue-500/10' : 'bg-gray-500/10'} flex items-center justify-center border border-slate-700`}>
                         <Truck className={`w-4 h-4 ${!item.hora_salida ? 'text-blue-400' : 'text-gray-500'}`} />
                       </div>
                       <div>
-                        <h4 className="text-[11px] font-black text-white leading-none uppercase truncate max-w-[120px]">{item.empresa_proveedor}</h4>
+                        <h4 className="text-[11px] font-black text-slate-800 dark:text-white leading-none uppercase truncate max-w-[120px]">{item.empresa_proveedor}</h4>
                         <p className="text-[9px] text-gray-500 font-mono mt-1">{item.placa}</p>
                       </div>
                     </div>
 
                     <div className="hidden sm:block flex-1 min-w-0">
                       <span className="text-[8px] text-gray-600 font-black uppercase tracking-widest block mb-0.5">Conductor</span>
-                      <p className="text-[10px] text-gray-300 font-medium truncate capitalize">{item.conductor?.toLowerCase()}</p>
+                      <p className="text-[10px] text-slate-600 dark:text-gray-300 font-medium truncate capitalize">{item.conductor?.toLowerCase()}</p>
                     </div>
 
                     <div className="flex items-center gap-6 shrink-0">
                       <div className="flex flex-col items-center">
                         <span className="text-[8px] text-gray-600 font-black uppercase mb-1">Horario</span>
-                        <span className="text-[10px] text-gray-400 font-mono">{item.hora_llegada?.slice(0,5)} — {item.hora_salida?.slice(0,5) || '--:--'}</span>
+                        <span className="text-[10px] text-slate-500 dark:text-gray-400 font-mono">{item.hora_llegada?.slice(0,5)} — {item.hora_salida?.slice(0,5) || '--:--'}</span>
                       </div>
 
                       <div className="flex flex-col items-center">

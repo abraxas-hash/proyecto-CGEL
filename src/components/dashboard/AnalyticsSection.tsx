@@ -53,11 +53,11 @@ export default function AnalyticsSection({ data }: { data: any }) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         {/* Gráfica de Tendencia (Area Smooth) */}
-        <Card className="glass-panel border-black/5 dark:border-white/5 relative overflow-hidden group">
+        <Card className="glass-panel border-slate-400 dark:border-slate-700 dark:border-slate-700 relative overflow-hidden group">
           <CardHeader className="flex flex-row items-center justify-between z-10 relative">
             <div>
-              <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white flex items-center gap-2">
-                <Activity className="w-4 h-4 text-[#00d4ff]" />
+              <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-slate-800 dark:text-white flex items-center gap-2">
+                <Activity className="w-4 h-4 text-slate-800 dark:text-white" />
                 Performance Operativo
               </CardTitle>
               <CardDescription className="text-xs text-gray-600 dark:text-gray-500 mt-1">Volumen de ingresos y auditorías por ciclo semanal</CardDescription>
@@ -65,12 +65,12 @@ export default function AnalyticsSection({ data }: { data: any }) {
             <div className="flex gap-2">
               <div className="flex items-center gap-1.5 px-3 py-1 bg-[#00d4ff]/10 rounded-full border border-[#00d4ff]/20">
                 <div className="w-2 h-2 rounded-full bg-[#00d4ff] animate-pulse"></div>
-                <span className="text-[9px] font-black text-[#00d4ff] uppercase tracking-widest">Live</span>
+                <span className="text-[9px] font-black text-slate-800 dark:text-white uppercase tracking-widest">Live</span>
               </div>
             </div>
           </CardHeader>
           <CardContent className="h-[280px] mt-4 z-10 relative p-0 sm:p-6 sm:pt-0">
-            <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+            <ResponsiveContainer width="100%" height="100%" minWidth={10} minHeight={10}>
               <AreaChart data={data.weekly} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
@@ -115,14 +115,14 @@ export default function AnalyticsSection({ data }: { data: any }) {
         </Card>
 
         {/* Distribución Radial (Concéntrica) -> Convertida a Donut interactivo */}
-        <Card className="h-full glass-panel border-black/5 dark:border-white/5 flex flex-col justify-center relative overflow-hidden group">
+        <Card className="h-full glass-panel border-slate-400 dark:border-slate-700 dark:border-slate-700 flex flex-col justify-center relative overflow-hidden group">
           <CardHeader className="pb-2 z-10 relative">
-            <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white">Mix de Seguridad</CardTitle>
+            <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-slate-800 dark:text-white">Mix de Seguridad</CardTitle>
             <CardDescription className="text-xs text-gray-600 dark:text-gray-500 mt-1">Distribución por categoría</CardDescription>
           </CardHeader>
           <CardContent className="flex-1 pb-6 flex flex-col items-center justify-center z-10 relative">
             <div className="h-[200px] w-full">
-              <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+              <ResponsiveContainer width="100%" height="100%" minWidth={10} minHeight={10}>
                 <RadialBarChart 
                   data={[
                     { name: 'Repartidores', value: data.counts.repartidores || 1, fill: COLORS.blue },
@@ -155,20 +155,20 @@ export default function AnalyticsSection({ data }: { data: any }) {
             {/* Custom Legend */}
             <div className="grid grid-cols-2 gap-x-4 gap-y-2 w-full mt-4 px-4">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#00d4ff]"></div><span className="text-[10px] text-gray-400 font-bold uppercase">Repartidores</span></div>
-                <span className="text-[10px] text-white font-black">{data.counts.repartidores}</span>
+                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#00d4ff]"></div><span className="text-[10px] text-slate-500 dark:text-gray-400 font-bold uppercase">Repartidores</span></div>
+                <span className="text-[10px] text-slate-800 dark:text-white font-black">{data.counts.repartidores}</span>
               </div>
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#a855f7]"></div><span className="text-[10px] text-gray-400 font-bold uppercase">Visitas</span></div>
-                <span className="text-[10px] text-white font-black">{data.counts.visitas}</span>
+                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#a855f7]"></div><span className="text-[10px] text-slate-500 dark:text-gray-400 font-bold uppercase">Visitas</span></div>
+                <span className="text-[10px] text-slate-800 dark:text-white font-black">{data.counts.visitas}</span>
               </div>
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#22c55e]"></div><span className="text-[10px] text-gray-400 font-bold uppercase">Proveedores</span></div>
-                <span className="text-[10px] text-white font-black">{data.counts.proveedores}</span>
+                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#22c55e]"></div><span className="text-[10px] text-slate-500 dark:text-gray-400 font-bold uppercase">Proveedores</span></div>
+                <span className="text-[10px] text-slate-800 dark:text-white font-black">{data.counts.proveedores}</span>
               </div>
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#f97316]"></div><span className="text-[10px] text-gray-400 font-bold uppercase">Contratistas</span></div>
-                <span className="text-[10px] text-white font-black">{data.counts.contratistas}</span>
+                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#f97316]"></div><span className="text-[10px] text-slate-500 dark:text-gray-400 font-bold uppercase">Contratistas</span></div>
+                <span className="text-[10px] text-slate-800 dark:text-white font-black">{data.counts.contratistas}</span>
               </div>
             </div>
           </CardContent>
@@ -179,32 +179,32 @@ export default function AnalyticsSection({ data }: { data: any }) {
       <div className="mt-6">
         
         {/* Mapa de Calor */}
-        <Card className="glass-panel border-black/5 dark:border-white/5 relative overflow-hidden group">
+        <Card className="glass-panel border-slate-400 dark:border-slate-700 dark:border-slate-700 relative overflow-hidden group">
         <CardHeader className="flex flex-row items-center justify-between z-10 relative">
           <div>
-            <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-white flex items-center gap-2">
+            <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-slate-800 dark:text-white flex items-center gap-2">
               <Activity className="w-4 h-4 text-[#f97316]" />
               Mapa de Calor de Ingresos
             </CardTitle>
             <CardDescription className="text-xs text-gray-600 dark:text-gray-500 mt-1">Densidad operativa y detección de anomalías por franja horaria</CardDescription>
           </div>
           <div className="hidden sm:flex gap-3">
-             <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-gray-400">
+             <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-slate-500 dark:text-gray-400">
                 <div className="w-1.5 h-1.5 rounded-full bg-[#00d4ff] shadow-[0_0_8px_rgba(0,212,255,0.8)]"></div> Rep
              </div>
-             <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-gray-400">
+             <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-slate-500 dark:text-gray-400">
                 <div className="w-1.5 h-1.5 rounded-full bg-[#a855f7] shadow-[0_0_8px_rgba(168,85,247,0.8)]"></div> Vis
              </div>
-             <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-gray-400">
+             <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-slate-500 dark:text-gray-400">
                 <div className="w-1.5 h-1.5 rounded-full bg-[#22c55e] shadow-[0_0_8px_rgba(34,197,94,0.8)]"></div> Pro
              </div>
-             <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-gray-400">
+             <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-slate-500 dark:text-gray-400">
                 <div className="w-1.5 h-1.5 rounded-full bg-[#f97316] shadow-[0_0_8px_rgba(249,115,22,0.8)]"></div> Con
              </div>
           </div>
         </CardHeader>
         <CardContent className="h-[250px] mt-2 relative z-10 p-0 sm:p-6 sm:pt-0">
-          <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+          <ResponsiveContainer width="100%" height="100%" minWidth={10} minHeight={10}>
             <ScatterChart margin={{ top: 10, right: 20, bottom: 0, left: -20 }}>
               <defs>
                 <filter id="glow-scatter" x="-20%" y="-20%" width="140%" height="140%">
@@ -254,11 +254,11 @@ export default function AnalyticsSection({ data }: { data: any }) {
                     const data = payload[0].payload;
                     return (
                       <div className="bg-black/90 border border-white/10 p-4 rounded-xl backdrop-blur-xl shadow-2xl" style={{ boxShadow: `0 10px 30px -10px ${data.fill}50` }}>
-                        <p className="text-[12px] font-black text-white uppercase mb-2 leading-none" style={{ color: data.fill }}>{data.name}</p>
+                        <p className="text-[12px] font-black text-slate-800 dark:text-white uppercase mb-2 leading-none" style={{ color: data.fill }}>{data.name}</p>
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{data.category}</span>
+                          <span className="text-[10px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest">{data.category}</span>
                         </div>
-                        <p className="text-[10px] text-gray-500 font-bold">HORA REGISTRADA: <span className="text-white ml-1">{data.hour}:00</span></p>
+                        <p className="text-[10px] text-gray-500 font-bold">HORA REGISTRADA: <span className="text-slate-800 dark:text-white ml-1">{data.hour}:00</span></p>
                       </div>
                     );
                   }

@@ -15,7 +15,7 @@ export default async function VisitaDetailPage({ params }: { params: Promise<{ i
     .single();
 
   if (!visita) {
-    return <div className="p-8 text-white font-[family-name:var(--font-geist-sans)]">Visita no encontrada (ID: {id}).</div>;
+    return <div className="p-8 text-slate-800 dark:text-white font-[family-name:var(--font-geist-sans)]">Visita no encontrada (ID: {id}).</div>;
   }
 
   // 2 y 3. Historial de ingresos y evidencias vinculadas (en paralelo)

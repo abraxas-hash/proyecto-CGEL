@@ -78,7 +78,7 @@ export default function ContratistaClient({ contratista, personal, herramientas,
             <button 
               type="button"
               onClick={() => setSelectedImg(null)}
-              className="absolute -top-14 right-0 p-3 bg-white/10 hover:bg-white/20 hover:text-red-400 rounded-full text-white transition-all shadow-lg"
+              className="absolute -top-14 right-0 p-3 bg-white/10 hover:bg-white/20 hover:text-red-400 rounded-full text-slate-800 dark:text-white transition-all shadow-lg"
             >
               <X className="w-6 h-6" />
             </button>
@@ -91,7 +91,7 @@ export default function ContratistaClient({ contratista, personal, herramientas,
               />
               <div className="p-6 flex justify-between items-center bg-white/5">
                 <div>
-                  <p className="text-white font-black text-2xl uppercase tracking-tight">{contratista.empresa_contratista}</p>
+                  <p className="text-slate-800 dark:text-white font-black text-2xl uppercase tracking-tight">{contratista.empresa_contratista}</p>
                   <p className="text-yellow-500 text-sm font-bold flex items-center gap-2 mt-1">
                     <HardHat className="w-4 h-4" />
                     AUDITORÍA DE OBRA Y MANTENIMIENTO
@@ -108,14 +108,14 @@ export default function ContratistaClient({ contratista, personal, herramientas,
 
       <Header />
 
-      <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
-        <Link href="/contratistas" className="flex items-center gap-2 text-[#00d4ff] hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-4 py-2.5 rounded-xl border border-white/5 text-sm font-bold w-full sm:w-auto justify-center sm:justify-start">
+      <div className="mt-6 sm:mt-8 mb-4 sm:mb-6 flex flex-col sm:flex-row justify-start items-start sm:items-center gap-4">
+        <Link href="/contratistas" className="flex items-center gap-2 text-slate-800 dark:text-white hover:text-slate-800 dark:text-slate-800 dark:text-white transition-colors bg-white/5 hover:bg-white/10 px-4 py-2.5 rounded-xl border border-slate-700 text-sm font-bold w-full sm:w-auto justify-center sm:justify-start shrink-0">
           <ArrowLeft className="w-4 h-4" />
           Volver a la tabla
         </Link>
         <div className="flex items-center gap-2 bg-purple-500/10 px-4 py-2 rounded-xl border border-purple-500/20 w-full sm:w-auto justify-center sm:justify-end">
           <span className="text-[10px] font-black text-purple-400 uppercase tracking-widest">ID AUDITORÍA</span>
-          <span className="text-sm font-mono font-bold text-white tracking-tighter">#{String(contratista.id).split('-')[0]}</span>
+          <span className="text-sm font-mono font-bold text-slate-800 dark:text-white tracking-tighter">#{String(contratista.id).split('-')[0]}</span>
         </div>
       </div>
 
@@ -125,11 +125,11 @@ export default function ContratistaClient({ contratista, personal, herramientas,
         <div className="lg:col-span-4 flex flex-col gap-6">
           <div className="glass-panel rounded-3xl p-8 relative overflow-hidden border-t-8 border-t-yellow-500 shadow-2xl">
             <div className="absolute top-0 right-0 p-8 opacity-5">
-              <Hammer className="w-32 h-32 text-white" />
+              <Hammer className="w-32 h-32 text-slate-800 dark:text-white" />
             </div>
             
             <div className="relative">
-              <h2 className="text-4xl font-black text-white uppercase leading-[0.9] mb-2">{contratista.empresa_contratista}</h2>
+              <h2 className="text-4xl font-black text-slate-800 dark:text-white uppercase leading-[0.9] mb-2">{contratista.empresa_contratista}</h2>
               <p className="text-yellow-500 font-bold tracking-widest text-xs uppercase mb-8">Contratista Autorizado</p>
 
               <div className="space-y-6">
@@ -137,25 +137,25 @@ export default function ContratistaClient({ contratista, personal, herramientas,
                   <p className="text-[10px] text-gray-500 uppercase font-black tracking-[0.2em] mb-2 flex items-center gap-2">
                     <ClipboardList className="w-3 h-3" /> Naturaleza del Trabajo
                   </p>
-                  <p className="text-white text-lg font-medium leading-snug">{contratista.trabajo_realizar}</p>
+                  <p className="text-slate-800 dark:text-white text-lg font-medium leading-snug">{contratista.trabajo_realizar}</p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
+                  <div className="bg-white/5 p-4 rounded-2xl border border-slate-700">
                     <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">Área de Trabajo</p>
-                    <p className="text-white font-bold flex items-center gap-2">
+                    <p className="text-slate-800 dark:text-white font-bold flex items-center gap-2">
                       <MapPin className="w-4 h-4 text-red-400" /> {contratista.area_trabajo}
                     </p>
                   </div>
-                  <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
+                  <div className="bg-white/5 p-4 rounded-2xl border border-slate-700">
                     <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">Autorizado por</p>
-                    <p className="text-white font-bold">{contratista.autorizado_por}</p>
+                    <p className="text-slate-800 dark:text-white font-bold">{contratista.autorizado_por}</p>
                   </div>
                 </div>
 
-                <div className="p-5 bg-black/40 rounded-3xl border border-white/5">
+                <div className="p-5 bg-black/40 rounded-3xl border border-slate-700">
                   <p className="text-[10px] text-gray-500 uppercase font-black mb-3 tracking-widest">Observaciones de Seguridad</p>
-                  <p className="text-xs text-gray-400 italic leading-relaxed">
+                  <p className="text-xs text-slate-500 dark:text-gray-400 italic leading-relaxed">
                     "{parsedObs.texto || 'No se registraron observaciones para este servicio técnico.'}"
                   </p>
                 </div>
@@ -165,16 +165,16 @@ export default function ContratistaClient({ contratista, personal, herramientas,
 
           {/* CHECKLIST GENERAL CONTRATISTA */}
           <div className="glass-panel rounded-3xl p-6 bg-gradient-to-br from-yellow-500/[0.05] to-transparent">
-            <h3 className="text-xs font-black text-gray-400 uppercase mb-6 tracking-[0.2em] flex items-center gap-2">
+            <h3 className="text-xs font-black text-slate-500 dark:text-gray-400 uppercase mb-6 tracking-[0.2em] flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-yellow-500" /> Requisitos de Empresa
             </h3>
             <div className="space-y-3">
-              <div className="flex items-center justify-between bg-white/5 p-4 rounded-2xl border border-white/5 hover:bg-white/10 transition-all">
-                <span className="text-sm text-gray-300">Póliza SCTR Global Vigente</span>
+              <div className="flex items-center justify-between bg-white/5 p-4 rounded-2xl border border-slate-700 hover:bg-white/10 transition-all">
+                <span className="text-sm text-slate-600 dark:text-gray-300">Póliza SCTR Global Vigente</span>
                 {contratista.sctr_vigente ? <CheckCircle2 className="w-6 h-6 text-green-500" /> : <XCircle className="w-6 h-6 text-red-500" />}
               </div>
-              <div className="flex items-center justify-between bg-white/5 p-4 rounded-2xl border border-white/5 hover:bg-white/10 transition-all">
-                <span className="text-sm text-gray-300">Retiro y Limpieza Conforme</span>
+              <div className="flex items-center justify-between bg-white/5 p-4 rounded-2xl border border-slate-700 hover:bg-white/10 transition-all">
+                <span className="text-sm text-slate-600 dark:text-gray-300">Retiro y Limpieza Conforme</span>
                 {contratista.firma_conformidad_retiro ? <CheckCircle2 className="w-6 h-6 text-green-500" /> : <XCircle className="w-6 h-6 text-gray-700" />}
               </div>
             </div>
@@ -188,7 +188,7 @@ export default function ContratistaClient({ contratista, personal, herramientas,
             <div className="flex items-center justify-between mb-6 border-b border-white/10 pb-4">
               <div className="flex items-center gap-3">
                 <Users className="text-blue-400 w-6 h-6" />
-                <h2 className="text-xl font-bold text-white uppercase tracking-tight">Personal en Planta</h2>
+                <h2 className="text-xl font-bold text-slate-800 dark:text-white uppercase tracking-tight">Personal en Planta</h2>
               </div>
               <span className="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-xs font-black">
                 {personal.length} PAX
@@ -197,10 +197,10 @@ export default function ContratistaClient({ contratista, personal, herramientas,
             
             <div className="space-y-3">
               {personal.map((p, idx) => (
-                <div key={p.id || p.dni_ce || idx} className="bg-white/5 border border-white/5 p-4 rounded-2xl hover:bg-white/10 transition-all">
+                <div key={p.id || p.dni_ce || idx} className="bg-white/5 border border-slate-700 p-4 rounded-2xl hover:bg-white/10 transition-all">
                   <div className="flex justify-between items-start mb-2">
                     <div>
-                      <p className="text-white font-bold capitalize">{p.nombre_completo?.toLowerCase()}</p>
+                      <p className="text-slate-800 dark:text-white font-bold capitalize">{p.nombre_completo?.toLowerCase()}</p>
                       <p className="text-[10px] text-gray-500 font-mono">DNI: {p.dni_ce}</p>
                     </div>
                     <div className="flex gap-2">
@@ -214,7 +214,7 @@ export default function ContratistaClient({ contratista, personal, herramientas,
                       </div>
                     </div>
                   </div>
-                  <div className="flex justify-between text-[10px] text-gray-500 pt-2 border-t border-white/5">
+                  <div className="flex justify-between text-[10px] text-gray-500 pt-2 border-t border-slate-700">
                     <span>INGRESO: {p.hora_ingreso?.slice(0,5)}</span>
                     <span className={p.hora_salida ? 'text-gray-500' : 'text-green-500 font-bold'}>
                       {p.hora_salida ? `SALIDA: ${p.hora_salida.slice(0,5)}` : 'TRABAJANDO...'}
@@ -229,15 +229,15 @@ export default function ContratistaClient({ contratista, personal, herramientas,
           <div className="glass-panel rounded-3xl p-6">
             <div className="flex items-center gap-3 mb-6 border-b border-white/10 pb-4">
               <Wrench className="text-orange-400 w-6 h-6" />
-              <h2 className="text-xl font-bold text-white uppercase tracking-tight">Inventario de Herramientas</h2>
+              <h2 className="text-xl font-bold text-slate-800 dark:text-white uppercase tracking-tight">Inventario de Herramientas</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {herramientas.map((h, idx) => (
-                <div key={h.id || idx} className="flex items-center gap-4 bg-black/20 p-4 rounded-2xl border border-white/5">
+                <div key={h.id || idx} className="flex items-center gap-4 bg-black/20 p-4 rounded-2xl border border-slate-700">
                   <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center font-black text-orange-400 border border-orange-500/20">
                     {h.cantidad}
                   </div>
-                  <p className="text-xs text-gray-300 font-medium leading-tight">{h.descripcion_general}</p>
+                  <p className="text-xs text-slate-600 dark:text-gray-300 font-medium leading-tight">{h.descripcion_general}</p>
                 </div>
               ))}
               {herramientas.length === 0 && (
@@ -252,7 +252,7 @@ export default function ContratistaClient({ contratista, personal, herramientas,
           <div className="glass-panel rounded-3xl p-6 h-full bg-gradient-to-b from-transparent to-yellow-900/5">
             <div className="flex items-center gap-3 mb-6 border-b border-white/10 pb-4">
               <Camera className="text-purple-400 w-6 h-6" />
-              <h2 className="text-xl font-bold text-white uppercase tracking-tight">Inspección</h2>
+              <h2 className="text-xl font-bold text-slate-800 dark:text-white uppercase tracking-tight">Inspección</h2>
             </div>
 
             <div className="space-y-4 max-h-[800px] overflow-y-auto pr-2 custom-scrollbar">
@@ -272,7 +272,7 @@ export default function ContratistaClient({ contratista, personal, herramientas,
                       alt="Evidencia Obra" 
                       className="object-cover w-full h-full opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700"
                     />
-                    <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-md px-2 py-1 rounded text-[8px] font-black text-white border border-white/10 uppercase tracking-tighter">
+                    <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-md px-2 py-1 rounded text-[8px] font-black text-slate-800 dark:text-white border border-white/10 uppercase tracking-tighter">
                       {foto.tipo_evidencia}
                     </div>
                   </div>
