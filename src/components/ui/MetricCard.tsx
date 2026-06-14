@@ -19,33 +19,25 @@ interface MetricCardProps {
  */
 const colorStyles = {
   blue: {
-    cardBg: 'bg-blue-50 dark:bg-[#00d4ff]/5',
-    cardBorder: 'border-blue-200 dark:border-[#00d4ff]/20',
-    hoverBorder: 'hover:border-[#00d4ff]/50',
-    iconColor: 'text-[#00d4ff]'
+    accent: 'border-cyan-500 dark:border-cyan-400',
+    iconColor: 'text-cyan-600 dark:text-cyan-400'
   },
   purple: {
-    cardBg: 'bg-purple-50 dark:bg-purple-500/5',
-    cardBorder: 'border-purple-200 dark:border-purple-500/20',
-    hoverBorder: 'hover:border-purple-500/50',
-    iconColor: 'text-purple-400'
+    accent: 'border-purple-500 dark:border-purple-400',
+    iconColor: 'text-purple-600 dark:text-purple-400'
   },
   green: {
-    cardBg: 'bg-green-50 dark:bg-green-500/5',
-    cardBorder: 'border-green-200 dark:border-green-500/20',
-    hoverBorder: 'hover:border-green-500/50',
-    iconColor: 'text-green-400'
+    accent: 'border-emerald-500 dark:border-emerald-400',
+    iconColor: 'text-emerald-600 dark:text-emerald-400'
   },
   orange: {
-    cardBg: 'bg-orange-50 dark:bg-orange-500/5',
-    cardBorder: 'border-orange-200 dark:border-orange-500/20',
-    hoverBorder: 'hover:border-orange-500/50',
-    iconColor: 'text-orange-400'
+    accent: 'border-amber-500 dark:border-amber-400',
+    iconColor: 'text-amber-600 dark:text-amber-400'
   }
 };
 
 /**
- * MetricCard: Tarjeta de resumen de métricas — estilo tablero de apuntes.
+ * MetricCard: Tarjeta de resumen de métricas — estilo monocromático oscuro funcional.
  */
 export default function MetricCard({ title, subtitle, value, Icon, colorTheme, href }: MetricCardProps) {
   const theme = colorStyles[colorTheme];
@@ -53,92 +45,29 @@ export default function MetricCard({ title, subtitle, value, Icon, colorTheme, h
   return (
     <Link
       href={href}
-      className={`block ${theme.cardBorder} relative p-4 sm:p-6 rounded-2xl ${theme.hoverBorder} transition-all duration-300 active:scale-95 touch-manipulation cursor-pointer group flex flex-col justify-end text-center`}
-      style={{
-        minHeight: '165px',
-        overflow: 'visible',
-        paddingTop: '2.5rem',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        background: 'rgba(255,255,255,0.08)',
-        border: '1px solid rgba(255,255,255,0.25)',
-        borderRadius: '16px',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.3)',
-      }}
+      className={`block relative overflow-hidden bg-white dark:bg-[#161b27] border border-gray-200 dark:border-white/[0.08] p-4 sm:p-6 rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg active:scale-95 touch-manipulation cursor-pointer group flex flex-col min-h-[140px]`}
     >
-      {/* Clip Metálico — 100% inline styles para sobrevivir al purge de Tailwind */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '-6px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '68px',
-          height: '22px',
-          background: 'linear-gradient(to bottom, #e5e7eb, #9ca3af)',
-          borderRadius: '0 0 14px 14px',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.25), inset 0 2px 4px rgba(255,255,255,0.85)',
-          zIndex: 30,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'flex-end',
-          paddingBottom: '5px',
-        }}
-      >
-        {/* Argolla metálica del clip */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '-12px',
-            width: '20px',
-            height: '20px',
-            borderRadius: '50%',
-            border: '4px solid #9ca3af',
-            background: 'linear-gradient(135deg, #f3f4f6, #d1d5db)',
-            boxShadow: '0 2px 6px rgba(0,0,0,0.25)',
-          }}
-        />
-        {/* Barra sujetadora */}
-        <div
-          style={{
-            width: '34px',
-            height: '5px',
-            background: 'rgba(0,0,0,0.18)',
-            borderRadius: '9999px',
-          }}
-        />
+      {/* Acento semántico (borde superior) */}
+      <div className={`absolute top-0 left-0 right-0 h-[3px] border-t-2 ${theme.accent} opacity-80 group-hover:opacity-100 transition-opacity`} />
+
+      <div className="flex justify-between items-start mb-4 relative z-10">
+        <h2 className="text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300">{title}</h2>
+        <div className={`p-2 rounded-lg bg-gray-100 dark:bg-white/[0.04] ${theme.iconColor}`}>
+          <Icon size={20} strokeWidth={2} />
+        </div>
       </div>
 
-      {/* Hoja de papel rayada — inline styles */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '10px',
-          left: '8px',
-          right: '8px',
-          bottom: '8px',
-          borderRadius: '10px',
-          background: 'rgba(255,255,255,0.07)',
-          backgroundImage: 'repeating-linear-gradient(to bottom, transparent, transparent 26px, rgba(255,255,255,0.12) 27px)',
-          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2)',
-          zIndex: 0,
-          pointerEvents: 'none',
-        }}
-      />
-
-      {/* Icono de fondo como marca de agua */}
+      <div className="mt-auto relative z-10">
+        <span className="text-3xl sm:text-4xl font-black font-mono text-gray-900 dark:text-white drop-shadow-sm">{value}</span>
+        <p className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-2 ${theme.iconColor}`}>{subtitle}</p>
+      </div>
+      
+      {/* Icono de fondo como marca de agua sutil */}
       <Icon
-        strokeWidth={1.5}
-        className={`absolute left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 sm:w-28 sm:h-28 ${theme.iconColor} group-hover:scale-110 transition-transform duration-500`}
-        style={{ opacity: 0.22, zIndex: 10, top: '58%' }}
+        strokeWidth={1}
+        className={`absolute -bottom-6 -right-6 w-32 h-32 ${theme.iconColor} opacity-[0.04] dark:opacity-[0.06] group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500 z-0`}
       />
-
-      {/* Contenido principal */}
-      <div className="relative flex flex-col items-center" style={{ zIndex: 20, marginTop: 'auto', paddingTop: '1.5rem' }}>
-        <span className="text-3xl sm:text-4xl font-black font-mono text-black dark:text-white drop-shadow-sm mb-1">{value}</span>
-        <h2 className="text-lg sm:text-xl font-bold text-black dark:text-white leading-tight">{title}</h2>
-        <p className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-1 ${theme.iconColor} drop-shadow-sm`}>{subtitle}</p>
-      </div>
     </Link>
   );
 }
+

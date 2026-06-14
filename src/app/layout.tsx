@@ -23,7 +23,6 @@ export const metadata: Metadata = {
   description: "Plataforma de Inteligencia Operativa y Seguridad",
 };
 
-import WaveBackground from "@/components/ui/WaveBackground";
 import { FloatingChat } from "@/components/ui/FloatingChat";
 
 export default function RootLayout({
@@ -35,7 +34,7 @@ export default function RootLayout({
     <html lang="es" suppressHydrationWarning className={cn("font-sans", notoSans.variable, playfairDisplayHeading.variable)}>
       <body
         className={cn(
-          "min-h-screen bg-slate-100 dark:bg-[#11141d] font-sans antialiased text-slate-900 dark:text-gray-100 flex flex-col relative custom-scrollbar",
+          "min-h-screen bg-slate-50 dark:bg-[#0e1117] font-sans antialiased text-slate-900 dark:text-[#e2e8f0] flex flex-col relative custom-scrollbar",
           notoSans.variable,
           playfairDisplayHeading.variable
         )}
@@ -43,7 +42,6 @@ export default function RootLayout({
         <ThemeProvider>
           {children}
           <FloatingChat />
-          <WaveBackground />
         </ThemeProvider>
       </body>
     </html>
