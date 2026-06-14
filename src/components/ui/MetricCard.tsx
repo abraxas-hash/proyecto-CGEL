@@ -53,11 +53,17 @@ export default function MetricCard({ title, subtitle, value, Icon, colorTheme, h
   return (
     <Link
       href={href}
-      className={`block glass-panel ${theme.cardBg} ${theme.cardBorder} relative p-4 sm:p-6 rounded-2xl ${theme.hoverBorder} transition-all duration-300 active:scale-95 touch-manipulation cursor-pointer group flex flex-col justify-end text-center`}
+      className={`block ${theme.cardBorder} relative p-4 sm:p-6 rounded-2xl ${theme.hoverBorder} transition-all duration-300 active:scale-95 touch-manipulation cursor-pointer group flex flex-col justify-end text-center`}
       style={{
         minHeight: '165px',
         overflow: 'visible',
         paddingTop: '2.5rem',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        background: 'rgba(255,255,255,0.08)',
+        border: '1px solid rgba(255,255,255,0.25)',
+        borderRadius: '16px',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.3)',
       }}
     >
       {/* Clip Metálico — 100% inline styles para sobrevivir al purge de Tailwind */}
@@ -112,9 +118,9 @@ export default function MetricCard({ title, subtitle, value, Icon, colorTheme, h
           right: '8px',
           bottom: '8px',
           borderRadius: '10px',
-          background: 'rgba(255,255,255,0.32)',
-          backgroundImage: 'repeating-linear-gradient(to bottom, transparent, transparent 26px, rgba(100,116,139,0.2) 27px)',
-          boxShadow: 'inset 0 1px 4px rgba(255,255,255,0.6)',
+          background: 'rgba(255,255,255,0.07)',
+          backgroundImage: 'repeating-linear-gradient(to bottom, transparent, transparent 26px, rgba(255,255,255,0.12) 27px)',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2)',
           zIndex: 0,
           pointerEvents: 'none',
         }}
