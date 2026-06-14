@@ -46,7 +46,6 @@ export default function Header() {
 
   const navItems = [
     { name: 'RESUMEN', href: '/', icon: Home, color: 'text-gray-400', activeBg: 'bg-white/10', hoverBg: 'hover:bg-white/10' },
-    { name: 'GARITA', href: '/garita', icon: ShieldAlert, color: 'text-red-400', activeBg: 'bg-red-500/20', hoverBg: 'hover:bg-red-500/20' },
     { name: 'REPARTIDORES', href: '/repartidores', icon: Truck, color: 'text-slate-800 dark:text-white', activeBg: 'bg-[#00d4ff]/20', hoverBg: 'hover:bg-[#00d4ff]/20' },
     { name: 'VISITAS', href: '/visitas', icon: Users, color: 'text-purple-400', activeBg: 'bg-purple-500/20', hoverBg: 'hover:bg-purple-500/20' },
     { name: 'PROVEEDORES', href: '/proveedores', icon: ShieldCheck, color: 'text-green-400', activeBg: 'bg-green-500/20', hoverBg: 'hover:bg-green-500/20' },
