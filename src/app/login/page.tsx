@@ -20,12 +20,12 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   
   // Por defecto, si se da Enter en el form, entraremos a garita
-  const [defaultDestino, setDefaultDestino] = useState<'/garita' | '/visitas'>('/garita');
+  const [defaultDestino, setDefaultDestino] = useState<'/garita' | '/'>('/garita');
 
   // Lógica abstraída al Hook
   const { login, loading, error, setError } = useAuth();
 
-  const executeLogin = (destino: '/garita' | '/visitas') => {
+  const executeLogin = (destino: '/garita' | '/visitas' | '/') => {
     login(email, password, destino);
   };
 
@@ -167,11 +167,11 @@ export default function LoginPage() {
               <Button
                 type="button"
                 disabled={loading}
-                onClick={() => executeLogin('/visitas')}
-                onMouseEnter={() => setDefaultDestino('/visitas')}
+                onClick={() => executeLogin('/')}
+                onMouseEnter={() => setDefaultDestino('/')}
                 className="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-slate-800 dark:text-white font-black uppercase text-[10px] h-16 rounded-xl transition-all active:scale-[0.98] flex flex-col gap-1"
               >
-                {loading && defaultDestino === '/visitas' ? (
+                {loading && defaultDestino === '/' ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <LayoutDashboard className="w-5 h-5" />
