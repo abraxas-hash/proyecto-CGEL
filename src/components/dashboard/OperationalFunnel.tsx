@@ -18,9 +18,9 @@ export function OperationalFunnel() {
       <CardContent className="p-0 sm:p-6 sm:pb-0 flex flex-col h-full relative z-10">
         
         {/* Encabezado minimalista */}
-        <div className="flex items-center justify-between mb-4 sm:pt-0 pt-4 px-4 sm:px-0">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:pt-0 pt-4 px-4 sm:px-0 gap-2">
           <div>
-            <h3 className="text-sm font-black uppercase tracking-widest text-black dark:text-slate-800 dark:text-white flex items-center gap-2">
+            <h3 className="text-xs sm:text-sm font-black uppercase tracking-widest text-black dark:text-slate-800 dark:text-white flex items-center gap-2">
               <Filter className="w-4 h-4 text-slate-800 dark:text-white" />
               Embudo de Operaciones
             </h3>

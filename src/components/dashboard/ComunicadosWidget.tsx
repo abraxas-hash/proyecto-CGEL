@@ -86,8 +86,8 @@ export function ComunicadosWidget() {
 
   return (
     <Card className="glass-panel border-slate-400 dark:border-slate-700 dark:border-slate-700 relative overflow-hidden group w-full mb-8">
-      <CardHeader className="pb-4">
-        <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-slate-800 dark:text-white flex items-center gap-2">
+      <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 gap-2">
+        <CardTitle className="text-xs sm:text-sm font-black uppercase tracking-widest text-black dark:text-slate-800 dark:text-white flex items-center gap-2">
           <MessageSquare className="w-4 h-4 text-slate-800 dark:text-white" />
           Bandeja Oficial
         </CardTitle>
