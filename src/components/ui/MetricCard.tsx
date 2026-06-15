@@ -13,20 +13,24 @@ interface MetricCardProps {
 
 const colorStyles = {
   blue: {
-    iconColor: 'text-slate-800 dark:text-white',
-    hoverText: 'group-hover:text-slate-800 dark:text-white dark:group-hover:text-slate-800 dark:text-white'
+    iconColor: 'text-blue-500 dark:text-blue-400',
+    hoverText: 'group-hover:text-blue-600 dark:group-hover:text-blue-300',
+    borderColor: '!border-blue-500/40 dark:!border-blue-400/40 shadow-[0_0_15px_rgba(59,130,246,0.1)]'
   },
   purple: {
     iconColor: 'text-purple-500',
-    hoverText: 'group-hover:text-purple-600 dark:group-hover:text-purple-400'
+    hoverText: 'group-hover:text-purple-600 dark:group-hover:text-purple-400',
+    borderColor: '!border-purple-500/40 dark:!border-purple-500/40 shadow-[0_0_15px_rgba(168,85,247,0.1)]'
   },
   green: {
     iconColor: 'text-emerald-500',
-    hoverText: 'group-hover:text-emerald-600 dark:group-hover:text-emerald-400'
+    hoverText: 'group-hover:text-emerald-600 dark:group-hover:text-emerald-400',
+    borderColor: '!border-emerald-500/40 dark:!border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.1)]'
   },
   orange: {
     iconColor: 'text-amber-500',
-    hoverText: 'group-hover:text-amber-600 dark:group-hover:text-amber-400'
+    hoverText: 'group-hover:text-amber-600 dark:group-hover:text-amber-400',
+    borderColor: '!border-amber-500/40 dark:!border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.1)]'
   }
 };
 
@@ -36,7 +40,7 @@ export default function MetricCard({ title, subtitle, value, Icon, colorTheme, h
   return (
     <Link
       href={href}
-      className={`glass-panel block relative p-4 sm:p-6 transition-all duration-300 group flex flex-col justify-end text-center active:scale-95 touch-manipulation hover:-translate-y-1`}
+      className={`glass-panel block relative p-4 sm:p-6 transition-all duration-300 group flex flex-col justify-end text-center active:scale-95 touch-manipulation hover:-translate-y-1 ${theme.borderColor}`}
       style={{
         minHeight: '165px',
         overflow: 'visible',
