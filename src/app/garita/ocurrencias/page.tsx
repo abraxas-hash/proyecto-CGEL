@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { Camera, ArrowLeft, Send, CheckCircle2, AlertTriangle, BookOpen } from 'lucide-react';
+import { Camera, ArrowLeft, Send, CheckCircle2, AlertTriangle, BookOpen, Clock } from 'lucide-react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
@@ -10,6 +10,29 @@ export default function OcurrenciasPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [historial, setHistorial] = useState<any[]>([]);
+  const [loadingHistorial, setLoadingHistorial] = useState(true);
+
+  React.useEffect(() => {
+    async function fetchHistorial() {
+      try {
+        const { data, error } = await supabase
+          .from('cuaderno_ocurrencias')
+          .select('*, perfiles(nombre, rol)') // Asumiendo que el agente_id enlaza con una tabla perfiles o usuarios si es posible, sino solo mostramos datos crudos
+          .order('created_at', { ascending: false })
+          .limit(5);
+        
+        if (!error && data) {
+          setHistorial(data);
+        }
+      } catch (err) {
+        console.error('Error fetching historial:', err);
+      } finally {
+        setLoadingHistorial(false);
+      }
+    }
+    fetchHistorial();
+  }, [success]); // Refrescar cuando se guarda una nueva
   
   // Form State
   const [turno, setTurno] = useState('MAÑANA');
@@ -227,6 +250,63 @@ export default function OcurrenciasPage() {
         </div>
 
       </form>
+
+      {/* Historial Timeline */}
+      <div className="mt-8">
+        <h3 className="text-lg font-black text-slate-800 dark:text-white mb-4 flex items-center gap-2">
+          <BookOpen className="w-5 h-5 text-[#00d4ff]" />
+          Registros Anteriores
+        </h3>
+        
+        {loadingHistorial ? (
+          <div className="animate-pulse space-y-4">
+            <div className="h-24 bg-white/5 rounded-xl"></div>
+            <div className="h-24 bg-white/5 rounded-xl"></div>
+          </div>
+        ) : historial.length === 0 ? (
+          <div className="text-center p-6 glass-panel rounded-xl">
+            <p className="text-slate-500 font-medium">No hay ocurrencias previas registradas.</p>
+          </div>
+        ) : (
+          <div className="relative border-l border-slate-300 dark:border-slate-700 ml-3 space-y-6">
+            {historial.map((oc, idx) => (
+              <div key={oc.id || idx} className="relative pl-6">
+                <div className="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full bg-[#00d4ff] shadow-[0_0_8px_rgba(0,212,255,0.5)]"></div>
+                <div className="glass-panel p-4 rounded-xl relative group hover:bg-white/[0.02] transition-colors">
+                  <div className="flex justify-between items-start mb-2">
+                    <span className="text-[10px] font-black uppercase tracking-widest bg-black/10 dark:bg-white/10 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-sm">
+                      TURNO {oc.turno}
+                    </span>
+                    <span className="text-[10px] text-slate-500 font-bold flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      {new Date(oc.created_at).toLocaleString('es-PE', {
+                        day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit'
+                      })}
+                    </span>
+                  </div>
+                  <p className="text-sm font-medium text-slate-800 dark:text-white mb-3 whitespace-pre-wrap">
+                    {oc.novedades}
+                  </p>
+                  
+                  {oc.estado_equipos && (
+                    <div className="mt-2 text-xs text-slate-600 dark:text-slate-400 bg-black/5 dark:bg-black/20 p-2 rounded-lg border border-slate-200 dark:border-white/5">
+                      <strong className="block text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">Equipos:</strong>
+                      {oc.estado_equipos}
+                    </div>
+                  )}
+
+                  {oc.foto_url && (
+                    <a href={oc.foto_url} target="_blank" rel="noopener noreferrer" className="mt-3 block text-[10px] text-[#00d4ff] hover:underline font-bold uppercase tracking-widest flex items-center gap-1">
+                      <Camera className="w-3 h-3" /> Ver Evidencia Adjunta
+                    </a>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
     </div>
   );
 }
