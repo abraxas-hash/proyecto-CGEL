@@ -1,0 +1,21 @@
+{
+  "name": "CGEL Portal",
+  "short_name": "Garita Móvil",
+  "description": "Sistema de gestión logística y de garita",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0F172A",
+  "theme_color": "#00d4ff",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

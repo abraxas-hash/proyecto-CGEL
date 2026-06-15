@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Noto_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/ThemeProvider";
 import { cn } from "@/lib/utils";
+import { PwaRegister } from "@/components/PwaRegister";
 
 const playfairDisplayHeading = Playfair_Display({subsets:['latin'],variable:'--font-heading'});
 
@@ -21,6 +22,16 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Nexus Control",
   description: "Plataforma de Inteligencia Operativa y Seguridad",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "CGEL Portal",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#00d4ff",
 };
 
 import { FloatingChat } from "@/components/ui/FloatingChat";
@@ -40,6 +51,7 @@ export default function RootLayout({
         )}
       >
         <ThemeProvider>
+          <PwaRegister />
           {children}
           <FloatingChat />
         </ThemeProvider>
