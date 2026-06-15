@@ -18,10 +18,14 @@ export default function OcurrenciasPage() {
       try {
         const { data, error } = await supabase
           .from('cuaderno_ocurrencias')
-          .select('*, perfiles(nombre, rol)') // Asumiendo que el agente_id enlaza con una tabla perfiles o usuarios si es posible, sino solo mostramos datos crudos
+          .select('*')
           .order('created_at', { ascending: false })
           .limit(5);
         
+        if (error) {
+          console.error('Supabase query error:', error);
+        }
+
         if (!error && data) {
           setHistorial(data);
         }
