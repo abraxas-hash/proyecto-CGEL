@@ -64,7 +64,7 @@ export default function MetricCard({ title, subtitle, value, Icon, colorTheme, h
 
       {/* Hoja de papel hundida con Neumorfismo (Inset) */}
       <div
-        className="neumorphic-inset absolute top-3 left-3 right-3 bottom-3 rounded-[12px] z-0 pointer-events-none overflow-hidden"
+        className="neumorphic-inset absolute top-1.5 left-1.5 right-1.5 bottom-1.5 rounded-[12px] z-0 pointer-events-none overflow-hidden"
       >
         {/* Líneas del papel */}
         <div 
