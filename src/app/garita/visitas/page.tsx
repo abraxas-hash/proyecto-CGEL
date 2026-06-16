@@ -31,7 +31,7 @@ export default function VisitasForm() {
       const { data, error } = await supabase
         .from('registro_visitas')
         .select('visitante_nombre, empresa')
-        .eq('dni', dni)
+        .eq('dni_ce', dni)
         .order('fecha', { ascending: false })
         .limit(1)
         .single();
@@ -77,7 +77,7 @@ export default function VisitasForm() {
         .insert({
           fecha: now.toISOString().split('T')[0],
           hora_ingreso: timeString,
-          dni: dni,
+          dni_ce: dni,
           visitante_nombre: nombre.toUpperCase(),
           empresa: empresa.toUpperCase() || 'PARTICULAR',
           motivo: motivo.toUpperCase(),
@@ -151,7 +151,7 @@ export default function VisitasForm() {
               value={dni}
               onChange={(e) => setDni(e.target.value)}
               onBlur={handleDniBlur}
-              className={`w-full neumorphic-inset bg-white/50 dark:bg-black/20 border ${isSearchingDni ? 'border-blue-400' : 'border-slate-400/30 dark:border-white/10'} rounded-xl p-4 text-xl font-black text-slate-800 dark:text-white focus:outline-none focus:border-[#D97736]/50 text-center tracking-widest transition-colors`}
+              className={`w-full neumorphic-inset bg-white/50 dark:bg-black/20 border ${isSearchingDni ? 'border-blue-400' : 'border-slate-400/30 dark:border-white/10'} rounded-xl p-4 text-xl font-black text-slate-800 dark:text-white focus:outline-none focus:border-purple-500/50 transition-all`}
             />
           </div>
 
@@ -164,7 +164,7 @@ export default function VisitasForm() {
               placeholder="Nombres y Apellidos"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
-              className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-[#D97736]/50 uppercase"
+              className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-purple-500/50 transition-all"
             />
           </div>
 
@@ -176,7 +176,7 @@ export default function VisitasForm() {
               placeholder="Ej: Particular"
               value={empresa}
               onChange={(e) => setEmpresa(e.target.value)}
-              className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-[#D97736]/50 uppercase"
+              className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-purple-500/50 transition-all"
             />
           </div>
         </div>
@@ -191,7 +191,7 @@ export default function VisitasForm() {
               placeholder="Ej: Reunión comercial, Recojo, etc."
               value={motivo}
               onChange={(e) => setMotivo(e.target.value)}
-              className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-[#D97736]/50 uppercase"
+              className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-purple-500/50 transition-all"
             />
           </div>
 
@@ -203,7 +203,7 @@ export default function VisitasForm() {
               placeholder="Nombre del personal interno"
               value={autorizadoPor}
               onChange={(e) => setAutorizadoPor(e.target.value)}
-              className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-[#D97736]/50 uppercase"
+              className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-purple-500/50 transition-all"
             />
           </div>
         </div>
@@ -222,7 +222,7 @@ export default function VisitasForm() {
               value={observacionesTexto}
               onChange={(e) => setObservacionesTexto(e.target.value)}
               rows={2}
-              className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-[#D97736]/50 resize-none"
+              className="w-full neumorphic-inset bg-white/50 dark:bg-black/20 border border-slate-400/30 dark:border-white/10 rounded-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-purple-500/50 transition-all"
             />
           </div>
         </div>
@@ -238,7 +238,7 @@ export default function VisitasForm() {
                 setEppOk(!eppOk);
               }
             }}
-            className={`p-4 rounded-xl cursor-pointer transition-all flex flex-col items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#D97736]/50 ${eppOk ? 'neumorphic-inset bg-black/5 dark:bg-white/5' : 'glass-panel hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer'}`}
+            className={`p-4 rounded-xl cursor-pointer transition-all flex flex-col items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#D97736]/50 ${eppOk ? 'neumorphic-out bg-white/5' : 'neumorphic-in bg-red-500/10 border border-red-500/20'}`}
           >
             <span className="text-[10px] text-slate-600 dark:text-slate-300 font-bold uppercase tracking-widest">Equipos de Protección (Si ingresa a nave)</span>
             <span className={`text-lg font-black ${eppOk ? 'text-purple-500' : 'text-red-500'}`}>{eppOk ? 'CON EPP' : 'SIN EPP'}</span>
@@ -248,7 +248,7 @@ export default function VisitasForm() {
         <button 
           type="submit"
           disabled={isSubmitting || !dni || !nombre || !motivo}
-          className="w-full py-4 bg-gradient-to-r from-purple-600 to-purple-400 text-slate-800 dark:text-white rounded-2xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(168,85,247,0.3)] active:scale-[0.98] transition-all disabled:opacity-50 disabled:grayscale"
+          className="w-full py-4 bg-gradient-to-r from-purple-600 to-purple-400 text-slate-800 dark:text-white rounded-2xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-purple-500/30 transition-all"
         >
           {isSubmitting ? 'GUARDANDO...' : 'REGISTRAR INGRESO'}
           {!isSubmitting && <Send className="w-4 h-4" />}
