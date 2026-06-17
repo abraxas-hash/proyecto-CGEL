@@ -12,6 +12,7 @@ export default function ProveedoresForm() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // Form State
   const [empresa, setEmpresa] = useState('');
@@ -55,6 +56,7 @@ export default function ProveedoresForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!empresa || !placa || !conductor) return;
+    setSubmitError(null);
     
     setIsSubmitting(true);
 
@@ -105,9 +107,10 @@ export default function ProveedoresForm() {
         router.push('/garita');
       }, 2000);
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error submitting:', error);
-      alert('Hubo un error al guardar. Verifica los datos.');
+      const msg = error?.message || error?.details || JSON.stringify(error);
+      setSubmitError(msg);
     } finally {
       setIsSubmitting(false);
     }
@@ -278,6 +281,13 @@ export default function ProveedoresForm() {
             <span className={`text-lg font-black ${eppOk ? 'text-green-500' : 'text-red-500'}`}>{eppOk ? 'OK' : 'OBS'}</span>
           </div>
         </div>
+
+        {/* Error visible en pantalla */}
+        {submitError && (
+          <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-xs font-bold break-all">
+            ⚠ Error: {submitError}
+          </div>
+        )}
 
         <button 
           type="submit"
