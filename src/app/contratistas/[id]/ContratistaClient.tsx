@@ -134,28 +134,28 @@ export default function ContratistaClient({ contratista, personal, herramientas,
 
               <div className="space-y-6">
                 <div>
-                  <p className="text-[10px] text-gray-500 uppercase font-black tracking-[0.2em] mb-2 flex items-center gap-2">
+                  <p className="text-[10px] text-yellow-600 dark:text-yellow-400 uppercase font-black tracking-[0.2em] mb-2 flex items-center gap-2">
                     <ClipboardList className="w-3 h-3" /> Naturaleza del Trabajo
                   </p>
-                  <p className="text-slate-800 dark:text-white text-lg font-medium leading-snug">{contratista.trabajo_realizar}</p>
+                  <p className="text-slate-900 dark:text-white text-lg font-semibold leading-snug">{contratista.trabajo_realizar}</p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-white/5 p-4 rounded-2xl border border-slate-700">
-                    <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">Área de Trabajo</p>
-                    <p className="text-slate-800 dark:text-white font-bold flex items-center gap-2">
+                  <div className="bg-white/10 dark:bg-white/5 p-4 rounded-2xl border border-slate-400 dark:border-slate-600">
+                    <p className="text-[10px] text-slate-600 dark:text-slate-300 uppercase font-black tracking-widest mb-1">Área de Trabajo</p>
+                    <p className="text-slate-900 dark:text-white font-bold flex items-center gap-2">
                       <MapPin className="w-4 h-4 text-red-400" /> {contratista.area_trabajo}
                     </p>
                   </div>
-                  <div className="bg-white/5 p-4 rounded-2xl border border-slate-700">
-                    <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">Autorizado por</p>
-                    <p className="text-slate-800 dark:text-white font-bold">{contratista.autorizado_por}</p>
+                  <div className="bg-white/10 dark:bg-white/5 p-4 rounded-2xl border border-slate-400 dark:border-slate-600">
+                    <p className="text-[10px] text-slate-600 dark:text-slate-300 uppercase font-black tracking-widest mb-1">Autorizado por</p>
+                    <p className="text-slate-900 dark:text-white font-bold">{contratista.autorizado_por}</p>
                   </div>
                 </div>
 
-                <div className="p-5 bg-black/40 rounded-3xl border border-slate-700">
-                  <p className="text-[10px] text-gray-500 uppercase font-black mb-3 tracking-widest">Observaciones de Seguridad</p>
-                  <p className="text-xs text-slate-500 dark:text-gray-400 italic leading-relaxed">
+                <div className="p-5 bg-slate-100 dark:bg-black/40 rounded-3xl border border-slate-300 dark:border-slate-600">
+                  <p className="text-[10px] text-slate-600 dark:text-slate-300 uppercase font-black mb-3 tracking-widest">Observaciones de Seguridad</p>
+                  <p className="text-sm text-slate-700 dark:text-slate-200 italic leading-relaxed">
                     "{parsedObs.texto || 'No se registraron observaciones para este servicio técnico.'}"
                   </p>
                 </div>
@@ -169,13 +169,13 @@ export default function ContratistaClient({ contratista, personal, herramientas,
               <ShieldCheck className="w-4 h-4 text-yellow-500" /> Requisitos de Empresa
             </h3>
             <div className="space-y-3">
-              <div className="flex items-center justify-between bg-white/5 p-4 rounded-2xl border border-slate-700 hover:bg-white/10 transition-all">
-                <span className="text-sm text-slate-600 dark:text-gray-300">Póliza SCTR Global Vigente</span>
+              <div className="flex items-center justify-between bg-white/10 dark:bg-white/5 p-4 rounded-2xl border border-slate-300 dark:border-slate-600 hover:bg-white/20 dark:hover:bg-white/10 transition-all">
+                <span className="text-sm font-semibold text-slate-800 dark:text-slate-100">Póliza SCTR Global Vigente</span>
                 {contratista.sctr_vigente ? <CheckCircle2 className="w-6 h-6 text-green-500" /> : <XCircle className="w-6 h-6 text-red-500" />}
               </div>
-              <div className="flex items-center justify-between bg-white/5 p-4 rounded-2xl border border-slate-700 hover:bg-white/10 transition-all">
-                <span className="text-sm text-slate-600 dark:text-gray-300">Retiro y Limpieza Conforme</span>
-                {contratista.firma_conformidad_retiro ? <CheckCircle2 className="w-6 h-6 text-green-500" /> : <XCircle className="w-6 h-6 text-gray-700" />}
+              <div className="flex items-center justify-between bg-white/10 dark:bg-white/5 p-4 rounded-2xl border border-slate-300 dark:border-slate-600 hover:bg-white/20 dark:hover:bg-white/10 transition-all">
+                <span className="text-sm font-semibold text-slate-800 dark:text-slate-100">Retiro y Limpieza Conforme</span>
+                {contratista.firma_conformidad_retiro ? <CheckCircle2 className="w-6 h-6 text-green-500" /> : <XCircle className="w-6 h-6 text-red-500" />}
               </div>
             </div>
           </div>
