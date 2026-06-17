@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { ShieldAlert, Lock, User, Eye, EyeOff, Loader2, LayoutDashboard } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ShieldAlert, Lock, User, Eye, EyeOff, Loader2, LayoutDashboard, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -18,12 +18,38 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [installPrompt, setInstallPrompt] = useState<any>(null);
+  const [isInstalled, setIsInstalled] = useState(false);
   
   // Por defecto, si se da Enter en el form, entraremos a garita
   const [defaultDestino, setDefaultDestino] = useState<'/garita' | '/'>('/garita');
 
   // Lógica abstraída al Hook
   const { login, loading, error, setError } = useAuth();
+
+  // Capturar el evento de instalación PWA
+  useEffect(() => {
+    // Verificar si ya está instalada
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setIsInstalled(true);
+    }
+    const handler = (e: any) => {
+      e.preventDefault();
+      setInstallPrompt(e);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstall = async () => {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    const { outcome } = await installPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setInstallPrompt(null);
+      setIsInstalled(true);
+    }
+  };
 
   const executeLogin = (destino: '/garita' | '/visitas' | '/') => {
     login(email, password, destino);
@@ -181,7 +207,23 @@ export default function LoginPage() {
             </div>
           </form>
 
-          <div className="mt-12 text-center lg:text-left">
+          {/* Botón de instalación PWA */}
+          {!isInstalled && installPrompt && (
+            <button
+              onClick={handleInstall}
+              className="mt-4 w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-[#00d4ff]/30 bg-[#00d4ff]/5 hover:bg-[#00d4ff]/10 text-[#00d4ff] text-[11px] font-black uppercase tracking-widest transition-all duration-200 active:scale-[0.98]"
+            >
+              <Download className="w-4 h-4" />
+              Instalar App en este dispositivo
+            </button>
+          )}
+          {isInstalled && (
+            <p className="mt-4 text-center text-[10px] font-bold text-emerald-500 uppercase tracking-widest">
+              ✓ App instalada en este dispositivo
+            </p>
+          )}
+
+          <div className="mt-8 text-center lg:text-left">
             <p className="text-gray-600 text-[10px] font-bold uppercase tracking-[0.2em] leading-loose">
               © 2026 Nexus Control | Todos los derechos reservados <br />
               Sistema Operativo de Seguridad
