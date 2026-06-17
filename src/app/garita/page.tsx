@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Truck, Users, Package, HardHat, BookOpen, LayoutDashboard, FileText } from 'lucide-react';
+import { Truck, Users, Package, HardHat, BookOpen, LayoutDashboard, FileText, ShoppingBag } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import { ConsultaRapida } from '@/components/garita/ConsultaRapida';
@@ -56,6 +56,17 @@ const MENU_ITEMS = [
     color: "text-red-400",
     bg: "bg-red-500/10",
     border: "border-red-500/20",
+    featured: true
+  },
+  {
+    title: "Retiro de Producto",
+    id: "tour-garita-retiro",
+    desc: "Orden de Venta · Cliente",
+    icon: ShoppingBag,
+    href: "/garita/retiro",
+    color: "text-sky-400",
+    bg: "bg-sky-500/10",
+    border: "border-sky-500/20",
     featured: true
   }
 ];
