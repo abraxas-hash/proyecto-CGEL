@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Truck, Users, Package, HardHat, BookOpen, LayoutDashboard, FileText } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
+import { ConsultaRapida } from '@/components/garita/ConsultaRapida';
 
 const MENU_ITEMS = [
   {
@@ -108,9 +109,12 @@ export default function GaritaMenu() {
           </Link>
         ))}
       </div>
-      
+
+      {/* Panel de Consulta Rápida */}
+      <ConsultaRapida />
+
       {/* Footer Info */}
-      <div className="mt-auto pt-6 text-center">
+      <div className="mt-auto pt-4 text-center">
         <p className="text-[10px] text-gray-600 font-bold uppercase tracking-widest flex items-center justify-center gap-1">
           <FileText className="w-3 h-3" /> Nexus System v2.9
         </p>
