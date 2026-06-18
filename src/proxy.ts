@@ -52,12 +52,9 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(url)
     }
 
-    // Si está logueado e intenta ir a login, redirigir al dashboard
-    if (user && isLoginPage) {
-      const url = request.nextUrl.clone()
-      url.pathname = '/'
-      return NextResponse.redirect(url)
-    }
+    // Si está logueado e intenta ir a login, simplemente dejar pasar.
+    // El login page maneja su propia redirección post-login.
+    // NO redirigir aquí para evitar el bucle al hacer logout.
 
     return supabaseResponse
   } catch (error) {

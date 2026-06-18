@@ -1,9 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Truck, Users, Package, HardHat, BookOpen, LayoutDashboard, FileText, ShoppingBag, Warehouse, Flame } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabaseClient';
+import { Truck, Users, Package, HardHat, BookOpen, FileText, ShoppingBag, Warehouse, Flame } from 'lucide-react';
 import { ConsultaRapida } from '@/components/garita/ConsultaRapida';
 
 const MENU_ITEMS = [
@@ -13,9 +11,9 @@ const MENU_ITEMS = [
     desc: "Ingreso / Salida",
     icon: Truck,
     href: "/garita/repartidores",
-    color: "text-slate-800 dark:text-white",
-    bg: "bg-[#00d4ff]/10",
-    border: "border-[#00d4ff]/20"
+    color: "text-sky-400",
+    bg: "bg-sky-500/10",
+    border: "border-sky-500/20"
   },
   {
     title: "Visitas",
@@ -55,30 +53,27 @@ const MENU_ITEMS = [
     href: "/garita/ocurrencias",
     color: "text-red-400",
     bg: "bg-red-500/10",
-    border: "border-red-500/20",
-    featured: true
+    border: "border-red-500/20"
   },
   {
     title: "Retiro de Producto",
     id: "tour-garita-retiro",
-    desc: "Orden de Venta · Cliente",
+    desc: "Orden de Venta",
     icon: ShoppingBag,
     href: "/garita/retiro",
-    color: "text-sky-400",
-    bg: "bg-sky-500/10",
-    border: "border-sky-500/20",
-    featured: true
+    color: "text-cyan-400",
+    bg: "bg-cyan-500/10",
+    border: "border-cyan-500/20"
   },
   {
     title: "Almacén Externo",
     id: "tour-garita-almacen-externo",
-    desc: "Bitácora Punto Halcón 3",
+    desc: "Punto Halcón 3",
     icon: Warehouse,
     href: "/almacen-externo",
     color: "text-yellow-400",
     bg: "bg-yellow-500/10",
-    border: "border-yellow-500/20",
-    featured: true
+    border: "border-yellow-500/20"
   },
   {
     title: "Gas Montacarga",
@@ -86,43 +81,33 @@ const MENU_ITEMS = [
     desc: "Cambio de Balones",
     icon: Flame,
     href: "/garita/proveedores/gas",
-    color: "text-orange-500",
+    color: "text-orange-400",
     bg: "bg-orange-500/10",
-    border: "border-orange-500/20",
-    featured: true
+    border: "border-orange-500/20"
   }
 ];
 
 export default function GaritaMenu() {
-  const router = useRouter();
-
-  const menuItems = MENU_ITEMS;
-
   return (
     <div className="flex flex-col h-full gap-6 mt-4">
 
-      <div className="grid grid-cols-2 gap-4">
-        {menuItems.map((item) => (
-          <Link 
-            key={item.title} 
+      <div className="grid grid-cols-2 gap-3">
+        {MENU_ITEMS.map((item) => (
+          <Link
+            key={item.title}
             href={item.href}
             id={item.id}
-            className={`
-              glass-panel hover:bg-black/5 dark:hover:bg-white/5 rounded-2xl p-4 flex flex-col items-center justify-center text-center
-              transition-transform active:scale-95 touch-manipulation relative overflow-hidden group
-              ${item.featured ? 'col-span-2 min-h-32' : 'aspect-square'}
-            `}
+            className="glass-panel rounded-2xl p-4 flex flex-col items-center justify-center text-center gap-3 hover:bg-white/5 active:scale-95 touch-manipulation transition-all duration-200 group aspect-square"
           >
-            {/* Huge Background Icon (High Relief / Embossed) */}
-            <item.icon 
-              strokeWidth={2.5}
-              className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 sm:w-32 sm:h-32 ${item.color} opacity-40 drop-shadow-[2px_4px_4px_rgba(0,0,0,0.3)] dark:drop-shadow-[2px_4px_4px_rgba(0,0,0,0.8)] group-hover:scale-110 transition-transform duration-500`} 
-            />
-            
-            {/* Text Content in Foreground */}
-            <div className="relative z-10 mt-auto pt-10">
-              <h3 className="text-lg sm:text-xl font-bold text-slate-800 dark:text-white leading-tight drop-shadow-md">{item.title}</h3>
-              <p className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-1 drop-shadow-md ${item.color}`}>{item.desc}</p>
+            {/* Icon badge */}
+            <div className={`w-10 h-10 rounded-xl ${item.bg} border ${item.border} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300`}>
+              <item.icon className={`w-5 h-5 ${item.color}`} strokeWidth={2} />
+            </div>
+
+            {/* Text */}
+            <div className="flex flex-col items-center gap-0.5">
+              <h3 className="text-xs sm:text-sm font-bold text-slate-800 dark:text-white leading-tight">{item.title}</h3>
+              <p className={`text-[9px] font-semibold uppercase tracking-wider ${item.color} opacity-70`}>{item.desc}</p>
             </div>
           </Link>
         ))}
