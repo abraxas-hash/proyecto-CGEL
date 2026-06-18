@@ -41,7 +41,7 @@ export default function AlmacenExternoMenu() {
       <div className="flex items-center gap-4 mt-2">
         <button
           onClick={() => router.push('/garita')}
-          className="w-10 h-10 rounded-xl glass-panel hover:bg-black/5 dark:hover:bg-white/5 flex items-center justify-center text-slate-800 dark:text-white shrink-0 transition-colors"
+          className="w-10 h-10 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 flex items-center justify-center text-slate-800 dark:text-white shrink-0 transition-colors"
           title="Volver a Garita"
         >
           <ArrowLeft className="w-5 h-5" />

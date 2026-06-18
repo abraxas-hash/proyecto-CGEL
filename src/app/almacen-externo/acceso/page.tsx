@@ -78,17 +78,17 @@ export default function AccesoAlmacenPage() {
   return (
     <div className="flex flex-col gap-5 pb-10">
       {/* Header */}
-      <div className="flex items-center gap-4 mt-2">
-        <Link href="/almacen-externo" className="w-10 h-10 rounded-xl glass-panel flex items-center justify-center text-slate-800 dark:text-white">
+      <div className="flex items-center gap-4 mt-2 mb-2">
+        <Link href="/almacen-externo" className="w-10 h-10 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 flex items-center justify-center text-slate-800 dark:text-white transition-colors shrink-0">
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center">
-            <DoorOpen className="w-5 h-5 text-yellow-400" />
+          <div className="w-10 h-10 rounded-xl neumorphic-inset bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0">
+            <DoorOpen className="w-6 h-6 text-yellow-400" />
           </div>
           <div>
-            <h2 className="text-lg font-black text-slate-800 dark:text-white">Apertura de Acceso</h2>
-            <p className="text-[11px] text-yellow-500 font-bold uppercase tracking-wider">Almacén Externo · Halcón 3</p>
+            <h2 className="text-xl font-black text-slate-800 dark:text-white leading-tight">Apertura de Acceso</h2>
+            <p className="text-[11px] text-yellow-500 font-bold uppercase tracking-wider mt-0.5">Almacén Externo · Halcón 3</p>
           </div>
         </div>
       </div>
