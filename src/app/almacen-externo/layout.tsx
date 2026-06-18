@@ -54,7 +54,8 @@ function LogoutButton() {
       // antes de redirigir, así evitamos que el middleware / proxy nos rebote al dashboard.
       await supabase.auth.signOut();
       localStorage.clear();
-      window.location.href = '/login';
+      // Usar timestamp para evitar que el navegador use un redirect 307 cacheado
+      window.location.href = `/login?t=${Date.now()}`;
     } catch (err) {
       console.error(err);
       setIsLoggingOut(false);
