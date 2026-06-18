@@ -20,16 +20,26 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [installPrompt, setInstallPrompt] = useState<any>(null);
   const [isInstalled, setIsInstalled] = useState(false);
-  
+
+  // Protección contra fuerza bruta (cliente)
+  const [failedAttempts, setFailedAttempts] = useState(0);
+  const [cooldown, setCooldown] = useState(0); // segundos restantes de bloqueo
+
   // Por defecto, si se da Enter en el form, entraremos a garita
   const [defaultDestino, setDefaultDestino] = useState<'/garita' | '/'>('/garita');
 
   // Lógica abstraída al Hook
   const { login, loading, error, setError } = useAuth();
 
+  // Temporizador de cooldown
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const t = setTimeout(() => setCooldown(c => c - 1), 1000);
+    return () => clearTimeout(t);
+  }, [cooldown]);
+
   // Capturar el evento de instalación PWA
   useEffect(() => {
-    // Verificar si ya está instalada
     if (window.matchMedia('(display-mode: standalone)').matches) {
       setIsInstalled(true);
     }
@@ -51,8 +61,18 @@ export default function LoginPage() {
     }
   };
 
-  const executeLogin = (destino: '/garita' | '/visitas' | '/') => {
-    login(email, password, destino);
+  const executeLogin = async (destino: '/garita' | '/visitas' | '/') => {
+    if (cooldown > 0) return;
+    const ok = await login(email, password, destino);
+    if (ok === false) {
+      const next = failedAttempts + 1;
+      setFailedAttempts(next);
+      // Bloquear 30s tras 3 intentos fallidos
+      if (next >= 3) {
+        setCooldown(30);
+        setFailedAttempts(0);
+      }
+    }
   };
 
   const handleFormSubmit = (e: React.FormEvent) => {
@@ -167,7 +187,22 @@ export default function LoginPage() {
             {error && (
               <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-3">
                 <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></div>
-                <p className="text-red-500 text-[10px] font-bold uppercase tracking-tight">{error}</p>
+                <p className="text-red-500 text-[10px] font-bold uppercase tracking-tight">
+                  {error}
+                  {failedAttempts > 0 && failedAttempts < 3 && (
+                    <span className="ml-2 text-orange-400">· Intento {failedAttempts}/3</span>
+                  )}
+                </p>
+              </div>
+            )}
+
+            {/* Bloqueo temporal por fuerza bruta */}
+            {cooldown > 0 && (
+              <div className="p-4 bg-orange-500/10 border border-orange-500/30 rounded-xl flex items-center gap-3">
+                <div className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse"></div>
+                <p className="text-orange-400 text-[10px] font-black uppercase tracking-tight">
+                  Acceso bloqueado temporalmente · Espere {cooldown}s
+                </p>
               </div>
             )}
 
