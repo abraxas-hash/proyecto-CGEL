@@ -3,6 +3,7 @@
 import { AsciiArt } from "@/components/ui/ascii-art";
 import { ModeToggle } from "@/components/ui/ModeToggle";
 import { LogOut } from "lucide-react";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function GaritaLayout({
   children,
@@ -27,14 +28,11 @@ export default function GaritaLayout({
           <div className="h-6 w-px bg-slate-300 dark:bg-slate-700"></div>
           <ModeToggle />
           <button 
-            onClick={async () => {
+            type="button"
+            onClick={async (e) => {
+              e.preventDefault();
               try {
-                const { createBrowserClient } = await import('@supabase/ssr');
-                const supabaseClient = createBrowserClient(
-                  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
-                  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key'
-                );
-                await supabaseClient.auth.signOut();
+                await supabase.auth.signOut();
                 localStorage.clear();
                 window.location.replace('/login');
               } catch (err) {
@@ -42,7 +40,7 @@ export default function GaritaLayout({
                 window.location.replace('/login');
               }
             }}
-            className="w-10 h-10 flex items-center justify-center rounded-md border border-slate-200 bg-white hover:bg-red-50 hover:text-red-600 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-red-900/20 dark:hover:text-red-500 transition-colors shadow-sm"
+            className="w-10 h-10 flex items-center justify-center rounded-md border border-slate-200 bg-white hover:bg-red-50 hover:text-red-600 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-red-900/20 dark:hover:text-red-500 transition-colors shadow-sm active:scale-95 touch-manipulation cursor-pointer relative z-[100]"
             title="Cerrar Sesión"
           >
             <LogOut className="h-[1.2rem] w-[1.2rem]" />
