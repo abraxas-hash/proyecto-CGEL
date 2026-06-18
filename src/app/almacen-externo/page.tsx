@@ -77,16 +77,6 @@ export default function AlmacenExternoMenu() {
         ))}
       </div>
 
-      {/* Footer */}
-      <div className="mt-2 text-center">
-        <button
-          type="button"
-          onClick={() => router.push('/')}
-          className="text-[10px] text-slate-400 uppercase tracking-widest font-black"
-        >
-          ← Volver al Dashboard
-        </button>
-      </div>
     </div>
   );
 }

@@ -96,13 +96,6 @@ export default function GaritaMenu() {
           <h2 className="text-sm text-slate-900 dark:text-slate-300 font-black uppercase tracking-wider">Centro Logístico</h2>
           <p className="text-xl font-black text-slate-800 dark:text-white">Panel Garita</p>
         </div>
-        <button 
-          onClick={() => router.push('/')}
-          className="p-3 bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-400/50 dark:border-white/10 text-slate-800 dark:text-white rounded-xl transition-all shadow-sm"
-          title="Ir al Dashboard"
-        >
-          <LayoutDashboard className="w-5 h-5" />
-        </button>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
