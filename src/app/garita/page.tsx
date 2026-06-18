@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Truck, Users, Package, HardHat, BookOpen, LayoutDashboard, FileText, ShoppingBag } from 'lucide-react';
+import { Truck, Users, Package, HardHat, BookOpen, LayoutDashboard, FileText, ShoppingBag, Warehouse } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import { ConsultaRapida } from '@/components/garita/ConsultaRapida';
@@ -67,6 +67,17 @@ const MENU_ITEMS = [
     color: "text-sky-400",
     bg: "bg-sky-500/10",
     border: "border-sky-500/20",
+    featured: true
+  },
+  {
+    title: "Almacén Externo",
+    id: "tour-garita-almacen-externo",
+    desc: "Bitácora Punto Halcón 3",
+    icon: Warehouse,
+    href: "/almacen-externo",
+    color: "text-yellow-400",
+    bg: "bg-yellow-500/10",
+    border: "border-yellow-500/20",
     featured: true
   }
 ];
