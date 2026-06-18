@@ -38,22 +38,21 @@ export default function AlmacenExternoMenu() {
     <div className="flex flex-col gap-6 pb-6">
 
       {/* Header */}
-      <div className="flex gap-2 items-stretch mt-4">
-        <button 
+      <div className="flex items-center gap-4 mt-2">
+        <button
           onClick={() => router.push('/garita')}
-          className="glass-panel px-4 rounded-2xl flex items-center justify-center hover:bg-black/5 dark:hover:bg-white/5 transition-colors active:scale-95"
+          className="w-10 h-10 rounded-xl glass-panel hover:bg-black/5 dark:hover:bg-white/5 flex items-center justify-center text-slate-800 dark:text-white shrink-0 transition-colors"
           title="Volver a Garita"
         >
-          <ArrowLeft className="w-6 h-6 text-slate-700 dark:text-slate-300" />
+          <ArrowLeft className="w-5 h-5" />
         </button>
-        <div className="glass-panel p-4 rounded-2xl flex items-center justify-between flex-1">
-          <div>
-            <p className="text-[10px] text-yellow-500 font-black uppercase tracking-widest">Punto Halcón 3</p>
-            <h2 className="text-xl font-black text-slate-800 dark:text-white">Almacén Externo</h2>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Jr. Yungay · Bitácora Digital</p>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl neumorphic-inset bg-black/5 dark:bg-white/5 flex items-center justify-center">
+            <Warehouse className="text-yellow-500 w-6 h-6" />
           </div>
-          <div className="w-12 h-12 rounded-xl bg-yellow-500/10 flex items-center justify-center hidden xs:flex">
-            <Warehouse className="w-6 h-6 text-yellow-400" />
+          <div>
+            <h2 className="text-xl font-black text-slate-800 dark:text-white leading-tight">Almacén Externo</h2>
+            <p className="text-[11px] text-yellow-500 font-bold uppercase tracking-wider mt-0.5">Punto Halcón 3 · Bitácora</p>
           </div>
         </div>
       </div>
