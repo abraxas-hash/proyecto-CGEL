@@ -29,16 +29,14 @@ export default function GaritaLayout({
           <ModeToggle />
           <button 
             type="button"
-            onClick={async (e) => {
+            onClick={(e) => {
               e.preventDefault();
-              try {
-                await supabase.auth.signOut();
-                localStorage.clear();
-                window.location.replace('/login');
-              } catch (err) {
-                console.error('Logout error:', err);
-                window.location.replace('/login');
-              }
+              // Fire and forget logout on server/network
+              supabase.auth.signOut().catch(console.error);
+              // Clear cache immediately
+              localStorage.clear();
+              // Redirect instantly on the client
+              window.location.href = '/login';
             }}
             className="w-10 h-10 flex items-center justify-center rounded-md border border-slate-200 bg-white hover:bg-red-50 hover:text-red-600 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-red-900/20 dark:hover:text-red-500 transition-colors shadow-sm active:scale-95 touch-manipulation cursor-pointer relative z-[100]"
             title="Cerrar Sesión"

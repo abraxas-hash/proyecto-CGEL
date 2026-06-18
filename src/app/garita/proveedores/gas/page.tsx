@@ -27,6 +27,13 @@ export default function GasMontacargaForm() {
   // Evidencias
   const [boletaFile, setBoletaFile] = useState<File | null>(null);
   const [balonesFile, setBalonesFile] = useState<File | null>(null);
+
+  // Alquiler Montacarga Extra
+  const [registroAlquiler, setRegistroAlquiler] = useState(false);
+  const [horaEntradaMontacarga, setHoraEntradaMontacarga] = useState('');
+  const [horaSalidaMontacarga, setHoraSalidaMontacarga] = useState('');
+  const [fotoMontacargaFile, setFotoMontacargaFile] = useState<File | null>(null);
+
   const [isSearchingDni, setIsSearchingDni] = useState(false);
 
   const handleDniBlur = async () => {
@@ -66,23 +73,33 @@ export default function GasMontacargaForm() {
       let boletaUrl = null;
       let balonesUrl = null;
 
+      let fotoMontacargaUrl = null;
+
       if (boletaFile) {
         boletaUrl = await uploadEvidence('proveedores', boletaFile);
       }
       if (balonesFile) {
         balonesUrl = await uploadEvidence('proveedores', balonesFile);
       }
+      if (registroAlquiler && fotoMontacargaFile) {
+        fotoMontacargaUrl = await uploadEvidence('proveedores', fotoMontacargaFile);
+      }
 
       // Estructuramos los datos del gas dentro de las observaciones
       const observacionesPayload = JSON.stringify({
-        texto: `Ingreso de Gas Montacarga. Balones Llenos Ingresados: ${balonesLlenos}. Balones Vacíos Retirados: ${balonesVacios}.`,
+        texto: `Ingreso de Gas Montacarga. Llenos: ${balonesLlenos}. Vacíos: ${balonesVacios}.${registroAlquiler ? ` [ALQUILER MONTACARGA REGISTRADO]` : ''}`,
         detalles_gas: {
           llenos_ingreso: balonesLlenos,
           vacios_salida: balonesVacios
         },
+        alquiler_montacarga: registroAlquiler ? {
+          hora_entrada: horaEntradaMontacarga,
+          hora_salida: horaSalidaMontacarga
+        } : null,
         fotos: {
           guias: boletaUrl || null,
-          estiba: balonesUrl || null
+          estiba: balonesUrl || null,
+          montacarga_alquilado: fotoMontacargaUrl || null
         }
       });
 
@@ -273,6 +290,54 @@ export default function GasMontacargaForm() {
               onImageChange={setBalonesFile}
             />
           </div>
+        </div>
+
+        {/* ALQUILER DE MONTACARGA (OPCIONAL) */}
+        <div className="glass-panel p-4 rounded-2xl flex flex-col gap-4 border-2 border-dashed border-sky-500/30">
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input 
+              type="checkbox" 
+              checked={registroAlquiler}
+              onChange={(e) => setRegistroAlquiler(e.target.checked)}
+              className="w-5 h-5 rounded border-slate-400 text-sky-500 focus:ring-sky-500"
+            />
+            <span className="text-[11px] text-sky-600 dark:text-sky-400 font-black uppercase tracking-widest">
+              + Registrar Alquiler Montacarga (Carretes Pesados)
+            </span>
+          </label>
+
+          {registroAlquiler && (
+            <div className="flex flex-col gap-4 mt-2 animate-in fade-in slide-in-from-top-4 duration-300">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Hora Entrada</label>
+                  <input
+                    type="time"
+                    required={registroAlquiler}
+                    value={horaEntradaMontacarga}
+                    onChange={(e) => setHoraEntradaMontacarga(e.target.value)}
+                    className="w-full bg-sky-500/10 text-sky-700 dark:text-sky-400 font-bold border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-sky-500/50 outline-none transition-all"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Hora Salida</label>
+                  <input
+                    type="time"
+                    required={registroAlquiler}
+                    value={horaSalidaMontacarga}
+                    onChange={(e) => setHoraSalidaMontacarga(e.target.value)}
+                    className="w-full bg-sky-500/10 text-sky-700 dark:text-sky-400 font-bold border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-sky-500/50 outline-none transition-all"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <ImageUpload
+                  label="Foto del Montacarga Alquilado"
+                  onImageChange={setFotoMontacargaFile}
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Botón Guardar */}
