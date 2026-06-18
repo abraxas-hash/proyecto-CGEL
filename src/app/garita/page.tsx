@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Truck, Users, Package, HardHat, BookOpen, LayoutDashboard, FileText, ShoppingBag, Warehouse } from 'lucide-react';
+import { Truck, Users, Package, HardHat, BookOpen, LayoutDashboard, FileText, ShoppingBag, Warehouse, Flame } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import { ConsultaRapida } from '@/components/garita/ConsultaRapida';
@@ -78,6 +78,17 @@ const MENU_ITEMS = [
     color: "text-yellow-400",
     bg: "bg-yellow-500/10",
     border: "border-yellow-500/20",
+    featured: true
+  },
+  {
+    title: "Gas Montacarga",
+    id: "tour-garita-gas",
+    desc: "Cambio de Balones",
+    icon: Flame,
+    href: "/garita/proveedores/gas",
+    color: "text-orange-500",
+    bg: "bg-orange-500/10",
+    border: "border-orange-500/20",
     featured: true
   }
 ];
