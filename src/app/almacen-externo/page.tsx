@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Warehouse, DoorOpen, PackageMinus, PackagePlus, Shield } from 'lucide-react';
+import { Warehouse, DoorOpen, PackageMinus, PackagePlus, ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const MENU = [
@@ -38,14 +38,23 @@ export default function AlmacenExternoMenu() {
     <div className="flex flex-col gap-6 pb-6">
 
       {/* Header */}
-      <div className="glass-panel p-4 rounded-2xl flex items-center justify-between mt-4">
-        <div>
-          <p className="text-[10px] text-yellow-500 font-black uppercase tracking-widest">Punto Halcón 3</p>
-          <h2 className="text-xl font-black text-slate-800 dark:text-white">Almacén Externo</h2>
-          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Jr. Yungay · Bitácora Digital</p>
-        </div>
-        <div className="w-14 h-14 rounded-2xl bg-yellow-500/10 flex items-center justify-center">
-          <Warehouse className="w-7 h-7 text-yellow-400" />
+      <div className="flex gap-2 items-stretch mt-4">
+        <button 
+          onClick={() => router.push('/garita')}
+          className="glass-panel px-4 rounded-2xl flex items-center justify-center hover:bg-black/5 dark:hover:bg-white/5 transition-colors active:scale-95"
+          title="Volver a Garita"
+        >
+          <ArrowLeft className="w-6 h-6 text-slate-700 dark:text-slate-300" />
+        </button>
+        <div className="glass-panel p-4 rounded-2xl flex items-center justify-between flex-1">
+          <div>
+            <p className="text-[10px] text-yellow-500 font-black uppercase tracking-widest">Punto Halcón 3</p>
+            <h2 className="text-xl font-black text-slate-800 dark:text-white">Almacén Externo</h2>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Jr. Yungay · Bitácora Digital</p>
+          </div>
+          <div className="w-12 h-12 rounded-xl bg-yellow-500/10 flex items-center justify-center hidden xs:flex">
+            <Warehouse className="w-6 h-6 text-yellow-400" />
+          </div>
         </div>
       </div>
 
