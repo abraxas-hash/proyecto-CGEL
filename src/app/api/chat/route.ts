@@ -59,9 +59,9 @@ export async function POST(req: Request) {
           parameters: dbParams,
           // @ts-ignore - Bypass Vercel AI SDK strict generic inference bug
           execute: async (args: any) => {
-            const query = args.query?.trim();
+            const query = String(args.query || '').trim();
             const tipo = args.tipo || 'todos';
-            if (!query || typeof query !== 'string' || query === '') {
+            if (!query || query === '') {
                return { error: "Parámetro 'query' inválido o vacío. DEBES proveer un término de búsqueda (ej. DNI, placa, nombre)." };
             }
             console.log(`[Nexus AI] Buscando en BD: ${query} en ${tipo}`);
