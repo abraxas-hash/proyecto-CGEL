@@ -2,6 +2,7 @@
 
 import { AsciiArt } from "@/components/ui/ascii-art";
 import { ModeToggle } from "@/components/ui/ModeToggle";
+import { LogOut } from "lucide-react";
 
 export default function GaritaLayout({
   children,
@@ -25,6 +26,28 @@ export default function GaritaLayout({
           </div>
           <div className="h-6 w-px bg-slate-300 dark:bg-slate-700"></div>
           <ModeToggle />
+          <button 
+            onClick={async () => {
+              try {
+                const { createBrowserClient } = await import('@supabase/ssr');
+                const supabaseClient = createBrowserClient(
+                  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
+                  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key'
+                );
+                await supabaseClient.auth.signOut();
+                localStorage.clear();
+                window.location.replace('/login');
+              } catch (err) {
+                console.error('Logout error:', err);
+                window.location.replace('/login');
+              }
+            }}
+            className="w-10 h-10 flex items-center justify-center rounded-md border border-slate-200 bg-white hover:bg-red-50 hover:text-red-600 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-red-900/20 dark:hover:text-red-500 transition-colors shadow-sm"
+            title="Cerrar Sesión"
+          >
+            <LogOut className="h-[1.2rem] w-[1.2rem]" />
+            <span className="sr-only">Cerrar Sesión</span>
+          </button>
         </div>
       </header>
 

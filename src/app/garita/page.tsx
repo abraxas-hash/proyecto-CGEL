@@ -88,15 +88,7 @@ export default function GaritaMenu() {
   const menuItems = MENU_ITEMS;
 
   return (
-    <div className="flex flex-col h-full gap-6">
-      
-      {/* Header Info */}
-      <div className="glass-panel p-4 rounded-2xl flex items-center justify-between mt-4">
-        <div>
-          <h2 className="text-sm text-slate-900 dark:text-slate-300 font-black uppercase tracking-wider">Centro Logístico</h2>
-          <p className="text-xl font-black text-slate-800 dark:text-white">Panel Garita</p>
-        </div>
-      </div>
+    <div className="flex flex-col h-full gap-6 mt-4">
 
       <div className="grid grid-cols-2 gap-4">
         {menuItems.map((item) => (
