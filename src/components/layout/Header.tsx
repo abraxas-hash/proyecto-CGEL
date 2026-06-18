@@ -119,16 +119,15 @@ export default function Header() {
             onClick={async () => {
               try {
                 const { createBrowserClient } = await import('@supabase/ssr');
-                const supabase = createBrowserClient(
-                  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-                  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+                const supabaseClient = createBrowserClient(
+                  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
+                  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key'
                 );
-                await supabase.auth.signOut();
+                await supabaseClient.auth.signOut();
                 localStorage.clear();
-                // Limpiar cookies explícitamente por si acaso
-                document.cookie = 'sb-' + process.env.NEXT_PUBLIC_SUPABASE_URL?.split('//')[1].split('.')[0] + '-auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
                 window.location.replace('/login');
               } catch (err) {
+                console.error('Logout error:', err);
                 window.location.replace('/login');
               }
             }}
