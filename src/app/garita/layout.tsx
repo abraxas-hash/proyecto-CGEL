@@ -52,8 +52,10 @@ export default function GaritaLayout({
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto pb-6 relative z-10 p-4">
-        {children}
+      <main className="flex-1 overflow-y-auto relative z-10 w-full flex justify-center">
+        <div className="w-full max-w-xl p-4 md:p-6 pb-12">
+          {children}
+        </div>
       </main>
       
       {/* Ambient background glow & ASCII */}
