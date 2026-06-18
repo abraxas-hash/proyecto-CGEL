@@ -6,6 +6,8 @@ import { generateText, tool } from 'ai'
 import { z } from 'zod'
 
 export const maxDuration = 30;
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 const SYSTEM_PROMPT = `Eres Nexus AI, el asistente operativo inteligente del sistema Nexus Control.
 Tu única función es asistir al personal respondiendo dudas sobre cómo usar el sistema, buscar información en la base de datos de garita y analizar el dashboard operativo.
