@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Warehouse, DoorOpen, PackageMinus, PackagePlus, ArrowLeft } from 'lucide-react';
+import { Warehouse, DoorOpen, PackageMinus, PackagePlus, ArrowLeft, Shield } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const MENU = [

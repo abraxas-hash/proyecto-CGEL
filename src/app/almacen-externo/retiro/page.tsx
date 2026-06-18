@@ -201,7 +201,7 @@ export default function RetiroMaterialPage() {
           <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-3 flex items-center gap-2">
             <Camera className="w-3 h-3" /> Evidencia Fotográfica del Material (opcional)
           </p>
-          <ImageUpload onFileSelect={setFotoFile} label="Fotografiar el material que sale" />
+          <ImageUpload onImageChange={setFotoFile} label="Fotografiar el material que sale" />
         </div>
 
         {error && (
