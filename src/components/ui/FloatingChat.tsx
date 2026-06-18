@@ -271,6 +271,7 @@ export function FloatingChat() {
             </div>
           </form>
         </div>
+        </div>
       )}
     </>
   );
