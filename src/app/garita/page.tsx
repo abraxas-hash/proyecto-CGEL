@@ -11,9 +11,7 @@ const MENU_ITEMS = [
     desc: "Ingreso / Salida",
     icon: Truck,
     href: "/garita/repartidores",
-    color: "text-sky-400",
-    bg: "bg-sky-500/10",
-    border: "border-sky-500/20"
+    color: "text-sky-400"
   },
   {
     title: "Visitas",
@@ -21,9 +19,7 @@ const MENU_ITEMS = [
     desc: "Clientes / Otros",
     icon: Users,
     href: "/garita/visitas",
-    color: "text-purple-400",
-    bg: "bg-purple-500/10",
-    border: "border-purple-500/20"
+    color: "text-purple-400"
   },
   {
     title: "Proveedores",
@@ -31,9 +27,7 @@ const MENU_ITEMS = [
     desc: "Carga / Descarga",
     icon: Package,
     href: "/garita/proveedores",
-    color: "text-green-400",
-    bg: "bg-green-500/10",
-    border: "border-green-500/20"
+    color: "text-green-400"
   },
   {
     title: "Contratistas",
@@ -41,9 +35,7 @@ const MENU_ITEMS = [
     desc: "Trabajos internos",
     icon: HardHat,
     href: "/garita/contratistas",
-    color: "text-orange-400",
-    bg: "bg-orange-500/10",
-    border: "border-orange-500/20"
+    color: "text-orange-400"
   },
   {
     title: "Cuaderno Virtual",
@@ -51,9 +43,7 @@ const MENU_ITEMS = [
     desc: "Ocurrencias / Cierre",
     icon: BookOpen,
     href: "/garita/ocurrencias",
-    color: "text-red-400",
-    bg: "bg-red-500/10",
-    border: "border-red-500/20"
+    color: "text-red-400"
   },
   {
     title: "Retiro de Producto",
@@ -61,9 +51,7 @@ const MENU_ITEMS = [
     desc: "Orden de Venta",
     icon: ShoppingBag,
     href: "/garita/retiro",
-    color: "text-cyan-400",
-    bg: "bg-cyan-500/10",
-    border: "border-cyan-500/20"
+    color: "text-cyan-400"
   },
   {
     title: "Almacén Externo",
@@ -71,9 +59,7 @@ const MENU_ITEMS = [
     desc: "Punto Halcón 3",
     icon: Warehouse,
     href: "/almacen-externo",
-    color: "text-yellow-400",
-    bg: "bg-yellow-500/10",
-    border: "border-yellow-500/20"
+    color: "text-yellow-400"
   },
   {
     title: "Gas Montacarga",
@@ -81,9 +67,7 @@ const MENU_ITEMS = [
     desc: "Cambio de Balones",
     icon: Flame,
     href: "/garita/proveedores/gas",
-    color: "text-orange-400",
-    bg: "bg-orange-500/10",
-    border: "border-orange-500/20"
+    color: "text-orange-500"
   }
 ];
 
@@ -97,17 +81,18 @@ export default function GaritaMenu() {
             key={item.title}
             href={item.href}
             id={item.id}
-            className="glass-panel rounded-2xl p-4 flex flex-col items-center justify-center text-center gap-3 hover:bg-white/5 active:scale-95 touch-manipulation transition-all duration-200 group aspect-square"
+            className="glass-panel hover:bg-black/5 dark:hover:bg-white/5 rounded-xl p-3 flex flex-col items-center justify-center text-center transition-transform active:scale-95 touch-manipulation relative overflow-hidden group h-28"
           >
-            {/* Icon badge */}
-            <div className={`w-10 h-10 rounded-xl ${item.bg} border ${item.border} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300`}>
-              <item.icon className={`w-5 h-5 ${item.color}`} strokeWidth={2} />
-            </div>
-
-            {/* Text */}
-            <div className="flex flex-col items-center gap-0.5">
-              <h3 className="text-xs sm:text-sm font-bold text-slate-800 dark:text-white leading-tight">{item.title}</h3>
-              <p className={`text-[9px] font-semibold uppercase tracking-wider ${item.color} opacity-70`}>{item.desc}</p>
+            {/* Background Icon (High Relief / Embossed) - Smaller */}
+            <item.icon 
+              strokeWidth={2.5}
+              className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 ${item.color} opacity-30 drop-shadow-[1px_2px_2px_rgba(0,0,0,0.3)] dark:drop-shadow-[1px_2px_2px_rgba(0,0,0,0.8)] group-hover:scale-110 transition-transform duration-500`} 
+            />
+            
+            {/* Text Content in Foreground */}
+            <div className="relative z-10 mt-auto pt-6">
+              <h3 className="text-sm font-bold text-slate-800 dark:text-white leading-tight drop-shadow-md">{item.title}</h3>
+              <p className={`text-[9px] font-bold uppercase tracking-wider mt-0.5 drop-shadow-md ${item.color}`}>{item.desc}</p>
             </div>
           </Link>
         ))}
