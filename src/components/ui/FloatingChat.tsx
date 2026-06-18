@@ -124,10 +124,36 @@ export function FloatingChat() {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <>
+      {/* Botón Lateral (Tab Vertical) */}
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label={isOpen ? "Cerrar chat de ayuda" : "Abrir chat de ayuda"}
+        className={`fixed top-1/2 right-0 -translate-y-1/2 z-50 flex flex-col items-center justify-center py-4 px-2 rounded-l-xl shadow-[-4px_0_20px_rgba(0,0,0,0.3)] transition-all duration-300 hover:-translate-x-1 active:scale-95 ${
+          isOpen 
+            ? 'bg-slate-800 dark:bg-slate-700 text-white shadow-none' 
+            : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-500/30'
+        }`}
+      >
+        <div className="relative">
+          {isOpen ? <X className="w-5 h-5 mb-3" /> : <MessageSquare className="w-5 h-5 mb-3" />}
+          {!isOpen && (
+            <span className="absolute -top-1 -right-1 w-2 h-2 bg-emerald-400 rounded-full animate-pulse border border-blue-600"></span>
+          )}
+        </div>
+        <span 
+          className="text-[10px] font-black uppercase tracking-widest text-white" 
+          style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+        >
+          Nexus AI
+        </span>
+      </button>
+
       {/* Ventana de Chat */}
       {isOpen && (
-        <div className="mb-4 w-80 sm:w-96 h-[520px] max-h-[80vh] flex flex-col glass-panel rounded-2xl shadow-2xl overflow-hidden border border-black/10 dark:border-white/10 animate-in slide-in-from-bottom-5 fade-in duration-300">
+        <div className="fixed bottom-6 right-12 z-50 flex flex-col items-end animate-in slide-in-from-right-8 fade-in duration-300">
+          <div className="mb-4 w-80 sm:w-96 h-[520px] max-h-[80vh] flex flex-col glass-panel rounded-2xl shadow-2xl overflow-hidden border border-black/10 dark:border-white/10">
           
           {/* Header del Chat */}
           <div className="flex items-center justify-between p-4 border-b border-slate-400 dark:border-slate-700 bg-gradient-to-r from-blue-600/20 to-purple-600/10">
@@ -246,26 +272,6 @@ export function FloatingChat() {
           </form>
         </div>
       )}
-
-      {/* Botón Flotante */}
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        aria-label={isOpen ? "Cerrar chat de ayuda" : "Abrir chat de ayuda"}
-        className={`relative w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 ${
-          isOpen 
-            ? 'bg-slate-700 dark:bg-slate-600 shadow-slate-500/20 text-slate-800 dark:text-white' 
-            : 'bg-blue-600 hover:bg-blue-500 shadow-blue-500/30 text-slate-800 dark:text-white'
-        }`}
-      >
-        <div className={`transition-all duration-200 ${isOpen ? 'rotate-0' : 'rotate-0'}`}>
-          {isOpen ? <X className="w-6 h-6" /> : <MessageSquare className="w-6 h-6" />}
-        </div>
-        {/* Pulso animado cuando está cerrado */}
-        {!isOpen && (
-          <span className="absolute inset-0 rounded-full bg-blue-500 animate-ping opacity-20"></span>
-        )}
-      </button>
-    </div>
+    </>
   );
 }
