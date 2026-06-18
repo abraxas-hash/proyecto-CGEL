@@ -1,8 +1,9 @@
 'use client';
 
+import { useState } from "react";
 import { AsciiArt } from "@/components/ui/ascii-art";
 import { ModeToggle } from "@/components/ui/ModeToggle";
-import { LogOut } from "lucide-react";
+import { LogOut, Loader2 } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 
 export default function GaritaLayout({
@@ -27,23 +28,7 @@ export default function GaritaLayout({
           </div>
           <div className="h-6 w-px bg-slate-300 dark:bg-slate-700"></div>
           <ModeToggle />
-          <button 
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              // Fire and forget logout on server/network
-              supabase.auth.signOut().catch(console.error);
-              // Clear cache immediately
-              localStorage.clear();
-              // Redirect instantly on the client
-              window.location.href = '/login';
-            }}
-            className="w-10 h-10 flex items-center justify-center rounded-md border border-slate-200 bg-white hover:bg-red-50 hover:text-red-600 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-red-900/20 dark:hover:text-red-500 transition-colors shadow-sm active:scale-95 touch-manipulation cursor-pointer relative z-[100]"
-            title="Cerrar Sesión"
-          >
-            <LogOut className="h-[1.2rem] w-[1.2rem]" />
-            <span className="sr-only">Cerrar Sesión</span>
-          </button>
+          <LogoutButton />
         </div>
       </header>
 
@@ -70,5 +55,43 @@ export default function GaritaLayout({
         <div className="absolute top-[-20%] right-[-20%] w-[60%] h-[60%] bg-[#D97736] rounded-full blur-[120px] opacity-10"></div>
       </div>
     </div>
+  );
+}
+
+function LogoutButton() {
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isLoggingOut) return;
+    
+    setIsLoggingOut(true);
+    try {
+      // Usamos await para asegurarnos que la cookie se elimina en el servidor
+      // antes de redirigir, así evitamos que el middleware / proxy nos rebote al dashboard.
+      await supabase.auth.signOut();
+      localStorage.clear();
+      window.location.href = '/login';
+    } catch (err) {
+      console.error(err);
+      setIsLoggingOut(false);
+    }
+  };
+
+  return (
+    <button 
+      type="button"
+      onClick={handleLogout}
+      disabled={isLoggingOut}
+      className="w-10 h-10 flex items-center justify-center rounded-md border border-slate-200 bg-white hover:bg-red-50 hover:text-red-600 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-red-900/20 dark:hover:text-red-500 transition-colors shadow-sm active:scale-95 touch-manipulation cursor-pointer relative z-[100] disabled:opacity-50"
+      title="Cerrar Sesión"
+    >
+      {isLoggingOut ? (
+        <Loader2 className="w-5 h-5 animate-spin" />
+      ) : (
+        <LogOut className="h-[1.2rem] w-[1.2rem]" />
+      )}
+      <span className="sr-only">Cerrar Sesión</span>
+    </button>
   );
 }
