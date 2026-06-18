@@ -31,7 +31,7 @@ export default function VisitasForm() {
       const { data, error } = await supabase
         .from('registro_visitas')
         .select('visitante_nombre, empresa')
-        .eq('dni_ce', dni)
+        .eq('dni', dni)
         .order('fecha', { ascending: false })
         .limit(1)
         .single();
@@ -77,14 +77,13 @@ export default function VisitasForm() {
         .insert({
           fecha: now.toISOString().split('T')[0],
           hora_ingreso: timeString,
-          dni_ce: dni,
+          dni: dni,
           visitante_nombre: nombre.toUpperCase(),
           empresa: empresa.toUpperCase() || 'PARTICULAR',
           motivo: motivo.toUpperCase(),
           autorizado_por: autorizadoPor.toUpperCase(),
           epp_ok: eppOk,
           observaciones: observacionesPayload
-          // Las visitas a zona de oficinas rara vez necesitan SCTR, así que lo omitimos o lo dejamos false
         });
 
       if (error) throw error;
