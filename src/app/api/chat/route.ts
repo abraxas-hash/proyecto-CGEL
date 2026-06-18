@@ -60,34 +60,35 @@ export async function POST(req: Request) {
           // @ts-ignore - Bypass Vercel AI SDK strict generic inference bug
           execute: async (args: any) => {
             const query = String(args.query || '').trim();
-            const tipo = args.tipo || 'todos';
             if (!query || query === '') {
                return { error: "Parámetro 'query' inválido o vacío. DEBES proveer un término de búsqueda (ej. DNI, placa, nombre)." };
             }
-            console.log(`[Nexus AI] Buscando en BD: ${query} en ${tipo}`);
+            console.log(`[Nexus AI] Buscando en TODAS las tablas BD: ${query}`);
             let resultados: any = {};
             const isDni = /^\d+$/.test(query);
 
-            if (tipo === 'visitas' || tipo === 'todos') {
+            const searchVisitas = async () => {
               let q = supabase.from('registro_visitas').select('*').order('fecha', { ascending: false }).limit(15);
               if (isDni) q = q.eq('dni', query); else q = q.or(`visitante_nombre.ilike.%${query}%,empresa.ilike.%${query}%`);
               const { data } = await q;
               if (data && data.length > 0) resultados.visitas = data;
-            }
+            };
 
-            if (tipo === 'proveedores' || tipo === 'todos') {
+            const searchProveedores = async () => {
               let q = supabase.from('registro_proveedores_carga').select('*').order('fecha', { ascending: false }).limit(15);
               if (isDni) q = q.eq('dni', query); else q = q.or(`conductor_nombre.ilike.%${query}%,empresa.ilike.%${query}%,placa.ilike.%${query}%`);
               const { data } = await q;
               if (data && data.length > 0) resultados.proveedores = data;
-            }
+            };
 
-            if (tipo === 'repartidores' || tipo === 'todos') {
+            const searchRepartidores = async () => {
               let q = supabase.from('registro_diario_repartidores').select('*').order('fecha', { ascending: false }).limit(15);
               q = q.or(`conductor_apellido.ilike.%${query}%,empresa_abreviatura.ilike.%${query}%,placa.ilike.%${query}%`);
               const { data } = await q;
               if (data && data.length > 0) resultados.repartidores = data;
-            }
+            };
+
+            await Promise.all([searchVisitas(), searchProveedores(), searchRepartidores()]);
 
             return Object.keys(resultados).length > 0 
               ? resultados 
