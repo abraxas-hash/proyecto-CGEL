@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Users, ArrowLeft, Send, CheckCircle2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Users, ArrowLeft, Send, CheckCircle2, LogOut, Clock, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
-import { supabase } from '@/lib/supabaseClient';
+import { createBrowserClient } from '@supabase/ssr';
 import { useRouter } from 'next/navigation';
 import { ImageUpload } from '@/components/ui/ImageUpload';
 import { uploadEvidence } from '@/lib/storageHelper';
@@ -22,7 +22,57 @@ export default function VisitasForm() {
   const [eppOk, setEppOk] = useState(true);
   const [observacionesTexto, setObservacionesTexto] = useState('');
   const [dniFile, setDniFile] = useState<File | null>(null);
-  const [isSearchingDni, setIsSearchingDni] = useState(false);
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+  );
+
+  const [activeTab, setActiveTab] = useState<'activos' | 'nuevo'>('activos');
+  const [todaysRecords, setTodaysRecords] = useState<any[]>([]);
+  const [isLoadingRecords, setIsLoadingRecords] = useState(true);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+
+  const fetchTodaysRecords = async () => {
+    setIsLoadingRecords(true);
+    const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Lima' });
+    const { data, error } = await supabase
+      .from('registro_visitas')
+      .select('*')
+      .eq('fecha', today)
+      .order('hora_ingreso', { ascending: false });
+    
+    if (!error && data) {
+      setTodaysRecords(data);
+    }
+    setIsLoadingRecords(false);
+  };
+
+  useEffect(() => {
+    fetchTodaysRecords();
+  }, []);
+
+  const handleMarcarSalida = async (id: string) => {
+    if (!confirm('¿Seguro que deseas marcar la salida de esta visita?')) return;
+    setIsUpdatingStatus(true);
+    try {
+      const now = new Date();
+      const formatter = new Intl.DateTimeFormat('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hour12: false });
+      const timeStr = formatter.format(now);
+
+      const { error } = await supabase
+        .from('registro_visitas')
+        .update({ hora_salida: timeStr })
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchTodaysRecords();
+    } catch (err) {
+      alert('Error al marcar salida.');
+      console.error(err);
+    } finally {
+      setIsUpdatingStatus(false);
+    }
+  };
 
   const handleDniBlur = async () => {
     if (!dni || dni.length < 8) return;
@@ -90,7 +140,11 @@ export default function VisitasForm() {
 
       setSuccess(true);
       setTimeout(() => {
-        router.push('/garita');
+        setSuccess(false);
+        setActiveTab('activos');
+        fetchTodaysRecords();
+        // Limpiar form
+        setDni(''); setNombre(''); setEmpresa(''); setMotivo(''); setAutorizadoPor('');
       }, 2000);
 
     } catch (error) {
@@ -133,8 +187,81 @@ export default function VisitasForm() {
           </div>
         </div>
       </div>
+
+      <div className="flex gap-2 p-1 bg-white/5 rounded-2xl mb-2">
+        <button
+          onClick={() => setActiveTab('activos')}
+          className={`flex-1 py-3 text-sm font-black uppercase tracking-widest rounded-xl transition-all ${activeTab === 'activos' ? 'bg-purple-500 text-white shadow-lg shadow-purple-500/25' : 'text-slate-500 hover:bg-white/5'}`}
+        >
+          En Planta
+        </button>
+        <button
+          onClick={() => setActiveTab('nuevo')}
+          className={`flex-1 py-3 text-sm font-black uppercase tracking-widest rounded-xl transition-all ${activeTab === 'nuevo' ? 'bg-purple-500 text-white shadow-lg shadow-purple-500/25' : 'text-slate-500 hover:bg-white/5'}`}
+        >
+          + Nuevo
+        </button>
+      </div>
       
-      <form onSubmit={handleSubmit} className="flex flex-col gap-5 pb-8">
+      {activeTab === 'activos' && (
+        <div className="flex flex-col gap-4">
+          <div className="flex justify-between items-center px-2">
+            <h3 className="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-widest">Visitas Hoy</h3>
+            <button onClick={fetchTodaysRecords} className="p-2 text-slate-500 hover:text-white bg-white/5 rounded-full" title="Actualizar">
+              <RefreshCw className={`w-4 h-4 ${isLoadingRecords ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
+          {todaysRecords.filter(r => !r.hora_salida).length === 0 ? (
+            <div className="glass-panel p-8 rounded-2xl text-center text-slate-500 border border-dashed border-white/10">
+              No hay visitas activas en planta.
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {todaysRecords.filter(r => !r.hora_salida).map(record => (
+                <div key={record.id} className="glass-panel p-4 rounded-2xl border-l-4 border-l-purple-500">
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <h4 className="font-black text-slate-800 dark:text-white leading-tight">{record.visitante_nombre}</h4>
+                      <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">{record.empresa}</p>
+                    </div>
+                    <div className="bg-purple-500/10 px-3 py-1 rounded-full border border-purple-500/20 text-purple-400 flex items-center gap-2">
+                      <Clock className="w-3 h-3" />
+                      <span className="text-xs font-mono font-bold">{record.hora_ingreso}</span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleMarcarSalida(record.id)}
+                    disabled={isUpdatingStatus}
+                    className="w-full mt-2 py-3 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 rounded-xl font-black uppercase text-xs tracking-widest flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+                  >
+                    <LogOut className="w-4 h-4" /> Marcar Salida
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="mt-6 pt-6 border-t border-white/10">
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest px-2 mb-3">Visitas Terminadas</h3>
+            <div className="flex flex-col gap-2">
+              {todaysRecords.filter(r => r.hora_salida).map(record => (
+                <div key={record.id} className="bg-white/5 p-3 rounded-xl flex justify-between items-center opacity-60">
+                  <div className="truncate pr-4">
+                    <h4 className="text-sm font-bold text-white truncate">{record.visitante_nombre}</h4>
+                    <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">{record.empresa}</p>
+                  </div>
+                  <div className="text-xs font-mono text-gray-400 whitespace-nowrap">
+                    {record.hora_ingreso} - {record.hora_salida}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'nuevo' && (
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5 pb-8">
         
         <div className="glass-panel p-4 rounded-2xl flex flex-col gap-4">
           <div>
@@ -253,6 +380,7 @@ export default function VisitasForm() {
           {!isSubmitting && <Send className="w-4 h-4" />}
         </button>
       </form>
+      )}
     </div>
   );
 }
