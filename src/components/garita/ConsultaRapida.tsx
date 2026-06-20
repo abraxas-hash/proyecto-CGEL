@@ -16,33 +16,37 @@ function toHora(str?: string | null) {
   return str.slice(0, 5);
 }
 
-const today = new Date().toISOString().split('T')[0];
-
 async function fetchData(categoria: string): Promise<PersonaItem[]> {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const today = `${year}-${month}-${day}`;
+  
   if (categoria === 'repartidores') {
     const { data } = await supabase
-      .from('registro_repartidores')
-      .select('conductor_nombre, empresa, placa, hora_llegada, hora_salida')
+      .from('registro_diario_repartidores')
+      .select('conductor_apellido, empresa_abreviatura, placa, entrada_1, salida_1')
       .eq('fecha', today)
-      .order('hora_llegada', { ascending: false })
+      .order('entrada_1', { ascending: false })
       .limit(20);
     return (data || []).map(r => ({
-      nombre: r.conductor_nombre || '—',
-      detalle: [r.empresa, r.placa].filter(Boolean).join(' · '),
-      hora: toHora(r.hora_llegada),
-      activo: !r.hora_salida,
+      nombre: r.conductor_apellido || '—',
+      detalle: [r.empresa_abreviatura, r.placa].filter(Boolean).join(' · '),
+      hora: toHora(r.entrada_1),
+      activo: !r.salida_1,
     }));
   }
   if (categoria === 'visitas') {
     const { data } = await supabase
       .from('registro_visitas')
-      .select('nombre_completo, empresa_procede, hora_ingreso, hora_salida')
+      .select('visitante_nombre, empresa, hora_ingreso, hora_salida')
       .eq('fecha', today)
       .order('hora_ingreso', { ascending: false })
       .limit(20);
     return (data || []).map(r => ({
-      nombre: r.nombre_completo || '—',
-      detalle: r.empresa_procede || '—',
+      nombre: r.visitante_nombre || '—',
+      detalle: r.empresa || '—',
       hora: toHora(r.hora_ingreso),
       activo: !r.hora_salida,
     }));
@@ -64,15 +68,15 @@ async function fetchData(categoria: string): Promise<PersonaItem[]> {
   if (categoria === 'contratistas') {
     const { data } = await supabase
       .from('registro_contratistas')
-      .select('empresa_contratista, trabajo_realizar, hora_ingreso, hora_salida')
-      .eq('fecha_ingreso', today)
-      .order('hora_ingreso', { ascending: false })
+      .select('empresa, actividad, hora_inicio, hora_fin')
+      .eq('fecha', today)
+      .order('hora_inicio', { ascending: false })
       .limit(20);
     return (data || []).map(r => ({
-      nombre: r.empresa_contratista || '—',
-      detalle: r.trabajo_realizar || '—',
-      hora: toHora(r.hora_ingreso),
-      activo: !r.hora_salida,
+      nombre: r.empresa || '—',
+      detalle: r.actividad || '—',
+      hora: toHora(r.hora_inicio),
+      activo: !r.hora_fin,
     }));
   }
   return [];

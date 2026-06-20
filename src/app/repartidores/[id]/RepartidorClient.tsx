@@ -372,12 +372,14 @@ export default function RepartidorClient({ repartidor, historial, evidencias }: 
             </div>
             
             <div className="pt-4 border-t border-blue-500/20">
-              <h3 className="text-sm font-bold text-blue-400 uppercase mb-2 tracking-wider">
+              <h3 className="text-sm font-bold text-blue-400 uppercase mb-3 tracking-wider">
                 Observaciones del Turno
               </h3>
-              <p className="text-xs text-slate-600 dark:text-slate-600 dark:text-gray-300 italic leading-relaxed">
-                {parsedObs.texto || 'Sin observaciones registradas.'}
-              </p>
+              <div className="p-4 bg-blue-500/10 dark:bg-blue-500/10 border border-blue-500/20 rounded-xl shadow-inner">
+                <p className="text-xs text-slate-800 dark:text-gray-200 italic leading-relaxed font-medium">
+                  {parsedObs.texto || 'Sin observaciones registradas.'}
+                </p>
+              </div>
             </div>
           </div>
 

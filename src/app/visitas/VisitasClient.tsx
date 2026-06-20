@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { Users, UserCheck, UserX, Search, ChevronDown, ChevronRight, Calendar, Download, ArrowRight } from 'lucide-react';
+import { Users, UserCheck, UserX, Search, ChevronDown, ChevronRight, Calendar, Download, ArrowRight, History, X } from 'lucide-react';
 import Link from 'next/link';
 
 import VisualCalendar from '@/components/ui/VisualCalendar';
@@ -19,6 +19,7 @@ export default function VisitasClient({ initialVisitas }: { initialVisitas: any[
     return null;
   });
   const [searchTerm, setSearchTerm] = useState('');
+  const [showMobileList, setShowMobileList] = useState(false);
 
   const filteredByDate = useMemo(() => {
     if (!selectedDate) return [];
@@ -84,9 +85,9 @@ export default function VisitasClient({ initialVisitas }: { initialVisitas: any[
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6 flex-1 min-h-0 overflow-hidden">
+      <div className="relative flex flex-col md:flex-row gap-6 flex-1 min-h-0 overflow-hidden">
         {/* Left Sidebar: Visual Calendar (STAY FIXED) */}
-        <aside className="w-full md:w-72 shrink-0 border-b md:border-b-0 md:border-r border-slate-700 pb-6 md:pb-0 md:pr-6 overflow-y-auto no-scrollbar">
+        <aside className="w-full md:w-72 shrink-0 border-b md:border-b-0 md:border-r border-slate-700 pb-24 md:pb-0 md:pr-6 overflow-y-auto no-scrollbar">
           <VisualCalendar 
             selectedDate={selectedDate}
             onDateSelect={setSelectedDate}
@@ -106,13 +107,51 @@ export default function VisitasClient({ initialVisitas }: { initialVisitas: any[
               </div>
             </div>
           </div>
+
         </aside>
 
+        {/* Botón flotante FIJO en la parte inferior del contenedor móvil */}
+        <div className="absolute bottom-4 left-2 right-2 md:hidden z-20 pointer-events-none">
+          <button 
+            type="button"
+            onClick={() => setShowMobileList(true)}
+            className="w-full py-4 bg-orange-600/90 border border-orange-400/50 text-white font-black tracking-widest uppercase rounded-2xl flex items-center justify-center gap-2 shadow-[0_10px_40px_rgba(249,115,22,0.3)] backdrop-blur-xl pointer-events-auto"
+          >
+            <History className="w-5 h-5" />
+            Ver Historial ({filteredByDate.length})
+          </button>
+        </div>
+
         {/* Right Content: Record List (THE ONLY ONE SCROLLING) */}
-        <div className="flex-1 overflow-y-auto min-h-0 pr-2 custom-scrollbar">
-          {selectedDate && (
-            <div className="animate-in fade-in slide-in-from-right-4 duration-500">
-              <div className="flex items-center justify-between mb-4 px-2">
+        {/* En móvil, se convierte en un bottom-sheet translúcido */}
+        <div className={`
+          flex-1 min-h-0 custom-scrollbar flex flex-col
+          md:relative md:translate-y-0 md:bg-transparent md:p-0 md:border-none md:shadow-none md:z-auto md:h-auto md:overflow-y-auto md:pr-2
+          ${showMobileList 
+            ? 'fixed inset-x-0 bottom-0 h-[85vh] z-[100] bg-[#050505]/95 backdrop-blur-2xl p-4 sm:p-6 rounded-t-[2rem] shadow-[0_-10px_50px_rgba(0,0,0,0.8)] border-t border-white/10 transition-transform duration-400 translate-y-0 overflow-hidden' 
+            : 'fixed inset-x-0 bottom-0 h-[85vh] z-[100] bg-[#050505]/95 backdrop-blur-2xl p-4 sm:p-6 rounded-t-[2rem] shadow-[0_-10px_50px_rgba(0,0,0,0.8)] border-t border-white/10 transition-transform duration-400 translate-y-[150%]'
+          }
+        `}>
+          
+          {/* Header Móvil del Botton Sheet */}
+          <div className="md:hidden flex justify-between items-center mb-6 shrink-0 px-2">
+            <h3 className="text-sm font-black text-white uppercase tracking-tighter flex items-center gap-2">
+               <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+               {selectedDate ? new Date(selectedDate + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }) : 'Sin Fecha'}
+            </h3>
+            <button 
+              type="button"
+              onClick={() => setShowMobileList(false)}
+              className="p-2 bg-white/10 hover:bg-red-500/20 hover:text-red-400 rounded-full text-white transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+            {selectedDate && (
+              <div className="animate-in fade-in slide-in-from-right-4 duration-500">
+                <div className="hidden md:flex items-center justify-between mb-4 px-2">
                 <h3 className="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tighter flex items-center gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></div>
                   Mostrando: {new Date(selectedDate + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
@@ -164,14 +203,15 @@ export default function VisitasClient({ initialVisitas }: { initialVisitas: any[
             </div>
           )}
 
-          {filteredByDate.length === 0 && (
-            <div className="py-20 text-center flex flex-col items-center animate-in fade-in duration-500">
-              <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mb-4">
-                <UserX className="w-10 h-10 text-gray-700 opacity-20" />
+            {filteredByDate.length === 0 && (
+              <div className="py-20 text-center flex flex-col items-center animate-in fade-in duration-500">
+                <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mb-4">
+                  <UserX className="w-10 h-10 text-gray-700 opacity-20" />
+                </div>
+                <p className="text-gray-500 font-black uppercase tracking-[0.4em] text-xs">Sin visitas para esta fecha</p>
               </div>
-              <p className="text-gray-500 font-black uppercase tracking-[0.4em] text-xs">Sin visitas para esta fecha</p>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </main>

@@ -153,9 +153,9 @@ export default function ContratistaClient({ contratista, personal, herramientas,
                   </div>
                 </div>
 
-                <div className="p-5 bg-slate-100 dark:bg-black/40 rounded-3xl border border-slate-300 dark:border-slate-600">
-                  <p className="text-[10px] text-slate-600 dark:text-slate-300 uppercase font-black mb-3 tracking-widest">Observaciones de Seguridad</p>
-                  <p className="text-sm text-slate-700 dark:text-slate-200 italic leading-relaxed">
+                <div className="p-5 bg-yellow-500/10 dark:bg-yellow-500/10 rounded-3xl border border-yellow-500/20 shadow-inner">
+                  <p className="text-[10px] text-yellow-600 dark:text-yellow-500 uppercase font-black mb-3 tracking-widest">Observaciones de Seguridad</p>
+                  <p className="text-sm text-slate-800 dark:text-gray-200 italic leading-relaxed font-medium">
                     "{parsedObs.texto || 'No se registraron observaciones para este servicio técnico.'}"
                   </p>
                 </div>

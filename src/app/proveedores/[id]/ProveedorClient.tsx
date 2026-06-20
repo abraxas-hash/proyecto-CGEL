@@ -43,16 +43,16 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
     
     const nowISO = new Date().toISOString();
     
-    if (parsedObs.fotos.guia) {
+    if (parsedObs?.fotos?.guias) {
       ev.push({
         id: 'json-guia',
-        url_foto: parsedObs.fotos.guia,
+        url_foto: parsedObs.fotos.guias,
         tipo_evidencia: 'GUIA',
         etiqueta: 'Foto de Guía',
         fecha_captura: nowISO
       });
     }
-    if (parsedObs.fotos.estiba) {
+    if (parsedObs?.fotos?.estiba) {
       ev.push({
         id: 'json-estiba',
         url_foto: parsedObs.fotos.estiba,
@@ -95,10 +95,10 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
               />
               <div className="p-5 flex justify-between items-center bg-white/5 mt-3 rounded-xl">
                 <div>
-                  <p className="text-slate-800 dark:text-white font-bold text-xl">{proveedor.conductor}</p>
+                  <p className="text-slate-800 dark:text-white font-bold text-xl">{proveedor.conductor_nombre}</p>
                   <p className="text-slate-500 dark:text-gray-400 text-sm flex items-center gap-2 mt-1">
                     <ShieldCheck className="w-4 h-4 text-slate-800 dark:text-white" />
-                    Evidencia de Seguridad - {proveedor.empresa_proveedor}
+                    Evidencia de Seguridad - {proveedor.empresa}
                   </p>
                 </div>
                 <div className="px-4 py-2 bg-blue-500/20 text-blue-300 rounded font-mono border border-blue-500/30 flex items-center gap-2 text-xs">
@@ -139,7 +139,7 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
             <div className="space-y-5">
               <div>
                 <p className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Proveedor / Empresa</p>
-                <p className="text-2xl font-black text-slate-800 dark:text-white mt-1 leading-tight">{proveedor.empresa_proveedor}</p>
+                <p className="text-2xl font-black text-slate-800 dark:text-white mt-1 leading-tight">{proveedor.empresa}</p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -156,7 +156,7 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
               <div>
                 <p className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Conductor</p>
                 <div className="flex items-center justify-between mt-2 bg-white/5 p-3 rounded-xl border border-slate-700">
-                  <span className="text-slate-800 dark:text-white font-semibold text-sm capitalize">{proveedor.conductor?.toLowerCase()}</span>
+                  <span className="text-slate-800 dark:text-white font-semibold text-sm capitalize">{proveedor.conductor_nombre?.toLowerCase() || 'No registrado'}</span>
                   <button 
                     type="button"
                     onClick={() => setShowDniModal(true)}
@@ -167,11 +167,11 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
                 </div>
               </div>
 
-              <div className="p-4 bg-orange-500/5 border border-orange-500/10 rounded-xl">
-                <p className="text-[10px] text-orange-400/80 uppercase font-bold mb-2 flex items-center gap-2">
+              <div className="p-4 bg-orange-500/10 border border-orange-500/20 rounded-xl">
+                <p className="text-[10px] text-orange-500 uppercase font-bold mb-2 flex items-center gap-2">
                   <Package className="w-3 h-3" /> Guías de Remisión
                 </p>
-                <p className="text-sm text-slate-600 dark:text-gray-300 font-mono break-words bg-black/20 p-2 rounded">
+                <p className="text-sm text-slate-800 dark:text-white font-mono break-words bg-white/10 dark:bg-black/30 p-2.5 rounded-lg border border-white/5 shadow-inner">
                   {proveedor.n_guias || 'Sin guías registradas'}
                 </p>
               </div>
@@ -254,10 +254,10 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
               ))}
             </div>
 
-            <div className="mt-8 p-5 bg-white/5 rounded-2xl border border-slate-700 italic">
-              <p className="text-xs text-slate-500 dark:text-gray-400 leading-relaxed">
-                <span className="text-blue-400 font-bold not-italic uppercase text-[10px] block mb-1">Observaciones del Agente:</span>
-                "{parsedObs.texto || 'Sin observaciones adicionales registradas para este ingreso.'}"
+            <div className="mt-8 p-5 bg-blue-500/5 dark:bg-blue-500/10 rounded-2xl border border-blue-500/20 shadow-inner">
+              <p className="text-sm text-slate-700 dark:text-gray-200 leading-relaxed">
+                <span className="text-blue-500 dark:text-blue-400 font-black uppercase text-[10px] block mb-2 tracking-widest">Observaciones del Agente:</span>
+                <span className="italic font-medium">"{parsedObs.texto || 'Sin observaciones adicionales registradas para este ingreso.'}"</span>
               </p>
             </div>
           </div>

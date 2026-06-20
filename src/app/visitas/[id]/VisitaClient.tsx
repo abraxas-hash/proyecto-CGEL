@@ -226,9 +226,9 @@ export default function VisitaClient({ visita, historial, evidencias }: { visita
               ))}
             </div>
 
-            <div className="mt-8 p-5 bg-black/40 rounded-3xl border border-slate-700">
-              <p className="text-[10px] text-gray-500 uppercase font-black mb-2 tracking-widest">Observaciones</p>
-              <p className="text-xs text-slate-500 dark:text-gray-400 italic leading-relaxed">
+            <div className="mt-8 p-5 bg-green-500/10 dark:bg-green-500/10 rounded-3xl border border-green-500/20 shadow-inner">
+              <p className="text-[10px] text-green-600 dark:text-green-500 uppercase font-black mb-2 tracking-widest">Observaciones</p>
+              <p className="text-sm text-slate-800 dark:text-gray-200 italic leading-relaxed font-medium">
                 "{parsedObs.texto || 'No se registraron incidentes durante esta visita administrativa.'}"
               </p>
             </div>

@@ -35,27 +35,7 @@ export default async function ProveedorDetailPage({ params }: { params: Promise<
       .eq('vinculado_a_registro_id', id)
   ]);
 
-  let evidencias = evidenciasResult;
-
-  // Simulación de evidencias si no hay reales
-  if (!evidencias || evidencias.length === 0) {
-    evidencias = [
-      {
-        id: 'mock-p-1',
-        tipo_evidencia: 'GUIAS',
-        etiqueta: 'REMISION_V01',
-        url_foto: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=600&auto=format&fit=crop',
-        fecha_captura: new Date(new Date(proveedor.fecha).getTime() + 10 * 60 * 60 * 1000).toISOString()
-      },
-      {
-        id: 'mock-p-2',
-        tipo_evidencia: 'CARGA',
-        etiqueta: proveedor.placa,
-        url_foto: 'https://images.unsplash.com/photo-1519003722824-192d99233858?q=80&w=600&auto=format&fit=crop',
-        fecha_captura: new Date(new Date(proveedor.fecha).getTime() + 10.5 * 60 * 60 * 1000).toISOString()
-      }
-    ] as any;
-  }
+  let evidencias = evidenciasResult || [];
 
   return (
     <ProveedorClient 

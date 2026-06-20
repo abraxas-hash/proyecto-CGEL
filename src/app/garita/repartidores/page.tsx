@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Truck, ArrowLeft, Send, CheckCircle2, Camera, RefreshCw } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Truck, ArrowLeft, Send, CheckCircle2, Camera, RefreshCw, Clock, Loader2, Play, Square, X } from 'lucide-react';
 import Link from 'next/link';
 import { createBrowserClient } from '@supabase/ssr';
 import { useRouter } from 'next/navigation';
@@ -53,6 +53,12 @@ export default function RepartidoresForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  // Registros de hoy
+  const [todaysRecords, setTodaysRecords] = useState<any[]>([]);
+  const [isLoadingRecords, setIsLoadingRecords] = useState(true);
+  const [showTimeModal, setShowTimeModal] = useState(false);
+  const [updatingTime, setUpdatingTime] = useState(false);
+
   // Datos del vehículo seleccionado
   const [vehiculo, setVehiculo] = useState<VehiculoData | null>(null);
   const [placaManual, setPlacaManual] = useState('');
@@ -72,19 +78,80 @@ export default function RepartidoresForm() {
   const empresa   = vehiculo ? vehiculo.empresa   : empresaManual;
   const conductor = vehiculo ? vehiculo.conductor : conductorManual;
 
+  // ─── Obtener registros del día ────────────────────────────────
+  const fetchTodaysRecords = async () => {
+    setIsLoadingRecords(true);
+    const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Lima' });
+    const { data, error } = await supabase
+      .from('registro_diario_repartidores')
+      .select('*')
+      .eq('fecha', today);
+    if (!error && data) {
+      setTodaysRecords(data);
+    }
+    setIsLoadingRecords(false);
+  };
+
+  useEffect(() => {
+    fetchTodaysRecords();
+  }, []);
+
   // ─── Paso 1: selecciona vehículo ────────────────────────────────
   const handleSelectVehiculo = (v: VehiculoData) => {
     setVehiculo(v);
     setPlacaManual('');
     setEmpresaManual('');
     setConductorManual('');
-    setStep(2);
+    setShowTimeModal(true);
   };
 
   const handleManualNext = () => {
     if (!placaManual || !empresaManual || !conductorManual) return;
     setVehiculo(null);
-    setStep(2);
+    setShowTimeModal(true);
+  };
+
+  // ─── Botones de Tiempos ─────────────────────────────────────────
+  const handleMarkTime = async (columna: 'hora_llegada' | 'hora_inicio_carga' | 'hora_fin_carga') => {
+    if (!placa || !empresa || !conductor) return;
+    setUpdatingTime(true);
+
+    try {
+      const now = new Date();
+      const formatter = new Intl.DateTimeFormat('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hour12: false });
+      const timeStr = formatter.format(now);
+      const today = now.toLocaleDateString('en-CA', { timeZone: 'America/Lima' });
+
+      const existingRecord = todaysRecords.find(r => r.placa === placa);
+
+      if (existingRecord) {
+        // Update
+        const { error } = await supabase
+          .from('registro_diario_repartidores')
+          .update({ [columna]: timeStr })
+          .eq('id', existingRecord.id);
+        if (error) throw error;
+      } else {
+        // Insert
+        const { error } = await supabase
+          .from('registro_diario_repartidores')
+          .insert({
+            fecha: today,
+            turno: 'DIURNO',
+            empresa_abreviatura: empresa.toUpperCase(),
+            placa: placa.toUpperCase(),
+            conductor_apellido: conductor.toUpperCase(),
+            [columna]: timeStr
+          });
+        if (error) throw error;
+      }
+      await fetchTodaysRecords();
+    } catch (err) {
+      console.error(err);
+      alert('Error al guardar el tiempo.');
+    } finally {
+      setUpdatingTime(false);
+    }
   };
 
   // ─── Envío final ────────────────────────────────────────────────
@@ -107,23 +174,36 @@ export default function RepartidoresForm() {
       }) : null;
 
       // Determinar campo de entrada según número de salida
-      const campoEntrada = numSalida === 1 ? 'entrada_1' : numSalida === 2 ? 'entrada_2' : 'entrada_2';
+      const campoEntrada = numSalida === 1 ? 'entrada_1' : numSalida === 2 ? 'entrada_2' : 'entrada_3';
+      const existingRecord = todaysRecords.find(r => r.placa === placa);
 
-      const { error } = await supabase
-        .from('registro_diario_repartidores')
-        .insert({
-          fecha:              today,
-          turno:              'DIURNO',
-          empresa_abreviatura: empresa.toUpperCase(),
-          placa:              placa.toUpperCase(),
-          conductor_apellido: conductor.toUpperCase(),
-          sctr_ok:            sctrOk,
-          epp_ok:             eppOk,
-          [campoEntrada]:     timeStr,
-          observaciones:      obsPayload,
-        });
-
-      if (error) throw error;
+      if (existingRecord) {
+        const { error } = await supabase
+          .from('registro_diario_repartidores')
+          .update({
+            sctr_ok: sctrOk,
+            epp_ok: eppOk,
+            [campoEntrada]: timeStr,
+            observaciones: obsPayload,
+          })
+          .eq('id', existingRecord.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from('registro_diario_repartidores')
+          .insert({
+            fecha:              today,
+            turno:              'DIURNO',
+            empresa_abreviatura: empresa.toUpperCase(),
+            placa:              placa.toUpperCase(),
+            conductor_apellido: conductor.toUpperCase(),
+            sctr_ok:            sctrOk,
+            epp_ok:             eppOk,
+            [campoEntrada]:     timeStr,
+            observaciones:      obsPayload,
+          });
+        if (error) throw error;
+      }
 
       setSuccess(true);
       setTimeout(() => router.push('/garita'), 2500);
@@ -187,20 +267,37 @@ export default function RepartidoresForm() {
         <Header />
 
         <div className="glass-panel p-4 rounded-2xl">
-          <div className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest mb-3">
-            Vehículos autorizados — Toca para registrar
+          <div className="flex justify-between items-end mb-3">
+            <div className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest">
+              Vehículos autorizados — Toca para registrar
+            </div>
+            <button onClick={fetchTodaysRecords} className="p-1 text-slate-500 hover:text-white" title="Actualizar">
+              <RefreshCw className={`w-4 h-4 ${isLoadingRecords ? 'animate-spin' : ''}`} />
+            </button>
           </div>
           <div className="grid grid-cols-3 gap-2">
             {VEHICULOS.map((v) => {
               const c = COLOR_MAP[v.empresa] ?? COLOR_MAP.IND;
+              const record = todaysRecords.find(r => r.placa === v.placa);
+              const hasActivity = !!record;
+              const isFinished = record && (record.entrada_1 || record.entrada_2 || record.entrada_3);
+              
+              let statusColor = "bg-black/5 dark:bg-white/5";
+              if (isFinished) statusColor = "bg-green-500/10 border-green-500/30";
+              else if (hasActivity) statusColor = "bg-cyan-500/10 border-cyan-500/30";
+
               return (
                 <button
                   key={v.placa}
                   type="button"
                   onClick={() => handleSelectVehiculo(v)}
-                  className={`glass-panel hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer rounded-xl p-2.5 flex flex-col gap-0.5 text-left border transition-all active:scale-95 ${c}`}
+                  className={`glass-panel hover:opacity-80 cursor-pointer rounded-xl p-2.5 flex flex-col gap-0.5 text-left border transition-all active:scale-95 ${c} ${statusColor}`}
                 >
-                  <span className="text-sm font-black tracking-wider">{v.placa}</span>
+                  <span className="text-sm font-black tracking-wider flex items-center justify-between w-full">
+                    {v.placa}
+                    {hasActivity && !isFinished && <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />}
+                    {isFinished && <CheckCircle2 className="w-3 h-3 text-green-500" />}
+                  </span>
                   <span className="text-[9px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest">{v.empresa}</span>
                 </button>
               );
@@ -243,6 +340,71 @@ export default function RepartidoresForm() {
             Continuar →
           </button>
         </div>
+
+        {/* Modal Flotante de Opciones de Tiempo */}
+        {showTimeModal && (
+          <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in">
+            <div className="bg-[#111] border border-white/10 w-full max-w-sm rounded-[2rem] p-6 shadow-2xl relative animate-in slide-in-from-bottom-8">
+              <button onClick={() => setShowTimeModal(false)} className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white bg-white/5 rounded-full">
+                <X className="w-5 h-5" />
+              </button>
+              
+              <div className="mb-6">
+                <h3 className="text-xl font-black text-white">{placa}</h3>
+                <p className="text-xs text-gray-400 uppercase tracking-widest font-bold">{empresa} — {conductor}</p>
+              </div>
+
+              {(() => {
+                const record = todaysRecords.find(r => r.placa === placa);
+                return (
+                  <div className="flex flex-col gap-3">
+                    <button 
+                      onClick={() => handleMarkTime('hora_llegada')}
+                      disabled={updatingTime || !!record?.hora_llegada}
+                      className={`flex items-center justify-between p-4 rounded-xl border font-bold uppercase text-sm transition-all ${record?.hora_llegada ? 'bg-green-500/10 border-green-500/20 text-green-400 cursor-default' : 'bg-white/5 border-white/10 text-white hover:bg-white/10'}`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Clock className="w-5 h-5" /> Llegada
+                      </div>
+                      {record?.hora_llegada ? <span>{record.hora_llegada}</span> : updatingTime ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>Marcar</span>}
+                    </button>
+
+                    <button 
+                      onClick={() => handleMarkTime('hora_inicio_carga')}
+                      disabled={updatingTime || !!record?.hora_inicio_carga || !record?.hora_llegada}
+                      className={`flex items-center justify-between p-4 rounded-xl border font-bold uppercase text-sm transition-all ${record?.hora_inicio_carga ? 'bg-cyan-500/10 border-cyan-500/20 text-cyan-400 cursor-default' : !record?.hora_llegada ? 'opacity-30 cursor-not-allowed border-transparent text-gray-500' : 'bg-white/5 border-white/10 text-white hover:bg-white/10'}`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Play className="w-5 h-5" /> Inicio Carga
+                      </div>
+                      {record?.hora_inicio_carga ? <span>{record.hora_inicio_carga}</span> : <span>Marcar</span>}
+                    </button>
+
+                    <button 
+                      onClick={() => handleMarkTime('hora_fin_carga')}
+                      disabled={updatingTime || !!record?.hora_fin_carga || !record?.hora_inicio_carga}
+                      className={`flex items-center justify-between p-4 rounded-xl border font-bold uppercase text-sm transition-all ${record?.hora_fin_carga ? 'bg-orange-500/10 border-orange-500/20 text-orange-400 cursor-default' : !record?.hora_inicio_carga ? 'opacity-30 cursor-not-allowed border-transparent text-gray-500' : 'bg-white/5 border-white/10 text-white hover:bg-white/10'}`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Square className="w-5 h-5" /> Fin Carga
+                      </div>
+                      {record?.hora_fin_carga ? <span>{record.hora_fin_carga}</span> : <span>Marcar</span>}
+                    </button>
+
+                    <div className="h-px w-full bg-white/10 my-2"></div>
+
+                    <button 
+                      onClick={() => { setShowTimeModal(false); setStep(2); }}
+                      className="flex items-center justify-center gap-2 w-full py-4 rounded-xl bg-[#00d4ff] text-black font-black uppercase text-xs tracking-widest hover:bg-[#00d4ff]/80 transition-all shadow-[0_0_20px_rgba(0,212,255,0.3)]"
+                    >
+                      <Camera className="w-4 h-4" /> Registrar Salida y Fotos
+                    </button>
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
+        )}
       </div>
     );
   }
