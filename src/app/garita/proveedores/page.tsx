@@ -27,7 +27,6 @@ export default function ProveedoresForm() {
   // Evidencias
   const [guiaFile, setGuiaFile] = useState<File | null>(null);
   const [estibaFile, setEstibaFile] = useState<File | null>(null);
-  const [estibaFile, setEstibaFile] = useState<File | null>(null);
   const [isSearchingDni, setIsSearchingDni] = useState(false);
 
   const supabase = createBrowserClient(
