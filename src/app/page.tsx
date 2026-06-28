@@ -5,7 +5,7 @@ import { DashboardMetrics } from '@/components/dashboard/DashboardMetrics';
 import SafeAnalytics from '@/components/dashboard/SafeAnalytics';
 import SafetyObservations from '@/components/dashboard/SafetyObservations';
 import { OperationalFunnel } from '@/components/dashboard/OperationalFunnel';
-import { LiveEventsFeed } from '@/components/dashboard/LiveEventsFeed';
+
 import { EmotionManagementWidget } from '@/components/dashboard/EmotionManagementWidget';
 import { AnalisisDia } from '@/components/dashboard/AnalisisDia';
 export const dynamic = 'force-dynamic';
@@ -99,10 +99,7 @@ export default async function Home() {
           <AnalisisDia />
         </div>
 
-        {/* Feed de Eventos Críticos (Diseño Horizontal Compacto) */}
-        <div className="mt-8" id="tour-timeline">
-          <LiveEventsFeed />
-        </div>
+
 
         {/* Panel de Observaciones Críticas de Seguridad (SSOMA) */}
         <div className="mt-8">
