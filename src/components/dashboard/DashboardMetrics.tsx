@@ -20,7 +20,7 @@ export function DashboardMetrics({ counts }: Props) {
   const [modalData, setModalData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [gasData, setGasData] = useState({ llenos: 0, vacios: 0, count: 0 });
-  const [fichaUrl, setFichaUrl] = useState<string | null>(null);
+  const [fichas, setFichas] = useState<any[]>([]);
 
   useEffect(() => {
     // Fetch gas data for today
@@ -52,13 +52,11 @@ export function DashboardMetrics({ counts }: Props) {
       const today = new Date().toISOString().split('T')[0];
       const { data } = await supabase
         .from('fichas_diarias')
-        .select('url_foto')
+        .select('*')
         .eq('fecha', today)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .single();
-      if (data && data.url_foto) {
-        setFichaUrl(data.url_foto);
+        .order('created_at', { ascending: false });
+      if (data) {
+        setFichas(data);
       }
     }
 
@@ -152,18 +150,16 @@ export function DashboardMetrics({ counts }: Props) {
           />
         </div>
 
-        {fichaUrl && (
-          <div onClick={(e) => { e.preventDefault(); openModal('ficha'); }} className="col-span-2 lg:col-span-1">
-            <MetricCard 
-              title="Ficha Diaria" 
-              subtitle="Foto del registro"
-              value="1"
-              Icon={FileText}
-              colorTheme="purple"
-              href="#"
-            />
-          </div>
-        )}
+        <div onClick={(e) => { e.preventDefault(); openModal('ficha'); }} className="col-span-2 lg:col-span-1">
+          <MetricCard 
+            title="Fichas Diarias" 
+            subtitle="Fotos Físicas"
+            value={fichas.length}
+            Icon={FileText}
+            colorTheme="purple"
+            href="#"
+          />
+        </div>
       </div>
 
       {activeModal && (
@@ -179,9 +175,25 @@ export function DashboardMetrics({ counts }: Props) {
             </div>
             <div className="p-4 overflow-y-auto flex-1">
               {activeModal === 'ficha' ? (
-                <div className="flex flex-col items-center">
-                  <img src={fichaUrl!} alt="Ficha Diaria" className="max-w-full rounded-xl shadow-lg border border-slate-200 dark:border-slate-700" />
-                </div>
+                fichas.length === 0 ? (
+                  <p className="text-center text-slate-500 py-8">No se han subido fichas hoy.</p>
+                ) : (
+                  <div className="flex flex-col gap-6 items-center">
+                    {fichas.map((f, i) => {
+                      let tipo = 'GENERAL';
+                      try {
+                        const obs = typeof f.observaciones === 'string' ? JSON.parse(f.observaciones) : f.observaciones;
+                        if (obs && obs.tipo) tipo = obs.tipo;
+                      } catch(e) {}
+                      return (
+                        <div key={i} className="w-full flex flex-col items-center gap-2">
+                          <h4 className="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">{tipo} - {f.turno}</h4>
+                          <img src={f.url_foto} alt={`Ficha ${tipo}`} className="max-w-full rounded-xl shadow-lg border border-slate-200 dark:border-slate-700" />
+                        </div>
+                      )
+                    })}
+                  </div>
+                )
               ) : loading ? (
                 <div className="flex flex-col items-center justify-center py-12 text-slate-400 gap-3">
                   <Activity className="w-8 h-8 animate-spin" />
