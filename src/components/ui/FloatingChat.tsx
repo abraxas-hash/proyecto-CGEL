@@ -88,18 +88,26 @@ export function FloatingChat() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: [...messages, userMessage] })
       });
-      
-      const data = await res.json();
-      
-      if (!res.ok) {
-        throw new Error(data.error || 'Error del servidor');
+
+      // Leer como texto primero para evitar fallos al parsear errores HTML/texto plano
+      const rawText = await res.text();
+      let data: any = {};
+      try {
+        data = JSON.parse(rawText);
+      } catch {
+        console.error('[Chat] Respuesta no es JSON:', rawText.substring(0, 200));
+        throw new Error('El servidor no respondió correctamente. Intenta de nuevo.');
+      }
+
+      if (!res.ok || data.error) {
+        throw new Error(data.error || `Error ${res.status} del servidor`);
       }
 
       setMessages(prev => [...prev, { id: Date.now().toString() + '1', role: 'assistant', content: data.content }]);
     } catch (error: any) {
       console.error('[Chat] Error:', error);
-      alert('Error de conexión con la IA: ' + error.message);
-      setMyInput(currentInput); // Restaurar el input en caso de error
+      setMessages(prev => [...prev, { id: Date.now().toString() + 'e', role: 'assistant', content: '⚠️ ' + (error.message || 'Error de conexión. Intenta de nuevo.') }]);
+      setMyInput(currentInput);
     } finally {
       setIsLoading(false);
       setTimeout(() => inputRef.current?.focus(), 100);
