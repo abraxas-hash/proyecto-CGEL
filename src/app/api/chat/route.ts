@@ -49,19 +49,21 @@ export async function POST(req: Request) {
     const { messages } = await req.json();
 
     const dbParams = z.object({
-      query: z.string().describe('Término de búsqueda exacto: DNI, nombre, placa, empresa, número de guía o fecha (ej. "22 de junio" o "2026-06-22"). Este parámetro es OBLIGATORIO.'),
-      tipo: z.enum(['visitas', 'proveedores', 'repartidores', 'todos']).optional().describe('El módulo donde buscar.')
+      query: z.string().describe('Término de búsqueda exacto, por ejemplo "22 de junio", "D8J-550", "Juan".')
     });
 
     const metricasParams = z.object({});
 
     const myTools = {
         consultarBaseDatos: tool({
-          description: 'Busca el historial o récord de un DNI, Nombre de persona, Empresa, Conductor, PLACA DE VEHÍCULO, Número de Guía o FECHA en la base de datos de Visitas, Proveedores y Repartidores.',
+          description: 'Busca el historial en la base de datos de Visitas, Proveedores y Repartidores.',
           parameters: dbParams,
           // @ts-ignore
           execute: async (args: any) => {
-            const rawQuery = String(args.query || '').trim();
+            console.log(`[Nexus AI] Tool args:`, JSON.stringify(args));
+            const lastMessage = messages[messages.length - 1]?.content || '';
+            let rawQuery = String(args.query || '').trim();
+            if (!rawQuery) rawQuery = lastMessage.trim();
             const combinedInput = rawQuery;
             
             let parsedDate = null;
