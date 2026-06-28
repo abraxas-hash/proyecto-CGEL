@@ -176,9 +176,7 @@ export async function POST(req: Request) {
     // Bucle manual para soportar múltiples pasos sin usar el esquema estricto de herramientas
     for (let i = 0; i < 4; i++) {
       const result = await generateText({
-        model: google('gemini-flash-latest', {
-          useSearchGrounding: true,
-        }),
+        model: google('gemini-flash-latest'),
         system: SYSTEM_PROMPT,
         messages: currentMessages as any,
         tools: myTools,
