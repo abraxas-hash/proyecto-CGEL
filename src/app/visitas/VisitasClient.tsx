@@ -27,8 +27,8 @@ export default function VisitasClient({ initialVisitas, fichasDiarias }: { initi
     if (!selectedDate) return [];
     return initialVisitas?.filter(v => v.fecha === selectedDate && (
       !searchTerm || 
-      v.nombre_apellido?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      v.area_visita?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      v.nombre_completo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      v.referencia_visita?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       v.dni_ce?.toLowerCase().includes(searchTerm.toLowerCase())
     ));
   }, [initialVisitas, selectedDate, searchTerm]);
@@ -37,10 +37,10 @@ export default function VisitasClient({ initialVisitas, fichasDiarias }: { initi
     if (!filteredByDate || filteredByDate.length === 0) return;
     const exportData = filteredByDate.map(v => ({
       'FECHA': v.fecha,
-      'NOMBRE': v.nombre_apellido,
+      'NOMBRE': v.nombre_completo,
       'DOCUMENTO': v.dni_ce,
-      'EMPRESA': v.empresa_proviene,
-      'AREA': v.area_visita,
+      'EMPRESA': v.empresa || 'PARTICULAR',
+      'DESTINO': v.referencia_visita,
       'MOTIVO': v.motivo_visita,
       'SCTR': v.sctr_vigente ? 'VIGENTE' : 'VENCIDO'
     }));
