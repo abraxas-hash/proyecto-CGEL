@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server'
 import { google } from '@ai-sdk/google'
 import { generateText, tool } from 'ai'
 import { z } from 'zod'
+import { createAdminClient } from '@/lib/supabaseClient'
 
 export const maxDuration = 30;
 export const dynamic = 'force-dynamic';
@@ -29,7 +30,7 @@ REGLA CRÍTICA 3: NUNCA asumas que no tienes información sin antes usar la herr
 export async function POST(req: Request) {
   try {
     const cookieStore = await cookies()
-    const supabase = createServerClient(
+    const supabaseAuth = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       {
@@ -40,11 +41,13 @@ export async function POST(req: Request) {
       }
     )
 
-    const { data: { user } } = await supabase.auth.getUser()
+    const { data: { user } } = await supabaseAuth.auth.getUser()
 
     if (!user) {
       return NextResponse.json({ error: 'Acceso Denegado. Sesión no válida.' }, { status: 401 })
     }
+
+    const supabaseDb = createAdminClient()
 
     const { messages } = await req.json();
 
@@ -97,7 +100,7 @@ export async function POST(req: Request) {
             const isMonthDate = /^\d{4}-\d{2}$/.test(query) && !isFullDate;
 
             const buildQuery = (table: string, textSearchFields: string) => {
-              let q = supabase.from(table).select('*').order('fecha', { ascending: false }).limit(30);
+              let q = supabaseDb.from(table).select('*').order('fecha', { ascending: false }).limit(30);
               if (isDni) {
                 q = q.eq('dni', query);
               } else if (isFullDate) {
@@ -112,18 +115,20 @@ export async function POST(req: Request) {
 
             const searchVisitas = async () => {
               let q = buildQuery('registro_visitas', 'visitante_nombre,empresa,motivo');
-              const { data } = await q;
+              const { data, error } = await q;
+              if (error) console.error("[DB ERROR] Visitas:", error);
               if (data && data.length > 0) resultados.visitas = data;
             };
 
             const searchProveedores = async () => {
               let q = buildQuery('registro_proveedores_carga', 'conductor_nombre,empresa,placa,tipo_carga');
-              const { data } = await q;
+              const { data, error } = await q;
+              if (error) console.error("[DB ERROR] Proveedores:", error);
               if (data && data.length > 0) resultados.proveedores = data;
             };
 
             const searchRepartidores = async () => {
-              let q = supabase.from('registro_diario_repartidores').select('*').order('fecha', { ascending: false }).limit(30);
+              let q = supabaseDb.from('registro_diario_repartidores').select('*').order('fecha', { ascending: false }).limit(30);
               if (isFullDate) {
                 q = q.eq('fecha', query);
               } else if (isMonthDate) {
@@ -131,7 +136,8 @@ export async function POST(req: Request) {
               } else {
                 q = q.or(`conductor_apellido.ilike.%${query}%,empresa_abreviatura.ilike.%${query}%,placa.ilike.%${query}%`);
               }
-              const { data } = await q;
+              const { data, error } = await q;
+              if (error) console.error("[DB ERROR] Repartidores:", error);
               if (data && data.length > 0) resultados.repartidores = data;
             };
 
@@ -139,7 +145,7 @@ export async function POST(req: Request) {
 
             return Object.keys(resultados).length > 0 
               ? resultados 
-              : { mensaje: "No se encontraron registros en la base de datos para el término: " + (query || fechaParams) };
+              : { mensaje: "No se encontraron registros en la base de datos para el término: " + (query) };
           }
         }),
         leerMetricasDashboard: tool({
@@ -150,9 +156,9 @@ export async function POST(req: Request) {
             console.log(`[Nexus AI] Leyendo métricas del dashboard`);
             const hoy = new Date().toISOString().split('T')[0];
             const [visitas, proveedores, repartidores] = await Promise.all([
-              supabase.from('registro_visitas').select('*', { count: 'exact', head: true }).gte('fecha', hoy),
-              supabase.from('registro_proveedores_carga').select('*', { count: 'exact', head: true }).gte('fecha', hoy),
-              supabase.from('registro_diario_repartidores').select('*', { count: 'exact', head: true }).gte('fecha', hoy)
+              supabaseDb.from('registro_visitas').select('*', { count: 'exact', head: true }).gte('fecha', hoy),
+              supabaseDb.from('registro_proveedores_carga').select('*', { count: 'exact', head: true }).gte('fecha', hoy),
+              supabaseDb.from('registro_diario_repartidores').select('*', { count: 'exact', head: true }).gte('fecha', hoy)
             ]);
             return {
               fecha_consulta: hoy,
