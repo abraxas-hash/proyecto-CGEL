@@ -118,12 +118,8 @@ export default function Header() {
           <button 
             onClick={async () => {
               try {
-                const { createBrowserClient } = await import('@supabase/ssr');
-                const supabaseClient = createBrowserClient(
-                  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
-                  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key'
-                );
-                await supabaseClient.auth.signOut();
+                const { supabase } = await import('@/lib/supabaseClient');
+                await supabase.auth.signOut();
                 localStorage.clear();
                 window.location.replace('/login');
               } catch (err) {

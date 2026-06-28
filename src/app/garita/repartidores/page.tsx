@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Truck, ArrowLeft, Send, CheckCircle2, Camera, RefreshCw, Clock, Loader2, Play, Square, X } from 'lucide-react';
 import Link from 'next/link';
-import { createBrowserClient } from '@supabase/ssr';
+import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
 import { ImageUpload } from '@/components/ui/ImageUpload';
 import { uploadEvidence } from '@/lib/storageHelper';
@@ -44,10 +44,7 @@ type Step = 1 | 2 | 3;
 
 export default function RepartidoresForm() {
   const router = useRouter();
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-  );
+
 
   const [step, setStep] = useState<Step>(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
