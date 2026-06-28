@@ -3,7 +3,7 @@ import { ComunicadosWidget } from '@/components/dashboard/ComunicadosWidget';
 import Header from '@/components/layout/Header';
 import { DashboardMetrics } from '@/components/dashboard/DashboardMetrics';
 import SafeAnalytics from '@/components/dashboard/SafeAnalytics';
-import SafetyObservations from '@/components/dashboard/SafetyObservations';
+
 import { OperationalFunnel } from '@/components/dashboard/OperationalFunnel';
 
 import { EmotionManagementWidget } from '@/components/dashboard/EmotionManagementWidget';
@@ -101,10 +101,6 @@ export default async function Home() {
 
 
 
-        {/* Panel de Observaciones Críticas de Seguridad (SSOMA) */}
-        <div className="mt-8">
-          <SafetyObservations />
-        </div>
 
         {/* Embudo y Gestión Emocional en 2 columnas */}
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
