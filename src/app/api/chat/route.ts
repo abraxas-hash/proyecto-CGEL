@@ -19,7 +19,7 @@ El sistema Nexus Control tiene las siguientes secciones:
 - Políticas: Cifrado de datos, roles jerárquicos (Admin, Gerente, Supervisor SSOMA, Vigilante) y matriz de responsabilidades.
 
 TIENES HERRAMIENTAS ACTIVAS:
-1. Siempre que te pregunten por un proveedor, cliente, nombre, DNI, PLACA de vehículo (ej. D8J-550), FECHA (día o mes), NÚMERO DE GUÍA, o registro específico, UTILIZA LA HERRAMIENTA consultarBaseDatos para extraer la información verídica y léele al usuario un resumen útil.
+1. Siempre que te pregunten por un proveedor, cliente, nombre, DNI, PLACA de vehículo (ej. D8J-550), FECHA (día o mes), NÚMERO DE GUÍA, o registro específico, UTILIZA LA HERRAMIENTA consultarBaseDatos para extraer la información verídica y léele al usuario un resumen útil. IMPORTANTE: Para búsquedas de fechas, DEBES pasar el parámetro query en formato numérico YYYY-MM-DD (ej. "2026-06-22") o YYYY-MM (ej. "2026-06").
 2. Si te preguntan "cómo vamos hoy", "cuál es el estado", o sobre las métricas del dashboard, UTILIZA LA HERRAMIENTA leerMetricasDashboard y presenta un análisis inteligente (no solo des números, dales contexto).
 
 REGLA CRÍTICA 1: Si el usuario pregunta sobre temas no relacionados al sistema (programación, historia, chistes, deportes, etc.), DEBES negarte cortésmente indicando que tus protocolos limitan tus respuestas a la operativa del sistema.
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
     const { messages } = await req.json();
 
     const dbParams = z.object({
-      query: z.string().describe('El término de búsqueda: número de DNI, nombre de persona, placa de vehículo, empresa, número de guía de remisión, o fecha/mes (ej. 2026-06, junio, 2026-06-22).'),
+      query: z.string().describe('Término exacto: DNI, nombre, placa, empresa, número de guía. Para fechas usa SIEMPRE formato YYYY-MM-DD (ej. 2026-06-22) o YYYY-MM (ej. 2026-06). NUNCA uses texto como "22 de junio".'),
       tipo: z.enum(['visitas', 'proveedores', 'repartidores', 'todos']).optional().describe('El módulo donde buscar.')
     });
 
