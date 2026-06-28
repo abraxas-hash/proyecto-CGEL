@@ -7,6 +7,7 @@ import SafetyObservations from '@/components/dashboard/SafetyObservations';
 import { OperationalFunnel } from '@/components/dashboard/OperationalFunnel';
 import { LiveEventsFeed } from '@/components/dashboard/LiveEventsFeed';
 import { EmotionManagementWidget } from '@/components/dashboard/EmotionManagementWidget';
+import { AnalisisDia } from '@/components/dashboard/AnalisisDia';
 export const dynamic = 'force-dynamic';
 
 const HOURLY_DATA = [
@@ -91,6 +92,11 @@ export default async function Home() {
         {/* Grid de tarjetas métricas */}
         <div className="mb-8">
           <DashboardMetrics counts={counts} />
+        </div>
+
+        {/* Resumen Analítico del Día */}
+        <div className="mb-8" id="tour-analisis">
+          <AnalisisDia />
         </div>
 
         {/* Feed de Eventos Críticos (Diseño Horizontal Compacto) */}
