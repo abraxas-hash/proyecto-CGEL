@@ -22,6 +22,7 @@ export default function VisitasForm() {
   const [eppOk, setEppOk] = useState(true);
   const [observacionesTexto, setObservacionesTexto] = useState('');
   const [dniFile, setDniFile] = useState<File | null>(null);
+  const [existingDniUrl, setExistingDniUrl] = useState<string | null>(null);
   const [isSearchingDni, setIsSearchingDni] = useState(false);
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL || '',
@@ -87,16 +88,24 @@ export default function VisitasForm() {
         .limit(1)
         .single();
         
-      if (data && !error) {
-        if (!nombre) setNombre(data.visitante_nombre || '');
-        if (!empresa && data.empresa !== 'PARTICULAR') setEmpresa(data.empresa || '');
+        if (data && !error) {
+          if (!nombre) setNombre(data.visitante_nombre || '');
+          if (!empresa && data.empresa !== 'PARTICULAR') setEmpresa(data.empresa || '');
+          if (data.observaciones) {
+            try {
+              const obs = typeof data.observaciones === 'string' ? JSON.parse(data.observaciones) : data.observaciones;
+              if (obs?.fotos?.dni) {
+                setExistingDniUrl(obs.fotos.dni);
+              }
+            } catch(e) {}
+          }
+        }
+      } catch (err) {
+        // Ignorar errores silentes si no se encuentra
+      } finally {
+        setIsSearchingDni(false);
       }
-    } catch (err) {
-      // Ignorar errores silentes si no se encuentra
-    } finally {
-      setIsSearchingDni(false);
-    }
-  };
+    };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,7 +117,7 @@ export default function VisitasForm() {
       const now = new Date();
       const timeString = now.toTimeString().split(' ')[0]; 
       
-      let dniUrl = null;
+      let dniUrl = existingDniUrl;
       if (dniFile) {
         dniUrl = await uploadEvidence('visitas', dniFile);
       }
@@ -145,7 +154,7 @@ export default function VisitasForm() {
         setActiveTab('activos');
         fetchTodaysRecords();
         // Limpiar form
-        setDni(''); setNombre(''); setEmpresa(''); setMotivo(''); setAutorizadoPor('');
+        setDni(''); setNombre(''); setEmpresa(''); setMotivo(''); setAutorizadoPor(''); setExistingDniUrl(null); setDniFile(null);
       }, 2000);
 
     } catch (error) {
@@ -336,10 +345,20 @@ export default function VisitasForm() {
         </div>
         
         <div className="glass-panel p-4 rounded-2xl flex flex-col gap-4">
-          <ImageUpload 
-            label="Foto del DNI / Documento" 
-            onImageChange={setDniFile} 
-          />
+          {existingDniUrl && !dniFile ? (
+            <div className="bg-green-500/10 border border-green-500/20 p-4 rounded-xl flex flex-col gap-2 relative">
+              <span className="text-[10px] text-green-500 font-bold uppercase tracking-widest flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3" /> Foto de DNI recuperada
+              </span>
+              <img src={existingDniUrl} alt="DNI guardado" className="h-24 w-auto rounded object-cover shadow" />
+              <button type="button" onClick={() => setExistingDniUrl(null)} className="absolute top-2 right-2 text-xs bg-white/10 hover:bg-white/20 p-1 px-2 rounded font-bold text-white">Actualizar</button>
+            </div>
+          ) : (
+            <ImageUpload 
+              label="Foto del DNI / Documento" 
+              onImageChange={setDniFile} 
+            />
+          )}
           
           <div>
             <label htmlFor="input-observaciones" className="text-[10px] text-slate-900 dark:text-slate-300 font-black uppercase tracking-widest block mb-2">Observaciones (Opcional)</label>

@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Users, UserCheck, UserX, Search, ChevronDown, ChevronRight, Calendar, Download, ArrowRight, History, X } from 'lucide-react';
 import Link from 'next/link';
+import { exportToExcel } from '@/lib/excelHelper';
 
 import VisualCalendar from '@/components/ui/VisualCalendar';
 
@@ -33,18 +34,16 @@ export default function VisitasClient({ initialVisitas }: { initialVisitas: any[
 
   const handleExport = () => {
     if (!filteredByDate || filteredByDate.length === 0) return;
-    const headers = ['FECHA', 'NOMBRE', 'DOCUMENTO', 'EMPRESA', 'AREA', 'MOTIVO', 'SCTR'];
-    const BOM = '\uFEFF';
-    const csvRows = filteredByDate.map(v => [
-      v.fecha, v.nombre_apellido, v.dni_ce, v.empresa_proviene,
-      v.area_visita, v.motivo_visita, v.sctr_vigente ? 'VIGENTE' : 'VENCIDO'
-    ].map(field => `"${field}"`).join(','));
-    const csvContent = BOM + [headers.join(','), ...csvRows].join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `visitas_${selectedDate}.csv`;
-    link.click();
+    const exportData = filteredByDate.map(v => ({
+      'FECHA': v.fecha,
+      'NOMBRE': v.nombre_apellido,
+      'DOCUMENTO': v.dni_ce,
+      'EMPRESA': v.empresa_proviene,
+      'AREA': v.area_visita,
+      'MOTIVO': v.motivo_visita,
+      'SCTR': v.sctr_vigente ? 'VIGENTE' : 'VENCIDO'
+    }));
+    exportToExcel(exportData, `visitas_${selectedDate}`, 'Visitas');
   };
 
   return (

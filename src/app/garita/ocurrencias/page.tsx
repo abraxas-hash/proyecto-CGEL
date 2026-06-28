@@ -7,8 +7,6 @@ import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
 
 export default function CuadernoPage() {
-  const [activeTab, setActiveTab] = useState<'NUEVA' | 'RESUMEN'>('NUEVA');
-
   return (
     <div className="flex flex-col gap-6">
       {/* HEADER GLOBAL */}
@@ -22,51 +20,20 @@ export default function CuadernoPage() {
         </Link>
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl neumorphic-inset bg-black/5 dark:bg-white/5 flex items-center justify-center">
-            {activeTab === 'NUEVA' ? (
-              <BookOpen className="text-red-500 w-6 h-6" />
-            ) : (
-              <Activity className="text-emerald-500 w-6 h-6" />
-            )}
+            <BookOpen className="text-red-500 w-6 h-6" />
           </div>
           <div>
             <h2 className="text-xl font-black text-slate-800 dark:text-white leading-tight">
-              {activeTab === 'NUEVA' ? 'Cuaderno Virtual' : 'Resumen del Día'}
+              Cuaderno Virtual
             </h2>
-            <p className={`text-[11px] font-bold uppercase tracking-wider mt-0.5 ${activeTab === 'NUEVA' ? 'text-red-500' : 'text-emerald-500'}`}>
-              {activeTab === 'NUEVA' ? 'Ocurrencias / Cierre' : 'Análisis Detallado'}
+            <p className="text-[11px] font-bold uppercase tracking-wider mt-0.5 text-red-500">
+              Ocurrencias / Cierre
             </p>
           </div>
         </div>
       </div>
 
-      {/* TABS BUTTONS */}
-      <div className="flex p-1 bg-black/5 dark:bg-white/5 rounded-2xl">
-        <button
-          type="button"
-          onClick={() => setActiveTab('NUEVA')}
-          className={`flex-1 py-3 text-xs font-black uppercase tracking-widest rounded-xl transition-all ${
-            activeTab === 'NUEVA'
-              ? 'bg-white dark:bg-slate-800 shadow-sm text-red-500'
-              : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
-          }`}
-        >
-          Anotar Novedad
-        </button>
-        <button
-          type="button"
-          onClick={() => setActiveTab('RESUMEN')}
-          className={`flex-1 py-3 text-xs font-black uppercase tracking-widest rounded-xl transition-all ${
-            activeTab === 'RESUMEN'
-              ? 'bg-white dark:bg-slate-800 shadow-sm text-emerald-500'
-              : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
-          }`}
-        >
-          Análisis del Día
-        </button>
-      </div>
-
-      {/* RENDER CONTENT BASED ON TAB */}
-      {activeTab === 'NUEVA' ? <NuevaOcurrenciaTab /> : <ResumenDiaTab />}
+      <NuevaOcurrenciaTab />
     </div>
   );
 }
@@ -248,209 +215,4 @@ function NuevaOcurrenciaTab() {
   );
 }
 
-// ==========================================
-// TAB 2: RESUMEN DEL DÍA (Dashboard)
-// ==========================================
-function ResumenDiaTab() {
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState({
-    visitasCount: 0,
-    proveedoresCount: 0,
-    gasLlenos: 0,
-    gasVacios: 0,
-    alquileres: 0,
-    ocurrencias: [] as any[]
-  });
 
-  useEffect(() => {
-    async function fetchDashboard() {
-      setLoading(true);
-      try {
-        const today = new Date().toISOString().split('T')[0];
-
-        // 1. Visitas
-        const { data: visitas } = await supabase
-          .from('registro_visitas')
-          .select('id')
-          .eq('fecha', today);
-
-        // 2. Proveedores (incluye Gas y Alquiler)
-        const { data: proveedores } = await supabase
-          .from('registro_proveedores_carga')
-          .select('tipo_carga, observaciones')
-          .eq('fecha', today);
-
-        // 3. Ocurrencias
-        // 'created_at' comes as ISO string e.g. "2026-06-18T10:00:00.000Z"
-        // so we filter using ilike or gte/lte. For simplicity: >= today
-        const { data: ocurrenciasData } = await supabase
-          .from('cuaderno_ocurrencias')
-          .select('*')
-          .gte('created_at', `${today}T00:00:00.000Z`)
-          .order('created_at', { ascending: false });
-
-        let provs = 0;
-        let gLlenos = 0;
-        let gVacios = 0;
-        let alq = 0;
-
-        if (proveedores) {
-          proveedores.forEach(p => {
-            if (p.tipo_carga === 'GAS MONTACARGA') {
-              // Parsear JSON para obtener balones
-              try {
-                const obs = typeof p.observaciones === 'string' ? JSON.parse(p.observaciones) : p.observaciones;
-                if (obs && obs.detalles_gas) {
-                  gLlenos += (parseInt(obs.detalles_gas.llenos_ingreso) || 0);
-                  gVacios += (parseInt(obs.detalles_gas.vacios_salida) || 0);
-                }
-              } catch(e) { }
-            } else if (p.tipo_carga === 'ALQUILER MONTACARGA') {
-              alq += 1;
-            } else {
-              provs += 1;
-            }
-          });
-        }
-
-        setData({
-          visitasCount: visitas ? visitas.length : 0,
-          proveedoresCount: provs,
-          gasLlenos: gLlenos,
-          gasVacios: gVacios,
-          alquileres: alq,
-          ocurrencias: ocurrenciasData || []
-        });
-
-      } catch (err) {
-        console.error("Error fetching summary data", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchDashboard();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center h-[50vh] animate-pulse gap-4 text-emerald-500">
-        <Activity className="w-12 h-12" />
-        <p className="text-sm font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400">Analizando datos del día...</p>
-      </div>
-    );
-  }
-
-  const dateStr = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-
-  return (
-    <div className="flex flex-col gap-6 animate-in slide-in-from-right-4 duration-300 pb-12">
-      <div className="text-center">
-        <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest">Resumen Analítico</p>
-        <p className="text-slate-800 dark:text-white font-bold capitalize">{dateStr}</p>
-      </div>
-
-      {/* METRIC CARDS */}
-      <div className="grid grid-cols-2 gap-4">
-        
-        {/* Personas */}
-        <div className="glass-panel p-4 rounded-2xl border border-purple-500/20 flex flex-col items-center justify-center text-center relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-2 opacity-10">
-            <Users className="w-16 h-16 text-purple-500" />
-          </div>
-          <span className="text-3xl font-black text-slate-800 dark:text-white drop-shadow-md z-10">{data.visitasCount}</span>
-          <span className="text-[10px] text-purple-600 dark:text-purple-400 font-bold uppercase tracking-widest mt-1 z-10">Visitas Reg.</span>
-        </div>
-
-        {/* Proveedores */}
-        <div className="glass-panel p-4 rounded-2xl border border-green-500/20 flex flex-col items-center justify-center text-center relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-2 opacity-10">
-            <Package className="w-16 h-16 text-green-500" />
-          </div>
-          <span className="text-3xl font-black text-slate-800 dark:text-white drop-shadow-md z-10">{data.proveedoresCount}</span>
-          <span className="text-[10px] text-green-600 dark:text-green-400 font-bold uppercase tracking-widest mt-1 z-10">Proveedores C/D</span>
-        </div>
-
-        {/* Gas */}
-        <div className="glass-panel p-4 rounded-2xl border border-orange-500/20 flex flex-col justify-center relative overflow-hidden col-span-2">
-          <div className="absolute top-1/2 -translate-y-1/2 right-4 opacity-10">
-            <Flame className="w-20 h-20 text-orange-500" />
-          </div>
-          <span className="text-[10px] text-orange-600 dark:text-orange-400 font-bold uppercase tracking-widest mb-2 z-10 block">
-            Intercambio de Gas Montacarga
-          </span>
-          <div className="flex gap-6 z-10">
-            <div className="flex flex-col">
-              <span className="text-2xl font-black text-slate-800 dark:text-white">{data.gasLlenos}</span>
-              <span className="text-[10px] text-slate-500 font-bold">LLENOS (ING)</span>
-            </div>
-            <div className="w-px bg-slate-300 dark:bg-slate-700"></div>
-            <div className="flex flex-col">
-              <span className="text-2xl font-black text-slate-800 dark:text-white">{data.gasVacios}</span>
-              <span className="text-[10px] text-slate-500 font-bold">VACÍOS (SAL)</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Alquileres */}
-        {data.alquileres > 0 && (
-          <div className="glass-panel p-4 rounded-2xl border border-sky-500/20 flex items-center justify-between col-span-2">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-sky-500/10 flex items-center justify-center">
-                <Truck className="w-5 h-5 text-sky-500" />
-              </div>
-              <div>
-                <span className="text-[10px] text-sky-600 dark:text-sky-400 font-bold uppercase tracking-widest block">Alquileres Pesados</span>
-                <span className="text-sm font-black text-slate-800 dark:text-white">{data.alquileres} Registros Hoy</span>
-              </div>
-            </div>
-          </div>
-        )}
-
-      </div>
-
-      {/* OCURRENCIAS DEL DIA */}
-      <div className="mt-4">
-        <h3 className="text-xs font-black uppercase tracking-widest text-slate-500 mb-4 flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4 text-amber-500" /> Ocurrencias Anotadas Hoy ({data.ocurrencias.length})
-        </h3>
-
-        {data.ocurrencias.length === 0 ? (
-          <div className="glass-panel p-6 rounded-2xl flex flex-col items-center justify-center text-center gap-2 border border-slate-200 dark:border-slate-800">
-            <CheckCircle2 className="w-8 h-8 text-emerald-400 mb-1" />
-            <p className="text-slate-500 dark:text-slate-400 font-medium text-sm">No se han registrado novedades relevantes el día de hoy.</p>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-3">
-            {data.ocurrencias.map((oc) => {
-              const time = new Date(oc.created_at).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-              return (
-                <div key={oc.id} className="glass-panel p-4 rounded-2xl border-l-4 border-l-amber-500">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-[11px] font-black text-amber-600 dark:text-amber-400">{time}</span>
-                    <span className="text-[10px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded uppercase">
-                      TURNO {oc.turno}
-                    </span>
-                  </div>
-                  <p className="text-sm text-slate-800 dark:text-white font-medium leading-relaxed">{oc.novedades}</p>
-                  
-                  {oc.estado_equipos && (
-                    <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-800">
-                      <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 block mb-1">Equipos:</span>
-                      <p className="text-xs text-slate-600 dark:text-slate-400 italic">{oc.estado_equipos}</p>
-                    </div>
-                  )}
-                  {oc.foto_url && (
-                    <a href={oc.foto_url} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-1 text-[10px] font-bold text-sky-500 hover:text-sky-600 uppercase tracking-widest bg-sky-500/10 px-2 py-1 rounded">
-                      <Camera className="w-3 h-3" /> Ver Evidencia Adjunta
-                    </a>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-
-    </div>
-  );
-}

@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { HardHat, Hammer, Search, ChevronDown, ChevronRight, Download, Calendar, ArrowRight, History, X } from 'lucide-react';
 import Link from 'next/link';
+import { exportToExcel } from '@/lib/excelHelper';
 
 import VisualCalendar from '@/components/ui/VisualCalendar';
 
@@ -33,18 +34,16 @@ export default function ContratistasClient({ initialContratistas }: { initialCon
 
   const handleExport = () => {
     if (!filteredByDate || filteredByDate.length === 0) return;
-    const headers = ['FECHA', 'EMPRESA', 'RUC', 'TRABAJO', 'AREA', 'AUTORIZA', 'SCTR'];
-    const BOM = '\uFEFF';
-    const csvRows = filteredByDate.map(c => [
-      c.fecha, c.empresa_contratista, c.ruc, c.trabajo_realizar,
-      c.area_trabajo, c.autorizado_por, c.sctr_vigente ? 'VIGENTE' : 'VENCIDO'
-    ].map(field => `"${field}"`).join(','));
-    const csvContent = BOM + [headers.join(','), ...csvRows].join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `contratistas_${selectedDate}.csv`;
-    link.click();
+    const exportData = filteredByDate.map(c => ({
+      'FECHA': c.fecha,
+      'EMPRESA': c.empresa_contratista,
+      'RUC': c.ruc,
+      'TRABAJO': c.trabajo_realizar,
+      'AREA': c.area_trabajo,
+      'AUTORIZA': c.autorizado_por,
+      'SCTR': c.sctr_vigente ? 'VIGENTE' : 'VENCIDO'
+    }));
+    exportToExcel(exportData, `contratistas_${selectedDate}`, 'Contratistas');
   };
 
   return (

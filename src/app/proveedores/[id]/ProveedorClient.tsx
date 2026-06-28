@@ -65,7 +65,7 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
   }, [evidencias, parsedObs]);
 
   // Mock de la foto del DNI
-  const fotoDniUrl = evidencias?.find((e: any) => e.tipo_evidencia === 'DNI')?.url_foto || 'https://images.unsplash.com/photo-1633265486064-086b219458ce?q=80&w=800&auto=format&fit=crop';
+  const fotoDniUrl = parsedObs?.fotos?.dni || evidencias?.find((e: any) => e.tipo_evidencia === 'DNI')?.url_foto || 'https://images.unsplash.com/photo-1633265486064-086b219458ce?q=80&w=800&auto=format&fit=crop';
 
   return (
     <div className="min-h-screen p-8 font-[family-name:var(--font-geist-sans)] relative">

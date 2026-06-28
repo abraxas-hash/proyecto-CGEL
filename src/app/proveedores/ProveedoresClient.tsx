@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Truck, Search, ChevronDown, ChevronRight, Calendar, HardHat, Download, ArrowRight, History, X } from 'lucide-react';
 import Link from 'next/link';
+import { exportToExcel } from '@/lib/excelHelper';
 
 import VisualCalendar from '@/components/ui/VisualCalendar';
 
@@ -33,19 +34,15 @@ export default function ProveedoresClient({ initialProveedores }: { initialProve
 
   const handleExport = () => {
     if (!filteredByDate || filteredByDate.length === 0) return;
-    const headers = ['Fecha', 'Empresa', 'Placa', 'Conductor', 'SCTR', 'EPP'];
-    const BOM = '\uFEFF';
-    const csvRows = filteredByDate.map(item => [
-      item.fecha, item.empresa_proveedor, item.placa, item.conductor,
-      (item.sctr_salud && item.sctr_pension) ? 'OK' : 'X',
-      item.epp_completo ? 'OK' : 'X'
-    ].map(field => `"${field}"`).join(','));
-    const csvContent = BOM + [headers.join(','), ...csvRows].join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `proveedores_${selectedDate}.csv`;
-    link.click();
+    const exportData = filteredByDate.map(item => ({
+      'Fecha': item.fecha,
+      'Empresa': item.empresa_proveedor,
+      'Placa': item.placa,
+      'Conductor': item.conductor,
+      'SCTR': (item.sctr_salud && item.sctr_pension) ? 'OK' : 'X',
+      'EPP': item.epp_completo ? 'OK' : 'X'
+    }));
+    exportToExcel(exportData, `proveedores_${selectedDate}`, 'Proveedores');
   };
 
   return (

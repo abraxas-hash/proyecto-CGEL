@@ -4,6 +4,7 @@ import React, { useState, useMemo, useEffect, useTransition } from 'react';
 import { Truck, Search, ArrowRight, CheckCircle2, XCircle, ChevronDown, ChevronRight, HardHat, Calendar, Download, History, X, Clock, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { marcarTiempoRepartidor } from '@/app/actions/repartidores';
+import { exportToExcel } from '@/lib/excelHelper';
 
 import VisualCalendar from '@/components/ui/VisualCalendar';
 
@@ -62,19 +63,17 @@ export default function RepartidoresClient({ initialData }: { initialData: any[]
 
   const handleExport = () => {
     if (!filteredByDate || filteredByDate.length === 0) return;
-    const headers = ['FECHA', 'TURNO', 'EMPRESA', 'PLACA', 'CONDUCTOR', 'SCTR', 'EPP', 'ESTADO'];
-    const BOM = '\uFEFF';
-    const csvRows = filteredByDate.map(row => [
-      row.fecha, row.turno, row.empresa_abreviatura, row.placa,
-      row.conductor_apellido, row.sctr_ok ? 'OK' : 'PEND', row.epp_ok ? 'OK' : 'OBS',
-      (!row.salida_1 || (row.entrada_2 && !row.salida_2)) ? 'PLANTA' : 'FINAL'
-    ].map(field => `"${field}"`).join(','));
-    const csvContent = BOM + [headers.join(','), ...csvRows].join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `repartidores_${selectedDate}.csv`;
-    link.click();
+    const exportData = filteredByDate.map(row => ({
+      'FECHA': row.fecha,
+      'TURNO': row.turno,
+      'EMPRESA': row.empresa_abreviatura,
+      'PLACA': row.placa,
+      'CONDUCTOR': row.conductor_apellido,
+      'SCTR': row.sctr_ok ? 'OK' : 'PEND',
+      'EPP': row.epp_ok ? 'OK' : 'OBS',
+      'ESTADO': (!row.salida_1 || (row.entrada_2 && !row.salida_2)) ? 'PLANTA' : 'FINAL'
+    }));
+    exportToExcel(exportData, `repartidores_${selectedDate}`, 'Repartidores');
   };
 
   return (

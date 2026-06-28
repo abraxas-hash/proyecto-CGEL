@@ -1,8 +1,7 @@
 import { createAdminClient } from '@/lib/supabaseClient';
 import { ComunicadosWidget } from '@/components/dashboard/ComunicadosWidget';
-import { ShieldCheck, Truck, Users, Wrench } from 'lucide-react';
 import Header from '@/components/layout/Header';
-import MetricCard from '@/components/ui/MetricCard';
+import { DashboardMetrics } from '@/components/dashboard/DashboardMetrics';
 import SafeAnalytics from '@/components/dashboard/SafeAnalytics';
 import SafetyObservations from '@/components/dashboard/SafetyObservations';
 import { OperationalFunnel } from '@/components/dashboard/OperationalFunnel';
@@ -90,42 +89,8 @@ export default async function Home() {
         </div>
 
         {/* Grid de tarjetas métricas */}
-        <div id="tour-metrics" className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          <MetricCard 
-            title="Repartidores" 
-            subtitle="Control diario de rutas"
-            value={countRepartidores || 0}
-            Icon={Truck}
-            colorTheme="blue"
-            href="/repartidores"
-          />
-
-          <MetricCard 
-            title="Visitas" 
-            subtitle="Control de pases de seguridad"
-            value={countVisitas || 0}
-            Icon={Users}
-            colorTheme="purple"
-            href="/visitas"
-          />
-
-          <MetricCard 
-            title="Proveedores" 
-            subtitle="Revisión SCTR y Guías"
-            value={countProveedores || 0}
-            Icon={ShieldCheck}
-            colorTheme="green"
-            href="/proveedores"
-          />
-
-          <MetricCard 
-            title="Contratistas" 
-            subtitle="Inventario y personal"
-            value={countContratistas || 0}
-            Icon={Wrench}
-            colorTheme="orange"
-            href="/contratistas"
-          />
+        <div className="mb-8">
+          <DashboardMetrics counts={counts} />
         </div>
 
         {/* Feed de Eventos Críticos (Diseño Horizontal Compacto) */}

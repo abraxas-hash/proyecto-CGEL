@@ -6,14 +6,6 @@ import { useRouter } from 'next/navigation';
 
 const MENU = [
   {
-    title: 'Apertura de Acceso',
-    desc: 'Registrar ingreso de operario',
-    Icon: DoorOpen,
-    href: '/almacen-externo/acceso',
-    color: 'text-yellow-400',
-    bg: 'bg-yellow-500/10',
-  },
-  {
     title: 'Retiro de Material',
     desc: 'Tubería · Conductor · Carrete',
     Icon: PackageMinus,

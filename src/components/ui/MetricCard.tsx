@@ -34,18 +34,11 @@ const colorStyles = {
   }
 };
 
-export default function MetricCard({ title, subtitle, value, Icon, colorTheme, href }: MetricCardProps) {
+export default function MetricCard({ title, subtitle, value, Icon, colorTheme, href, onClick }: MetricCardProps & { onClick?: () => void }) {
   const theme = colorStyles[colorTheme];
 
-  return (
-    <Link
-      href={href}
-      className={`glass-panel block relative p-4 sm:p-6 transition-all duration-300 group flex flex-col justify-end text-center active:scale-95 touch-manipulation hover:-translate-y-1 ${theme.borderColor}`}
-      style={{
-        minHeight: '165px',
-        overflow: 'visible',
-      }}
-    >
+  const innerContent = (
+    <>
       {/* Clip Metálico */}
       <div
         className="absolute -top-2 left-1/2 -translate-x-1/2 w-[68px] h-[22px] rounded-b-[14px] z-30 flex justify-center items-end pb-[5px]"
@@ -100,6 +93,23 @@ export default function MetricCard({ title, subtitle, value, Icon, colorTheme, h
           {subtitle}
         </p>
       </div>
+    </>
+  );
+
+  const classNameStr = `glass-panel block relative p-4 sm:p-6 transition-all duration-300 group flex flex-col justify-end text-center active:scale-95 touch-manipulation hover:-translate-y-1 ${theme.borderColor}`;
+  const styleObj = { minHeight: '165px', overflow: 'visible' };
+
+  if (onClick) {
+    return (
+      <button onClick={onClick} className={`${classNameStr} w-full text-left`} style={styleObj as any}>
+        {innerContent}
+      </button>
+    );
+  }
+
+  return (
+    <Link href={href || '#'} className={classNameStr} style={styleObj as any}>
+      {innerContent}
     </Link>
   );
 }

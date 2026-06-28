@@ -27,6 +27,8 @@ export default function ProveedoresForm() {
   // Evidencias
   const [guiaFile, setGuiaFile] = useState<File | null>(null);
   const [estibaFile, setEstibaFile] = useState<File | null>(null);
+  const [dniFile, setDniFile] = useState<File | null>(null);
+  const [existingDniUrl, setExistingDniUrl] = useState<string | null>(null);
   const [isSearchingDni, setIsSearchingDni] = useState(false);
 
   const supabase = createBrowserClient(
@@ -97,6 +99,23 @@ export default function ProveedoresForm() {
         if (!conductor) setConductor(data.conductor_nombre || '');
         if (!empresa) setEmpresa(data.empresa || '');
         if (!placa) setPlaca(data.placa || '');
+        // Search in observaciones for DNI photo
+        try {
+          const { data: latestObs } = await supabase
+            .from('registro_proveedores_carga')
+            .select('observaciones')
+            .eq('dni', dni)
+            .not('observaciones', 'is', null)
+            .order('fecha', { ascending: false })
+            .limit(1)
+            .single();
+          if (latestObs && latestObs.observaciones) {
+            const obs = typeof latestObs.observaciones === 'string' ? JSON.parse(latestObs.observaciones) : latestObs.observaciones;
+            if (obs?.fotos?.dni) {
+              setExistingDniUrl(obs.fotos.dni);
+            }
+          }
+        } catch(e) {}
       }
     } catch (err) {
       // Ignorar errores silentes
@@ -118,6 +137,7 @@ export default function ProveedoresForm() {
 
       let guiaUrl = null;
       let estibaUrl = null;
+      let dniUrl = existingDniUrl;
 
       if (guiaFile) {
         guiaUrl = await uploadEvidence('proveedores', guiaFile);
@@ -125,14 +145,18 @@ export default function ProveedoresForm() {
       if (estibaFile) {
         estibaUrl = await uploadEvidence('proveedores', estibaFile);
       }
+      if (dniFile) {
+        dniUrl = await uploadEvidence('proveedores', dniFile);
+      }
 
       let observacionesPayload = null;
-      if (observacionesTexto || guiaUrl || estibaUrl) {
+      if (observacionesTexto || guiaUrl || estibaUrl || dniUrl) {
         observacionesPayload = JSON.stringify({
           texto: observacionesTexto,
           fotos: {
             guias: guiaUrl || null,
-            estiba: estibaUrl || null
+            estiba: estibaUrl || null,
+            dni: dniUrl || null
           }
         });
       }
@@ -160,7 +184,7 @@ export default function ProveedoresForm() {
         setActiveTab('activos');
         fetchTodaysRecords();
         // Limpiar form
-        setEmpresa(''); setPlaca(''); setConductor(''); setDni(''); setTipoCarga('');
+        setEmpresa(''); setPlaca(''); setConductor(''); setDni(''); setTipoCarga(''); setExistingDniUrl(null); setDniFile(null);
       }, 2000);
 
     } catch (error: any) {
@@ -354,6 +378,21 @@ export default function ProveedoresForm() {
         </div>
         
         <div className="glass-panel p-4 rounded-2xl flex flex-col gap-4">
+          {existingDniUrl && !dniFile ? (
+            <div className="bg-green-500/10 border border-green-500/20 p-4 rounded-xl flex flex-col gap-2 relative">
+              <span className="text-[10px] text-green-500 font-bold uppercase tracking-widest flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3" /> Foto de DNI recuperada
+              </span>
+              <img src={existingDniUrl} alt="DNI guardado" className="h-24 w-auto rounded object-cover shadow" />
+              <button type="button" onClick={() => setExistingDniUrl(null)} className="absolute top-2 right-2 text-xs bg-white/10 hover:bg-white/20 p-1 px-2 rounded font-bold text-white">Actualizar</button>
+            </div>
+          ) : (
+            <ImageUpload 
+              label="Foto del DNI del Conductor" 
+              onImageChange={setDniFile} 
+            />
+          )}
+
           <ImageUpload 
             label="Foto de Guía de Remisión" 
             onImageChange={setGuiaFile} 

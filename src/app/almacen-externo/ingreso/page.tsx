@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { PackagePlus, ArrowLeft, Send, CheckCircle2, Camera } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { PackagePlus, ArrowLeft, Send, CheckCircle2, Camera, Search, UserCheck } from 'lucide-react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabaseClient';
 import { uploadEvidence } from '@/lib/storageHelper';
@@ -33,8 +33,37 @@ export default function IngresoMaterialPage() {
   const [unidad, setUnidad] = useState('UND');
   const [guia, setGuia] = useState('');
   const [proveedor, setProveedor] = useState('');
+  const [operarioDni, setOperarioDni] = useState('');
   const [operarioNombre, setOperarioNombre] = useState('');
+  const [isSearchingDni, setIsSearchingDni] = useState(false);
   const [fotoFile, setFotoFile] = useState<File | null>(null);
+  const [fotoFichaFile, setFotoFichaFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    if (operarioDni.length === 8) {
+      buscarDni();
+    }
+  }, [operarioDni]);
+
+  const buscarDni = async () => {
+    setIsSearchingDni(true);
+    try {
+      const { data } = await supabase
+        .from('almacen_externo_movimientos')
+        .select('operario_nombre')
+        .eq('operario_dni', operarioDni)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
+      
+      if (data && data.operario_nombre) {
+        setOperarioNombre(data.operario_nombre);
+      }
+    } catch (e) {
+    } finally {
+      setIsSearchingDni(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,6 +78,10 @@ export default function IngresoMaterialPage() {
       if (fotoFile) {
         urlFoto = await uploadEvidence('almacen-externo', fotoFile);
       }
+      let urlFotoFicha: string | null = null;
+      if (fotoFichaFile) {
+        urlFotoFicha = await uploadEvidence('almacen-externo', fotoFichaFile);
+      }
 
       const { error: dbError } = await supabase
         .from('almacen_externo_movimientos')
@@ -61,8 +94,10 @@ export default function IngresoMaterialPage() {
           unidad,
           guia_referencia: guia.trim().toUpperCase() || null,
           autorizado_por: proveedor.toUpperCase(),
+          operario_dni: operarioDni,
           operario_nombre: operarioNombre.toUpperCase(),
           url_foto: urlFoto,
+          url_foto_ficha: urlFotoFicha,
         });
 
       if (dbError) throw dbError;
@@ -183,24 +218,55 @@ export default function IngresoMaterialPage() {
               className="w-full bg-white/50 dark:bg-black/20 border border-slate-300 dark:border-white/10 rounded-xl p-3 text-sm font-bold text-slate-800 dark:text-white focus:outline-none uppercase"
             />
           </div>
-          <div>
-            <label htmlFor="operario" className="text-[10px] text-slate-600 dark:text-slate-400 font-bold uppercase tracking-widest block mb-1">Operario que Recepciona</label>
-            <input
-              id="operario" required type="text"
-              placeholder="Nombre del operario"
-              value={operarioNombre}
-              onChange={e => setOperarioNombre(e.target.value)}
-              className="w-full bg-white/50 dark:bg-black/20 border border-slate-300 dark:border-white/10 rounded-xl p-3 text-sm font-bold text-slate-800 dark:text-white focus:outline-none uppercase"
-            />
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label htmlFor="operario_dni" className="text-[10px] text-slate-600 dark:text-slate-400 font-bold uppercase tracking-widest block mb-1">
+                DNI Operario
+                {isSearchingDni && <span className="text-green-500 animate-pulse text-[9px] ml-2">Buscando...</span>}
+              </label>
+              <div className="relative">
+                <input
+                  id="operario_dni" required type="text" maxLength={8}
+                  placeholder="DNI"
+                  value={operarioDni}
+                  onChange={e => setOperarioDni(e.target.value.replace(/\D/g, ''))}
+                  className="w-full bg-white/50 dark:bg-black/20 border border-slate-300 dark:border-white/10 rounded-xl p-3 pr-10 text-sm font-bold text-slate-800 dark:text-white focus:outline-none"
+                />
+                <Search className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2" />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="operario" className="text-[10px] text-slate-600 dark:text-slate-400 font-bold uppercase tracking-widest block mb-1">
+                Nombre del Operario
+              </label>
+              <div className="relative">
+                <input
+                  id="operario" required type="text"
+                  placeholder="Nombre..."
+                  value={operarioNombre}
+                  onChange={e => setOperarioNombre(e.target.value)}
+                  className="w-full bg-white/50 dark:bg-black/20 border border-slate-300 dark:border-white/10 rounded-xl p-3 pr-10 text-sm font-bold text-slate-800 dark:text-white focus:outline-none uppercase"
+                />
+                <UserCheck className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2" />
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Foto */}
-        <div className="glass-panel p-4 rounded-2xl">
-          <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-3 flex items-center gap-2">
-            <Camera className="w-3 h-3" /> Evidencia Fotográfica (opcional)
-          </p>
-          <ImageUpload onImageChange={setFotoFile} label="Fotografiar la mercadería recibida" />
+        {/* Doble Foto */}
+        <div className="glass-panel p-4 rounded-2xl flex flex-col gap-5">
+          <div>
+            <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-3 flex items-center gap-2">
+              <Camera className="w-3 h-3" /> 1. Evidencia del Material
+            </p>
+            <ImageUpload onImageChange={setFotoFile} required label="Fotografiar la mercadería recibida" />
+          </div>
+          <div className="border-t border-slate-200 dark:border-slate-800 pt-5">
+            <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-3 flex items-center gap-2">
+              <Camera className="w-3 h-3" /> 2. Evidencia de Guía / Ficha
+            </p>
+            <ImageUpload onImageChange={setFotoFichaFile} required label="Fotografiar el documento" />
+          </div>
         </div>
 
         {error && (

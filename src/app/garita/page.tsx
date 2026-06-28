@@ -62,12 +62,20 @@ const MENU_ITEMS = [
     color: "text-yellow-400"
   },
   {
-    title: "Gas Montacarga",
+    title: "Montacarga, alquiler y recarga de gas",
     id: "tour-garita-gas",
     desc: "Cambio de Balones",
     icon: Flame,
     href: "/garita/proveedores/gas",
     color: "text-orange-500"
+  },
+  {
+    title: "Ficha Diaria",
+    id: "tour-garita-ficha-diaria",
+    desc: "Registro Documental",
+    icon: FileText,
+    href: "/garita/ficha-diaria",
+    color: "text-emerald-400"
   }
 ];
 
