@@ -68,14 +68,6 @@ const MENU_ITEMS = [
     icon: Flame,
     href: "/garita/proveedores/gas",
     color: "text-orange-500"
-  },
-  {
-    title: "Ficha Diaria",
-    id: "tour-garita-ficha-diaria",
-    desc: "Registro Documental",
-    icon: FileText,
-    href: "/garita/ficha-diaria",
-    color: "text-emerald-400"
   }
 ];
 

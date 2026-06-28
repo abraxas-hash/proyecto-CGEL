@@ -1,12 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Package, ArrowLeft, Send, CheckCircle2, LogOut, Clock, RefreshCw } from 'lucide-react';
-import Link from 'next/link';
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
 import { ImageUpload } from '@/components/ui/ImageUpload';
 import { uploadEvidence } from '@/lib/storageHelper';
+import { FichaDiariaForm } from '@/components/garita/FichaDiariaForm';
 
 export default function ProveedoresForm() {
   const router = useRouter();
@@ -33,7 +31,7 @@ export default function ProveedoresForm() {
 
 
 
-  const [activeTab, setActiveTab] = useState<'activos' | 'nuevo'>('activos');
+  const [activeTab, setActiveTab] = useState<'activos' | 'nuevo' | 'ficha'>('activos');
   const [todaysRecords, setTodaysRecords] = useState<any[]>([]);
   const [isLoadingRecords, setIsLoadingRecords] = useState(true);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
@@ -227,18 +225,27 @@ export default function ProveedoresForm() {
       </div>
 
       <div className="flex gap-2 p-1 bg-white/5 rounded-2xl mb-2">
-        <button
-          onClick={() => setActiveTab('activos')}
-          className={`flex-1 py-3 text-sm font-black uppercase tracking-widest rounded-xl transition-all ${activeTab === 'activos' ? 'bg-green-500 text-white shadow-lg shadow-green-500/25' : 'text-slate-500 hover:bg-white/5'}`}
-        >
-          En Patio
-        </button>
-        <button
-          onClick={() => setActiveTab('nuevo')}
-          className={`flex-1 py-3 text-sm font-black uppercase tracking-widest rounded-xl transition-all ${activeTab === 'nuevo' ? 'bg-green-500 text-white shadow-lg shadow-green-500/25' : 'text-slate-500 hover:bg-white/5'}`}
-        >
-          + Nuevo
-        </button>
+          <button 
+            onClick={() => setActiveTab('activos')}
+            className={`flex-1 py-2 text-[10px] sm:text-xs font-black uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-2 ${activeTab === 'activos' ? 'bg-white dark:bg-slate-800 shadow text-green-500' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+          >
+            Activos
+            <span className="bg-green-500/10 text-green-500 px-1.5 sm:px-2 py-0.5 rounded-full text-[10px]">
+              {todaysRecords.filter(r => !r.hora_salida).length}
+            </span>
+          </button>
+          <button 
+            onClick={() => setActiveTab('ficha')}
+            className={`flex-1 py-2 text-[10px] sm:text-xs font-black uppercase tracking-wider rounded-lg transition-all ${activeTab === 'ficha' ? 'bg-white dark:bg-slate-800 shadow text-green-500' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+          >
+            Ficha
+          </button>
+          <button
+            onClick={() => setActiveTab('nuevo')}
+            className={`flex-1 py-3 text-sm font-black uppercase tracking-widest rounded-xl transition-all ${activeTab === 'nuevo' ? 'bg-green-500 text-white shadow-lg shadow-green-500/25' : 'text-slate-500 hover:bg-white/5'}`}
+          >
+            + Nuevo
+          </button>
       </div>
 
       {activeTab === 'activos' && (
@@ -296,6 +303,10 @@ export default function ProveedoresForm() {
             </div>
           </div>
         </div>
+      )}
+
+      {activeTab === 'ficha' && (
+        <FichaDiariaForm tipoFicha="PROVEEDORES" />
       )}
 
       {activeTab === 'nuevo' && (
