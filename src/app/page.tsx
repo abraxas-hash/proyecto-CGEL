@@ -1,7 +1,7 @@
 import { createAdminClient } from '@/lib/supabaseClient';
 import { ComunicadosWidget } from '@/components/dashboard/ComunicadosWidget';
 import Header from '@/components/layout/Header';
-import { CollapsibleMetrics } from '@/components/dashboard/CollapsibleMetrics';
+import { DashboardMetrics } from '@/components/dashboard/DashboardMetrics';
 import { CollapsibleAnalytics } from '@/components/dashboard/CollapsibleAnalytics';
 
 import { OperationalFunnel } from '@/components/dashboard/OperationalFunnel';
@@ -89,9 +89,9 @@ export default async function Home() {
           <ComunicadosWidget />
         </div>
 
-        {/* Tarjetas métricas colapsables */}
+        {/* Grid de tarjetas métricas */}
         <div className="mb-8">
-          <CollapsibleMetrics counts={counts} />
+          <DashboardMetrics counts={counts} />
         </div>
 
         {/* Resumen Analítico del Día */}
