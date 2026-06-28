@@ -19,7 +19,7 @@ El sistema Nexus Control tiene las siguientes secciones:
 - Políticas: Cifrado de datos, roles jerárquicos (Admin, Gerente, Supervisor SSOMA, Vigilante) y matriz de responsabilidades.
 
 TIENES HERRAMIENTAS ACTIVAS:
-1. Siempre que te pregunten por un proveedor, cliente, nombre, DNI, PLACA de vehículo (ej. D8J-550), FECHA (día o mes), NÚMERO DE GUÍA, o registro específico, UTILIZA LA HERRAMIENTA consultarBaseDatos para extraer la información verídica y léele al usuario un resumen útil. IMPORTANTE: Para búsquedas de fechas, DEBES pasar el parámetro query en formato numérico YYYY-MM-DD (ej. "2026-06-22") o YYYY-MM (ej. "2026-06").
+1. Siempre que te pregunten por un proveedor, cliente, nombre, DNI, PLACA de vehículo (ej. D8J-550), FECHA (día o mes), NÚMERO DE GUÍA, o registro específico, UTILIZA LA HERRAMIENTA consultarBaseDatos para extraer la información verídica y léele al usuario un resumen útil. Puedes enviarle la fecha en texto o número en el parámetro query.
 2. Si te preguntan "cómo vamos hoy", "cuál es el estado", o sobre las métricas del dashboard, UTILIZA LA HERRAMIENTA leerMetricasDashboard y presenta un análisis inteligente (no solo des números, dales contexto).
 
 REGLA CRÍTICA 1: Si el usuario pregunta sobre temas no relacionados al sistema (programación, historia, chistes, deportes, etc.), DEBES negarte cortésmente indicando que tus protocolos limitan tus respuestas a la operativa del sistema.
@@ -49,8 +49,7 @@ export async function POST(req: Request) {
     const { messages } = await req.json();
 
     const dbParams = z.object({
-      query: z.string().optional().describe('Término de búsqueda en texto: DNI, nombre, placa, empresa, número de guía. No usar para fechas.'),
-      fecha: z.string().optional().describe('Si el usuario busca por fecha o mes, pasa el valor aquí en formato estricto YYYY-MM-DD (ej. 2026-06-22) o YYYY-MM (ej. 2026-06).'),
+      query: z.string().describe('Término de búsqueda exacto: DNI, nombre, placa, empresa, número de guía o fecha (ej. "22 de junio" o "2026-06-22"). Este parámetro es OBLIGATORIO.'),
       tipo: z.enum(['visitas', 'proveedores', 'repartidores', 'todos']).optional().describe('El módulo donde buscar.')
     });
 
@@ -63,8 +62,7 @@ export async function POST(req: Request) {
           // @ts-ignore
           execute: async (args: any) => {
             const rawQuery = String(args.query || '').trim();
-            const rawFecha = String(args.fecha || '').trim();
-            const combinedInput = rawQuery + " " + rawFecha;
+            const combinedInput = rawQuery;
             
             let parsedDate = null;
             const ymdMatch = combinedInput.match(/\b(\d{4}-\d{2}-\d{2})\b/);
@@ -84,11 +82,11 @@ export async function POST(req: Request) {
               }
             }
             
-            const query = parsedDate ? parsedDate : (rawQuery || rawFecha);
+            const query = parsedDate ? parsedDate : rawQuery;
             console.log(`[Nexus AI] Buscando en BD: raw='${combinedInput}', parsed='${query}'`);
             
             if (!query) {
-               return { error: "DEBES proveer un término de búsqueda." };
+               return { error: "DEBES proveer un término de búsqueda en el parámetro query." };
             }
             
             let resultados: any = {};

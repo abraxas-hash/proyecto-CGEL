@@ -7,8 +7,7 @@ const { z } = require('zod');
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
 const dbParams = z.object({
-  query: z.string().optional().describe('Término de búsqueda en texto: DNI, nombre, placa, empresa, número de guía. No usar para fechas.'),
-  fecha: z.string().optional().describe('Si el usuario busca por fecha o mes, pasa el valor aquí en formato estricto YYYY-MM-DD (ej. 2026-06-22) o YYYY-MM (ej. 2026-06).'),
+  query: z.string().describe('Término de búsqueda exacto: DNI, nombre, placa, empresa, número de guía o fecha (ej. "22 de junio" o "2026-06-22"). Este parámetro es OBLIGATORIO.'),
   tipo: z.enum(['visitas', 'proveedores', 'repartidores', 'todos']).optional().describe('El módulo donde buscar.')
 });
 
@@ -17,29 +16,48 @@ const myTools = {
       description: 'Busca el historial o récord en la base de datos',
       parameters: dbParams,
       execute: async (args) => {
-        const query = String(args.query || '').trim();
-        const fechaParams = String(args.fecha || '').trim();
-        const searchStr = query || fechaParams;
-        console.log(`[Nexus AI] Buscando en TODAS las tablas BD: query='${query}', fecha='${fechaParams}'`);
-        let resultados = {};
-        
-        const isDni = /^\d+$/.test(searchStr) && searchStr.length >= 8;
-        const isFullDate = /^\d{4}-\d{2}-\d{2}$/.test(fechaParams);
-        const isMonthDate = /^\d{4}-\d{2}$/.test(fechaParams);
+            const rawQuery = String(args.query || '').trim();
+            const combinedInput = rawQuery;
+            
+            let parsedDate = null;
+            const ymdMatch = combinedInput.match(/\b(\d{4}-\d{2}-\d{2})\b/);
+            const ymMatch = combinedInput.match(/\b(\d{4}-\d{2})\b/);
+            
+            if (ymdMatch) parsedDate = ymdMatch[1];
+            else {
+              const esMatch = combinedInput.toLowerCase().match(/(\d{1,2})\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)(?:\s+(?:de|del)\s+(\d{4}))?/);
+              if (esMatch) {
+                const months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+                const day = esMatch[1].padStart(2, '0');
+                const month = (months.indexOf(esMatch[2]) + 1).toString().padStart(2, '0');
+                const year = esMatch[3] || new Date().getFullYear().toString();
+                parsedDate = `${year}-${month}-${day}`;
+              } else if (ymMatch) {
+                parsedDate = ymMatch[1]; // just YYYY-MM
+              }
+            }
+            
+            const query = parsedDate ? parsedDate : rawQuery;
+            console.log(`[Nexus AI] Buscando en BD: raw='${combinedInput}', parsed='${query}'`);
+            
+            let resultados = {};
+            const isDni = /^\d+$/.test(query) && query.length >= 8;
+            const isFullDate = /^\d{4}-\d{2}-\d{2}$/.test(query);
+            const isMonthDate = /^\d{4}-\d{2}$/.test(query) && !isFullDate;
 
-        const buildQuery = (table, textSearchFields) => {
-          let q = supabase.from(table).select('*').order('fecha', { ascending: false }).limit(30);
-          if (isDni && query) {
-            q = q.eq('dni', query);
-          } else if (isFullDate) {
-            q = q.eq('fecha', fechaParams);
-          } else if (isMonthDate) {
-            q = q.gte('fecha', `${fechaParams}-01`).lte('fecha', `${fechaParams}-31`);
-          } else if (query) {
-            q = q.or(textSearchFields.split(',').map(f => `${f}.ilike.%${query}%`).join(','));
-          }
-          return q;
-        };
+            const buildQuery = (table, textSearchFields) => {
+              let q = supabase.from(table).select('*').order('fecha', { ascending: false }).limit(30);
+              if (isDni) {
+                q = q.eq('dni', query);
+              } else if (isFullDate) {
+                q = q.eq('fecha', query);
+              } else if (isMonthDate) {
+                q = q.gte('fecha', `${query}-01`).lte('fecha', `${query}-31`);
+              } else {
+                q = q.or(textSearchFields.split(',').map(f => `${f}.ilike.%${query}%`).join(','));
+              }
+              return q;
+            };
 
         const searchProveedores = async () => {
           let q = buildQuery('registro_proveedores_carga', 'conductor_nombre,empresa,placa,tipo_carga');
