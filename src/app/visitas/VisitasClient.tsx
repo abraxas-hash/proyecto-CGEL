@@ -124,23 +124,21 @@ export default function VisitasClient({ initialVisitas, fichasDiarias }: { initi
           </div>
 
           {/* Ficha Diaria Card */}
-          {fichaForDate && (
-            <div className="mt-6">
-              <span className="text-[9px] text-gray-600 font-black uppercase tracking-widest px-2 block mb-3">Evidencia del Día</span>
-              <div 
-                onClick={() => setShowFichaModal(true)}
-                className="bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer transition-all group"
-              >
-                <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                  <FileText className="w-6 h-6 text-purple-400" />
-                </div>
-                <span className="text-sm font-black text-purple-300 uppercase">Ficha Diaria</span>
-                <span className="text-[10px] text-purple-500 font-bold mt-1 uppercase flex items-center gap-1">
-                  <Camera className="w-3 h-3" /> Ver Foto Físicas
-                </span>
+          <div className="mt-6">
+            <span className="text-[9px] text-gray-600 font-black uppercase tracking-widest px-2 block mb-3">Evidencia del Día</span>
+            <div 
+              onClick={() => fichaForDate && setShowFichaModal(true)}
+              className={`${fichaForDate ? 'bg-purple-500/10 hover:bg-purple-500/20 border-purple-500/20 cursor-pointer' : 'bg-slate-800/20 border-slate-700/50 cursor-not-allowed opacity-60'} border rounded-xl p-4 flex flex-col items-center justify-center transition-all group`}
+            >
+              <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 transition-transform ${fichaForDate ? 'bg-purple-500/20 group-hover:scale-110' : 'bg-slate-800'}`}>
+                <FileText className={`w-6 h-6 ${fichaForDate ? 'text-purple-400' : 'text-slate-500'}`} />
               </div>
+              <span className={`text-sm font-black uppercase ${fichaForDate ? 'text-purple-300' : 'text-slate-500'}`}>Ficha Diaria</span>
+              <span className={`text-[10px] font-bold mt-1 uppercase flex items-center gap-1 ${fichaForDate ? 'text-purple-500' : 'text-slate-600'}`}>
+                {fichaForDate ? <><Camera className="w-3 h-3" /> Ver Foto Físicas</> : 'Sin Evidencia'}
+              </span>
             </div>
-          )}
+          </div>
 
         </aside>
 
