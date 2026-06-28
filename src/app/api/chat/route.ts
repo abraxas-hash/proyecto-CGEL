@@ -114,31 +114,25 @@ export async function POST(req: Request) {
             };
 
             const searchVisitas = async () => {
-              let q = buildQuery('registro_visitas', 'visitante_nombre,empresa,motivo');
+              let q = buildQuery('registro_visitas', 'nombre,empresa,motivo,dni');
               const { data, error } = await q;
               if (error) console.error("[DB ERROR] Visitas:", error);
-              if (data && data.length > 0) resultados.visitas = data;
+              if (data && data.length > 0) resultados.visitas = data.map((d:any) => ({ fecha: d.fecha, hora: d.hora_ingreso, nombre: d.nombre, dni: d.dni, empresa: d.empresa, motivo: d.motivo }));
             };
 
             const searchProveedores = async () => {
               let q = buildQuery('registro_proveedores_carga', 'conductor_nombre,empresa,placa,tipo_carga');
               const { data, error } = await q;
               if (error) console.error("[DB ERROR] Proveedores:", error);
-              if (data && data.length > 0) resultados.proveedores = data;
+              console.log(`[Nexus AI] Proveedores encontrados para ${query}:`, data ? data.length : 0);
+              if (data && data.length > 0) resultados.proveedores = data.map((d:any) => ({ fecha: d.fecha, hora: d.hora_llegada, empresa: d.empresa, conductor: d.conductor_nombre, placa: d.placa, carga: d.tipo_carga }));
             };
 
             const searchRepartidores = async () => {
-              let q = supabaseDb.from('registro_diario_repartidores').select('*').order('fecha', { ascending: false }).limit(30);
-              if (isFullDate) {
-                q = q.eq('fecha', query);
-              } else if (isMonthDate) {
-                q = q.gte('fecha', `${query}-01`).lte('fecha', `${query}-31`);
-              } else {
-                q = q.or(`conductor_apellido.ilike.%${query}%,empresa_abreviatura.ilike.%${query}%,placa.ilike.%${query}%`);
-              }
+              let q = buildQuery('registro_diario_repartidores', 'nombre_conductor,empresa_transporte,placa');
               const { data, error } = await q;
               if (error) console.error("[DB ERROR] Repartidores:", error);
-              if (data && data.length > 0) resultados.repartidores = data;
+              if (data && data.length > 0) resultados.repartidores = data.map((d:any) => ({ fecha: d.fecha, hora: d.hora_llegada, conductor: d.nombre_conductor, empresa: d.empresa_transporte, placa: d.placa }));
             };
 
             await Promise.all([searchVisitas(), searchProveedores(), searchRepartidores()]);
