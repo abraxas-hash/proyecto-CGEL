@@ -2,7 +2,7 @@ import { createAdminClient } from '@/lib/supabaseClient';
 import { ComunicadosWidget } from '@/components/dashboard/ComunicadosWidget';
 import Header from '@/components/layout/Header';
 import { CollapsibleMetrics } from '@/components/dashboard/CollapsibleMetrics';
-import SafeAnalytics from '@/components/dashboard/SafeAnalytics';
+import { CollapsibleAnalytics } from '@/components/dashboard/CollapsibleAnalytics';
 
 import { OperationalFunnel } from '@/components/dashboard/OperationalFunnel';
 
@@ -112,9 +112,9 @@ export default async function Home() {
           </div>
         </div>
 
-        {/* Analíticas Avanzadas */}
+        {/* Analíticas Avanzadas — Colapsable */}
         <div className="mt-8 mb-8">
-          <SafeAnalytics 
+          <CollapsibleAnalytics
             data={{
               distribution: distributionData,
               hourly: hourlyData,
