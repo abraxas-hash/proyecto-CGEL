@@ -1,3 +1,4 @@
+import { createBrowserClient } from '@supabase/ssr'
 import { createClient } from '@supabase/supabase-js'
 
 /**
@@ -5,7 +6,7 @@ import { createClient } from '@supabase/supabase-js'
  * Usa valores placeholder en build-time para evitar errores de importación.
  * Los valores reales se leen desde las variables de entorno en runtime.
  */
-export const supabase = createClient(
+export const supabase = createBrowserClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'https://placeholder.supabase.co',
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? 'placeholder-anon-key'
 )

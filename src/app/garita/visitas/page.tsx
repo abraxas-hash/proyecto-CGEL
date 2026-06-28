@@ -1,5 +1,8 @@
 'use client';
 
+import React, { useState, useEffect } from 'react';
+import { Users, ArrowLeft, Send, CheckCircle2, LogOut, Clock, RefreshCw } from 'lucide-react';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
 import { ImageUpload } from '@/components/ui/ImageUpload';
