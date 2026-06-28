@@ -68,24 +68,48 @@ export async function POST(req: Request) {
             console.log(`[Nexus AI] Buscando en TODAS las tablas BD: ${query}`);
             let resultados: any = {};
             const isDni = /^\d+$/.test(query);
+            const isFullDate = /^\d{4}-\d{2}-\d{2}$/.test(query);
+            const isMonthDate = /^\d{4}-\d{2}$/.test(query);
+
+            const buildQuery = (table: string, textSearchFields: string) => {
+              let q = supabase.from(table).select('*').order('fecha', { ascending: false }).limit(30);
+              if (isDni) {
+                // If the table doesn't have DNI, it will crash. Visitas and Proveedores have DNI.
+                // Repartidores doesn't use DNI to search, we'll handle it below.
+                q = q.eq('dni', query);
+              } else if (isFullDate) {
+                q = q.eq('fecha', query);
+              } else if (isMonthDate) {
+                q = q.gte('fecha', `${query}-01`).lte('fecha', `${query}-31`);
+              } else {
+                q = q.or(textSearchFields.split(',').map(f => `${f}.ilike.%${query}%`).join(','));
+              }
+              return q;
+            };
 
             const searchVisitas = async () => {
-              let q = supabase.from('registro_visitas').select('*').order('fecha', { ascending: false }).limit(30);
-              if (isDni) q = q.eq('dni', query); else q = q.or(`visitante_nombre.ilike.%${query}%,empresa.ilike.%${query}%,fecha::text.ilike.%${query}%`);
+              let q = buildQuery('registro_visitas', 'visitante_nombre,empresa,motivo');
+              if (isDni && !q) return; // handled by buildQuery
               const { data } = await q;
               if (data && data.length > 0) resultados.visitas = data;
             };
 
             const searchProveedores = async () => {
-              let q = supabase.from('registro_proveedores_carga').select('*').order('fecha', { ascending: false }).limit(30);
-              if (isDni) q = q.eq('dni', query); else q = q.or(`conductor_nombre.ilike.%${query}%,empresa.ilike.%${query}%,placa.ilike.%${query}%,tipo_carga.ilike.%${query}%,observaciones::text.ilike.%${query}%,fecha::text.ilike.%${query}%`);
+              let q = buildQuery('registro_proveedores_carga', 'conductor_nombre,empresa,placa,tipo_carga');
+              if (isDni && !q) return; 
               const { data } = await q;
               if (data && data.length > 0) resultados.proveedores = data;
             };
 
             const searchRepartidores = async () => {
               let q = supabase.from('registro_diario_repartidores').select('*').order('fecha', { ascending: false }).limit(30);
-              q = q.or(`conductor_apellido.ilike.%${query}%,empresa_abreviatura.ilike.%${query}%,placa.ilike.%${query}%,fecha::text.ilike.%${query}%`);
+              if (isFullDate) {
+                q = q.eq('fecha', query);
+              } else if (isMonthDate) {
+                q = q.gte('fecha', `${query}-01`).lte('fecha', `${query}-31`);
+              } else {
+                q = q.or(`conductor_apellido.ilike.%${query}%,empresa_abreviatura.ilike.%${query}%,placa.ilike.%${query}%`);
+              }
               const { data } = await q;
               if (data && data.length > 0) resultados.repartidores = data;
             };
