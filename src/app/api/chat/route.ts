@@ -49,7 +49,8 @@ export async function POST(req: Request) {
     const { messages } = await req.json();
 
     const dbParams = z.object({
-      query: z.string().describe('Término exacto: DNI, nombre, placa, empresa, número de guía. Para fechas usa SIEMPRE formato YYYY-MM-DD (ej. 2026-06-22) o YYYY-MM (ej. 2026-06). NUNCA uses texto como "22 de junio".'),
+      query: z.string().optional().describe('Término de búsqueda en texto: DNI, nombre, placa, empresa, número de guía. No usar para fechas.'),
+      fecha: z.string().optional().describe('Si el usuario busca por fecha o mes, pasa el valor aquí en formato estricto YYYY-MM-DD (ej. 2026-06-22) o YYYY-MM (ej. 2026-06).'),
       tipo: z.enum(['visitas', 'proveedores', 'repartidores', 'todos']).optional().describe('El módulo donde buscar.')
     });
 
@@ -59,23 +60,45 @@ export async function POST(req: Request) {
         consultarBaseDatos: tool({
           description: 'Busca el historial o récord de un DNI, Nombre de persona, Empresa, Conductor, PLACA DE VEHÍCULO, Número de Guía o FECHA en la base de datos de Visitas, Proveedores y Repartidores.',
           parameters: dbParams,
-          // @ts-ignore - Bypass Vercel AI SDK strict generic inference bug
+          // @ts-ignore
           execute: async (args: any) => {
-            const query = String(args.query || '').trim();
-            if (!query || query === '') {
-               return { error: "Parámetro 'query' inválido o vacío. DEBES proveer un término de búsqueda (ej. DNI, placa, nombre)." };
+            const rawQuery = String(args.query || '').trim();
+            const rawFecha = String(args.fecha || '').trim();
+            const combinedInput = rawQuery + " " + rawFecha;
+            
+            let parsedDate = null;
+            const ymdMatch = combinedInput.match(/\b(\d{4}-\d{2}-\d{2})\b/);
+            const ymMatch = combinedInput.match(/\b(\d{4}-\d{2})\b/);
+            
+            if (ymdMatch) parsedDate = ymdMatch[1];
+            else {
+              const esMatch = combinedInput.toLowerCase().match(/(\d{1,2})\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)(?:\s+(?:de|del)\s+(\d{4}))?/);
+              if (esMatch) {
+                const months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+                const day = esMatch[1].padStart(2, '0');
+                const month = (months.indexOf(esMatch[2]) + 1).toString().padStart(2, '0');
+                const year = esMatch[3] || new Date().getFullYear().toString();
+                parsedDate = `${year}-${month}-${day}`;
+              } else if (ymMatch) {
+                parsedDate = ymMatch[1]; // just YYYY-MM
+              }
             }
-            console.log(`[Nexus AI] Buscando en TODAS las tablas BD: ${query}`);
+            
+            const query = parsedDate ? parsedDate : (rawQuery || rawFecha);
+            console.log(`[Nexus AI] Buscando en BD: raw='${combinedInput}', parsed='${query}'`);
+            
+            if (!query) {
+               return { error: "DEBES proveer un término de búsqueda." };
+            }
+            
             let resultados: any = {};
-            const isDni = /^\d+$/.test(query);
+            const isDni = /^\d+$/.test(query) && query.length >= 8;
             const isFullDate = /^\d{4}-\d{2}-\d{2}$/.test(query);
-            const isMonthDate = /^\d{4}-\d{2}$/.test(query);
+            const isMonthDate = /^\d{4}-\d{2}$/.test(query) && !isFullDate;
 
             const buildQuery = (table: string, textSearchFields: string) => {
               let q = supabase.from(table).select('*').order('fecha', { ascending: false }).limit(30);
               if (isDni) {
-                // If the table doesn't have DNI, it will crash. Visitas and Proveedores have DNI.
-                // Repartidores doesn't use DNI to search, we'll handle it below.
                 q = q.eq('dni', query);
               } else if (isFullDate) {
                 q = q.eq('fecha', query);
@@ -89,14 +112,12 @@ export async function POST(req: Request) {
 
             const searchVisitas = async () => {
               let q = buildQuery('registro_visitas', 'visitante_nombre,empresa,motivo');
-              if (isDni && !q) return; // handled by buildQuery
               const { data } = await q;
               if (data && data.length > 0) resultados.visitas = data;
             };
 
             const searchProveedores = async () => {
               let q = buildQuery('registro_proveedores_carga', 'conductor_nombre,empresa,placa,tipo_carga');
-              if (isDni && !q) return; 
               const { data } = await q;
               if (data && data.length > 0) resultados.proveedores = data;
             };
@@ -118,7 +139,7 @@ export async function POST(req: Request) {
 
             return Object.keys(resultados).length > 0 
               ? resultados 
-              : { mensaje: "No se encontraron registros en la base de datos para el término: " + query };
+              : { mensaje: "No se encontraron registros en la base de datos para el término: " + (query || fechaParams) };
           }
         }),
         leerMetricasDashboard: tool({
