@@ -17,13 +17,30 @@ import {
   Clock,
   MessageSquare,
   ShieldCheck,
-  CreditCard
+  CreditCard,
+  Share2
 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function VisitaClient({ visita, historial, evidencias }: { visita: any, historial: any, evidencias: any }) {
   const [showDniModal, setShowDniModal] = useState<boolean>(false);
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
+
+  const handleShareWhatsApp = () => {
+    const time = new Date(visita.fecha).toLocaleDateString('es-ES');
+    let message = `*Visita Registrada: ${visita.nombre_completo}*\n`;
+    message += `DNI/CE: ${visita.dni_ce}\n`;
+    message += `Empresa: ${visita.empresa || 'Particular'}\n`;
+    message += `Destino: ${visita.referencia_visita}\n`;
+    message += `Ingreso: ${visita.hora_ingreso?.slice(0,5)} | Fecha: ${time}\n`;
+    
+    if (evidencias && evidencias.length > 0) {
+       message += `\n*Evidencia Fotográfica:*\n${evidencias[0].url_foto}`;
+    }
+
+    const waLink = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(waLink, '_blank');
+  };
 
   // Parse JSON observations if any
   const parsedObs = useMemo(() => {
@@ -110,6 +127,13 @@ export default function VisitaClient({ visita, historial, evidencias }: { visita
           <span className="text-[10px] font-black text-purple-400 uppercase tracking-widest">ID AUDITORÍA</span>
           <span className="text-sm font-mono font-bold text-slate-800 dark:text-white tracking-tighter">#{String(visita.id).split('-')[0]}</span>
         </div>
+        <button 
+          onClick={handleShareWhatsApp}
+          className="flex items-center gap-2 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] px-4 py-2.5 rounded-xl border border-[#25D366]/30 text-sm font-bold transition-all w-full sm:w-auto justify-center sm:justify-end"
+        >
+          <Share2 className="w-4 h-4" />
+          WhatsApp
+        </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

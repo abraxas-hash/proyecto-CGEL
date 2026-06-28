@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Camera, ArrowLeft, Send, CheckCircle2, AlertTriangle, BookOpen, Clock, Activity, Users, Truck, Flame, Package } from 'lucide-react';
+import { Camera, ArrowLeft, Send, CheckCircle2, AlertTriangle, BookOpen, Clock, Activity, Users, Truck, Flame, Package, Share2 } from 'lucide-react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
@@ -48,17 +48,38 @@ function NuevaOcurrenciaTab() {
   const [historial, setHistorial] = useState<any[]>([]);
   const [loadingHistorial, setLoadingHistorial] = useState(true);
 
-  useEffect(() => {
-    async function fetchHistorial() {
-      try {
-        const { data, error } = await supabase
-          .from('cuaderno_ocurrencias')
-          .select('*')
-          .order('created_at', { ascending: false })
-          .limit(5);
-        if (!error && data) setHistorial(data);
-      } catch (err) { } finally { setLoadingHistorial(false); }
+  const fetchHistorial = async () => {
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const { data, error } = await supabase
+        .from('cuaderno_ocurrencias')
+        .select('*')
+        .gte('created_at', `${today}T00:00:00.000Z`)
+        .order('created_at', { ascending: false });
+
+      if (data) setHistorial(data);
+    } catch (e) { } finally {
+      setLoadingHistorial(false);
     }
+  };
+
+  const handleShareWhatsApp = (oc: any) => {
+    const time = new Date(oc.created_at).toLocaleString('es-ES');
+    let message = `*Reporte de Ocurrencia*\n`;
+    message += `Fecha y Hora: ${time}\n`;
+    message += `Turno: ${oc.turno}\n`;
+    message += `Estado Equipos: ${oc.estado_equipos || 'Sin detalle'}\n`;
+    message += `Novedades:\n${oc.novedades}\n`;
+    
+    if (oc.foto_url) {
+       message += `\n*Evidencia Fotográfica:*\n${oc.foto_url}`;
+    }
+
+    const waLink = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(waLink, '_blank');
+  };
+
+  useEffect(() => {
     fetchHistorial();
   }, [success]);
   
@@ -202,7 +223,17 @@ function NuevaOcurrenciaTab() {
                     TURNO {oc.turno}
                   </span>
                 </div>
-                <p className="text-sm text-slate-800 dark:text-white font-medium line-clamp-2">{oc.novedades}</p>
+                <div className="flex justify-between items-start gap-4">
+                  <p className="text-sm text-slate-800 dark:text-white font-medium line-clamp-2 flex-1">{oc.novedades}</p>
+                  <button 
+                    onClick={() => handleShareWhatsApp(oc)}
+                    type="button"
+                    className="p-2 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] rounded-lg border border-[#25D366]/30 transition-all shrink-0"
+                    title="Compartir por WhatsApp"
+                  >
+                    <Share2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             ))}
             {historial.length === 0 && (

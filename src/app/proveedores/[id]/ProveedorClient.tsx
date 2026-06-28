@@ -16,13 +16,30 @@ import {
   ClipboardCheck, 
   ShieldCheck,
   Package,
-  AlertTriangle
+  AlertTriangle,
+  Share2
 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function ProveedorClient({ proveedor, historial, evidencias }: { proveedor: any, historial: any, evidencias: any }) {
   const [showDniModal, setShowDniModal] = useState<boolean>(false);
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
+
+  const handleShareWhatsApp = () => {
+    const time = new Date(proveedor.fecha).toLocaleDateString('es-ES');
+    let message = `*Proveedor Registrado: ${proveedor.empresa}*\n`;
+    message += `Conductor: ${proveedor.conductor_nombre}\n`;
+    message += `Placa: ${proveedor.placa || 'N/A'}\n`;
+    message += `Ingreso: ${proveedor.hora_llegada?.slice(0,5)} | Fecha: ${time}\n`;
+    message += `Material: ${proveedor.tipo_carga || 'General'}\n`;
+    
+    if (evidencias && evidencias.length > 0) {
+       message += `\n*Evidencia Fotográfica:*\n${evidencias[0].url_foto}`;
+    }
+
+    const waLink = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(waLink, '_blank');
+  };
 
   // Parse JSON observations if any
   const parsedObs = useMemo(() => {
@@ -118,9 +135,16 @@ export default function ProveedorClient({ proveedor, historial, evidencias }: { 
           Volver a la tabla
         </Link>
         <div className="flex items-center gap-2 bg-purple-500/10 px-4 py-2 rounded-xl border border-purple-500/20 w-full sm:w-auto justify-center sm:justify-end">
-          <span className="text-[10px] font-black text-purple-400 uppercase tracking-widest">ID AUDITORÍA</span>
+          <span className="text-[10px] font-black text-purple-400 uppercase tracking-widest">ID PROVEEDOR</span>
           <span className="text-sm font-mono font-bold text-slate-800 dark:text-white tracking-tighter">#{String(proveedor.id).split('-')[0]}</span>
         </div>
+        <button 
+          onClick={handleShareWhatsApp}
+          className="flex items-center gap-2 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] px-4 py-2.5 rounded-xl border border-[#25D366]/30 text-sm font-bold transition-all w-full sm:w-auto justify-center sm:justify-end"
+        >
+          <Share2 className="w-4 h-4" />
+          WhatsApp
+        </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
