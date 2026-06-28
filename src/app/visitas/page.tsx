@@ -14,6 +14,11 @@ export default async function VisitasPage() {
     .order('fecha', { ascending: false })
     .order('hora_ingreso', { ascending: false });
 
+  const { data: fichas } = await supabase
+    .from('fichas_diarias')
+    .select('*')
+    .order('created_at', { ascending: false });
+
   if (error) {
     return (
       <div className="p-8 text-slate-800 dark:text-white font-[family-name:var(--font-geist-sans)]">
@@ -34,7 +39,7 @@ export default async function VisitasPage() {
           Volver al Resumen
         </Link>
       </div>
-      <VisitasClient initialVisitas={visitas || []} />
+      <VisitasClient initialVisitas={visitas || []} fichasDiarias={fichas || []} />
     </div>
   );
 }

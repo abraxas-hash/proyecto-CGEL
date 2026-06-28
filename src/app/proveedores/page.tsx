@@ -14,6 +14,11 @@ export default async function ProveedoresPage() {
     .order('fecha', { ascending: false })
     .order('hora_llegada', { ascending: false });
 
+  const { data: fichas } = await supabase
+    .from('fichas_diarias')
+    .select('*')
+    .order('created_at', { ascending: false });
+
   if (error) {
     return (
       <div className="p-8 text-slate-800 dark:text-white font-[family-name:var(--font-geist-sans)]">
@@ -34,7 +39,7 @@ export default async function ProveedoresPage() {
           Volver al Resumen
         </Link>
       </div>
-      <ProveedoresClient initialProveedores={proveedores || []} />
+      <ProveedoresClient initialProveedores={proveedores || []} fichasDiarias={fichas || []} />
     </div>
   );
 }

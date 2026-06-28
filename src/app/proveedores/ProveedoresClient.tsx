@@ -4,10 +4,11 @@ import { useState, useMemo, useEffect } from 'react';
 import { Truck, Search, ChevronDown, ChevronRight, Calendar, HardHat, Download, ArrowRight, History, X } from 'lucide-react';
 import Link from 'next/link';
 import { exportToExcel } from '@/lib/excelHelper';
+import { FileText, Camera } from 'lucide-react';
 
 import VisualCalendar from '@/components/ui/VisualCalendar';
 
-export default function ProveedoresClient({ initialProveedores }: { initialProveedores: any[] }) {
+export default function ProveedoresClient({ initialProveedores, fichasDiarias }: { initialProveedores: any[], fichasDiarias?: any[] }) {
   // Grouping logic for the calendar dots
   const availableDates = useMemo(() => {
     return Array.from(new Set(initialProveedores?.map(p => p.fecha) || []));
@@ -44,6 +45,21 @@ export default function ProveedoresClient({ initialProveedores }: { initialProve
     }));
     exportToExcel(exportData, `proveedores_${selectedDate}`, 'Proveedores');
   };
+
+  const fichaForDate = useMemo(() => {
+    if (!selectedDate || !fichasDiarias) return null;
+    return fichasDiarias.find(f => {
+      if (f.fecha !== selectedDate) return false;
+      try {
+        const obs = typeof f.observaciones === 'string' ? JSON.parse(f.observaciones) : f.observaciones;
+        return obs && obs.tipo === 'PROVEEDORES';
+      } catch {
+        return false;
+      }
+    });
+  }, [selectedDate, fichasDiarias]);
+
+  const [showFichaModal, setShowFichaModal] = useState(false);
 
   return (
     <main className="glass-panel rounded-2xl p-2 sm:p-4 w-full h-[calc(100vh-140px)] flex flex-col overflow-hidden">
@@ -105,6 +121,25 @@ export default function ProveedoresClient({ initialProveedores }: { initialProve
               </div>
             </div>
           </div>
+
+          {/* Ficha Diaria Card */}
+          {fichaForDate && (
+            <div className="mt-6">
+              <span className="text-[9px] text-gray-600 font-black uppercase tracking-widest px-2 block mb-3">Evidencia del Día</span>
+              <div 
+                onClick={() => setShowFichaModal(true)}
+                className="bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer transition-all group"
+              >
+                <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                  <FileText className="w-6 h-6 text-purple-400" />
+                </div>
+                <span className="text-sm font-black text-purple-300 uppercase">Ficha Diaria</span>
+                <span className="text-[10px] text-purple-500 font-bold mt-1 uppercase flex items-center gap-1">
+                  <Camera className="w-3 h-3" /> Ver Foto Físicas
+                </span>
+              </div>
+            </div>
+          )}
 
         </aside>
 
@@ -220,6 +255,25 @@ export default function ProveedoresClient({ initialProveedores }: { initialProve
           </div>
         </div>
       </div>
+
+      {showFichaModal && fichaForDate && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-slate-900 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] border border-slate-700">
+            <div className="p-4 bg-slate-800 flex justify-between items-center border-b border-slate-700">
+              <h3 className="font-bold text-white uppercase tracking-wider text-sm flex items-center gap-2">
+                <FileText className="w-4 h-4 text-purple-400" />
+                Ficha Física: Proveedores ({selectedDate})
+              </h3>
+              <button onClick={() => setShowFichaModal(false)} className="p-2 hover:bg-slate-700 rounded-full transition-colors">
+                <X className="w-5 h-5 text-slate-400" />
+              </button>
+            </div>
+            <div className="p-4 overflow-y-auto flex-1 flex flex-col items-center">
+              <img src={fichaForDate.url_foto} alt="Ficha Diaria" className="max-w-full rounded-xl shadow-lg border border-slate-700" />
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

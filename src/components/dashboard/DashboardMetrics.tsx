@@ -150,16 +150,7 @@ export function DashboardMetrics({ counts }: Props) {
           />
         </div>
 
-        <div onClick={(e) => { e.preventDefault(); openModal('ficha'); }} className="col-span-2 lg:col-span-1">
-          <MetricCard 
-            title="Fichas Diarias" 
-            subtitle="Fotos Físicas"
-            value={fichas.length}
-            Icon={FileText}
-            colorTheme="purple"
-            href="#"
-          />
-        </div>
+
       </div>
 
       {activeModal && (
