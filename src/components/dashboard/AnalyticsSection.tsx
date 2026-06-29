@@ -172,8 +172,8 @@ export default function AnalyticsSection({ data }: { data: any }) {
         </Card>
       </div>
 
-      {/* 3. SCATTER PLOT (Full Width) */}
-      <div className="mt-6">
+      {/* 3. SCATTER PLOT & INFOGRAPHIC (2 Columnas) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
         
         {/* Mapa de Calor */}
         <Card className="bg-gradient-to-br from-slate-900 to-slate-950 border-slate-700/50 shadow-lg relative overflow-hidden group">
@@ -200,7 +200,7 @@ export default function AnalyticsSection({ data }: { data: any }) {
              </div>
           </div>
         </CardHeader>
-        <CardContent className="h-[140px] mt-2 relative z-10 p-0 sm:p-4 sm:pt-0">
+        <CardContent className="h-[250px] mt-2 relative z-10 p-0 sm:p-4 sm:pt-0">
           <ResponsiveContainer width="100%" height="100%" minWidth={10} minHeight={10}>
             <ScatterChart margin={{ top: 10, right: 10, bottom: 0, left: -25 }}>
               <defs>
@@ -294,12 +294,9 @@ export default function AnalyticsSection({ data }: { data: any }) {
         </CardContent>
       </Card>
 
-      </div>
-
       {/* 4. INFOGRAPHIC PROGRESS CHART */}
-      <div className="mt-6">
-        <InfographicChart />
-      </div>
+      <InfographicChart />
+
     </div>
   );
 }

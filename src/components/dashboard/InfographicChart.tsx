@@ -178,11 +178,11 @@ export function InfographicChart() {
         </CardDescription>
       </CardHeader>
       
-      <CardContent className="h-[450px] mt-8 relative z-10 w-full p-0 sm:p-6 sm:pb-12">
+      <CardContent className="h-[250px] mt-2 relative z-10 w-full p-0 sm:p-2 sm:pb-8">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
             data={data}
-            margin={{ top: 80, right: 40, bottom: 40, left: 40 }}
+            margin={{ top: 60, right: 20, bottom: 20, left: 20 }}
           >
             {/* Ocultamos el eje Y visualmente */}
             <YAxis domain={[0, 110]} hide />
