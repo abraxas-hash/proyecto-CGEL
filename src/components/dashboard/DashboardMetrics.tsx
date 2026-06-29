@@ -145,17 +145,31 @@ export function DashboardMetrics({ counts }: Props) {
       </div>
 
       {activeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
-            <div className="p-4 bg-slate-100 dark:bg-slate-800 flex justify-between items-center border-b border-slate-200 dark:border-slate-700">
-              <h3 className="font-bold text-slate-800 dark:text-white uppercase tracking-wider text-sm">
-                {activeModal === 'ficha' ? 'Ficha Diaria' : `Detalle del Día: ${activeModal}`}
-              </h3>
-              <button onClick={() => setActiveModal(null)} className="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-full transition-colors">
-                <X className="w-5 h-5 text-slate-500" />
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6 bg-[#050505]/80 backdrop-blur-xl animate-in fade-in duration-300">
+          <div className="bg-white dark:bg-[#0a0a0a] w-full max-w-2xl rounded-[2rem] shadow-[0_20px_80px_rgba(0,0,0,0.8)] border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-300">
+            {/* Header Premium */}
+            <div className="px-6 py-5 bg-slate-50/80 dark:bg-white/[0.02] flex justify-between items-center border-b border-slate-200 dark:border-white/10 backdrop-blur-xl relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent opacity-50"></div>
+              <div className="flex items-center gap-4 relative z-10">
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center border border-white/5 shadow-inner">
+                  <Activity className="w-5 h-5 text-blue-500 dark:text-blue-400" />
+                </div>
+                <div>
+                  <h3 className="font-black text-slate-800 dark:text-white uppercase tracking-widest text-sm leading-tight">
+                    {activeModal === 'ficha' ? 'Ficha Diaria' : `Detalle: ${activeModal}`}
+                  </h3>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest font-bold mt-0.5">Reporte del Día</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setActiveModal(null)} 
+                className="p-2.5 bg-slate-200/50 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 rounded-full transition-all hover:scale-105 active:scale-95 shadow-sm relative z-10"
+              >
+                <X className="w-4 h-4 text-slate-600 dark:text-slate-400" />
               </button>
             </div>
-            <div className="p-4 overflow-y-auto flex-1">
+            
+            <div className="p-6 overflow-y-auto flex-1 custom-scrollbar">
               {activeModal === 'ficha' ? (
                 fichas.length === 0 ? (
                   <p className="text-center text-slate-500 py-8">No se han subido fichas hoy.</p>
@@ -182,9 +196,18 @@ export function DashboardMetrics({ counts }: Props) {
                   <p className="text-sm">Cargando registros...</p>
                 </div>
               ) : modalData.length === 0 ? (
-                <p className="text-center text-slate-500 py-8">No hay registros para hoy.</p>
+                <div className="flex flex-col items-center justify-center py-20 px-4 animate-in fade-in zoom-in-95 duration-500">
+                  <div className="relative mb-8">
+                    <div className="absolute inset-0 bg-blue-500/20 blur-2xl rounded-full"></div>
+                    <div className="w-24 h-24 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center relative shadow-inner border border-white/5">
+                      <FileText className="w-10 h-10 text-slate-400 dark:text-slate-500" />
+                    </div>
+                  </div>
+                  <h4 className="text-xl font-black text-slate-700 dark:text-slate-200 mb-3 tracking-tight">Sin Registros</h4>
+                  <p className="text-center text-slate-500 dark:text-slate-400 text-sm max-w-[280px] leading-relaxed">No se encontraron movimientos registrados en esta categoría para el día de hoy.</p>
+                </div>
               ) : (
-                <ul className="flex flex-col gap-3">
+                <ul className="flex flex-col gap-4">
                   {modalData.map((item, idx) => {
                     let tableName = '';
                     let timeColumn = '';
@@ -209,20 +232,33 @@ export function DashboardMetrics({ counts }: Props) {
                     }
 
                     return (
-                      <li key={idx} className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 text-sm flex justify-between items-center">
-                        <div>
-                          <p className="font-bold text-slate-800 dark:text-white">
-                            {item.nombre_empresa || item.nombre_completo || item.empresa || 'Registro #' + item.id}
-                          </p>
-                          <p className="text-[10px] text-slate-500 uppercase">{item.motivo || item.tipo_carga || item.placa || ''}</p>
+                      <li 
+                        key={idx} 
+                        className="p-4 bg-white dark:bg-white/[0.02] hover:dark:bg-white/[0.04] rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 group"
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-black/20 flex items-center justify-center border border-slate-200 dark:border-white/5 group-hover:border-blue-500/30 transition-colors shadow-inner">
+                            <FileText className="w-5 h-5 text-slate-400 dark:text-slate-500 group-hover:text-blue-400 transition-colors" />
+                          </div>
+                          <div>
+                            <p className="font-black text-slate-800 dark:text-white text-sm tracking-tight">
+                              {item.nombre_empresa || item.nombre_completo || item.empresa || 'Registro #' + item.id}
+                            </p>
+                            <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider mt-1 flex items-center gap-1.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-blue-500/50"></span>
+                              {item.motivo || item.tipo_carga || item.placa || 'Detalle no especificado'}
+                            </p>
+                          </div>
                         </div>
-                        <EditableTime 
-                          id={item.id}
-                          table={tableName}
-                          column={timeColumn}
-                          initialTime={initialTime}
-                          onSuccess={() => openModal(activeModal)}
-                        />
+                        <div className="bg-slate-50 dark:bg-black/40 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/5 w-full sm:w-auto shadow-inner">
+                          <EditableTime 
+                            id={item.id}
+                            table={tableName}
+                            column={timeColumn}
+                            initialTime={initialTime}
+                            onSuccess={() => openModal(activeModal)}
+                          />
+                        </div>
                       </li>
                     );
                   })}
