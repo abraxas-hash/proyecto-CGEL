@@ -6,7 +6,6 @@ import { DashboardMetrics } from '@/components/dashboard/DashboardMetrics';
 
 
 import { AnalisisDia } from '@/components/dashboard/AnalisisDia';
-import MiniAnalytics from '@/components/dashboard/MiniAnalytics';
 export const dynamic = 'force-dynamic';
 
 const HOURLY_DATA = [
@@ -96,14 +95,6 @@ export default async function Home() {
         {/* Resumen Analítico del Día */}
         <div className="mb-8" id="tour-analisis">
           <AnalisisDia />
-        </div>
-
-        {/* Mini Analytics Section */}
-        <div className="mb-8">
-          <MiniAnalytics data={{
-            counts,
-            weekly: weeklyData
-          }} />
         </div>
 
 

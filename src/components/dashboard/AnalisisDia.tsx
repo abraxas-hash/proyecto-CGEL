@@ -132,55 +132,46 @@ export function AnalisisDia() {
         </div>
       </div>
 
-      {/* METRIC CARDS */}
-      <div className="grid grid-cols-2 gap-4">
+      {/* METRIC CARDS (Sin fondo, tamaño reducido) */}
+      <div className="grid grid-cols-3 gap-2">
         
-        {/* Personas */}
+        {/* Visitas */}
         <div 
           onClick={() => openDetailsModal('visitas')}
-          className="cursor-pointer hover:scale-[1.02] transition-transform glass-panel p-4 rounded-2xl border border-purple-500/20 flex flex-col items-center justify-center text-center relative overflow-hidden bg-black/20"
+          className="cursor-pointer hover:bg-white/5 transition-colors p-2 rounded-xl flex flex-col items-center justify-center text-center relative group"
         >
-          <div className="absolute top-0 right-0 p-2 opacity-10">
-            <Users className="w-16 h-16 text-purple-500" />
-          </div>
-          <span className="text-3xl font-black text-slate-800 dark:text-white drop-shadow-md z-10">{data.visitasCount}</span>
-          <span className="text-[10px] text-purple-600 dark:text-purple-400 font-bold uppercase tracking-widest mt-1 z-10">Visitas Reg.</span>
+          <span className="text-xl font-black text-slate-800 dark:text-white drop-shadow-md z-10">{data.visitasCount}</span>
+          <span className="text-[9px] text-purple-400 font-bold uppercase tracking-widest mt-0.5 z-10">Visitas Reg.</span>
         </div>
 
         {/* Proveedores */}
         <div 
           onClick={() => openDetailsModal('proveedores')}
-          className="cursor-pointer hover:scale-[1.02] transition-transform glass-panel p-4 rounded-2xl border border-green-500/20 flex flex-col items-center justify-center text-center relative overflow-hidden bg-black/20"
+          className="cursor-pointer hover:bg-white/5 transition-colors p-2 rounded-xl flex flex-col items-center justify-center text-center relative group"
         >
-          <div className="absolute top-0 right-0 p-2 opacity-10">
-            <Package className="w-16 h-16 text-green-500" />
-          </div>
-          <span className="text-3xl font-black text-slate-800 dark:text-white drop-shadow-md z-10">{data.proveedoresCount}</span>
-          <span className="text-[10px] text-green-600 dark:text-green-400 font-bold uppercase tracking-widest mt-1 z-10">Proveedores C/D</span>
+          <span className="text-xl font-black text-slate-800 dark:text-white drop-shadow-md z-10">{data.proveedoresCount}</span>
+          <span className="text-[9px] text-green-400 font-bold uppercase tracking-widest mt-0.5 z-10">Proveedores C/D</span>
         </div>
 
         {/* Gas */}
         <div 
           onClick={() => openDetailsModal('gas')}
-          className="cursor-pointer hover:scale-[1.02] transition-transform glass-panel p-4 rounded-2xl border border-orange-500/20 flex flex-col justify-center relative overflow-hidden col-span-2 bg-black/20"
+          className="cursor-pointer hover:bg-white/5 transition-colors p-2 rounded-xl flex flex-col justify-center items-center relative group"
         >
-          <div className="absolute top-1/2 -translate-y-1/2 right-4 opacity-10">
-            <Flame className="w-20 h-20 text-orange-500" />
+          <div className="flex gap-3 z-10 items-center">
+            <div className="flex flex-col items-center">
+              <span className="text-lg font-black text-slate-800 dark:text-white">{data.gasLlenos}</span>
+              <span className="text-[8px] text-slate-500 font-bold">LLENOS</span>
+            </div>
+            <div className="w-px h-6 bg-slate-300 dark:bg-slate-700"></div>
+            <div className="flex flex-col items-center">
+              <span className="text-lg font-black text-slate-800 dark:text-white">{data.gasVacios}</span>
+              <span className="text-[8px] text-slate-500 font-bold">VACÍOS</span>
+            </div>
           </div>
-          <span className="text-[10px] text-orange-600 dark:text-orange-400 font-bold uppercase tracking-widest mb-2 z-10 block">
-            Intercambio de Gas Montacarga
+          <span className="text-[9px] text-orange-400 font-bold uppercase tracking-widest mt-1 z-10">
+            Gas Montacarga
           </span>
-          <div className="flex gap-6 z-10">
-            <div className="flex flex-col">
-              <span className="text-2xl font-black text-slate-800 dark:text-white">{data.gasLlenos}</span>
-              <span className="text-[10px] text-slate-500 font-bold">LLENOS (ING)</span>
-            </div>
-            <div className="w-px bg-slate-300 dark:bg-slate-700"></div>
-            <div className="flex flex-col">
-              <span className="text-2xl font-black text-slate-800 dark:text-white">{data.gasVacios}</span>
-              <span className="text-[10px] text-slate-500 font-bold">VACÍOS (SAL)</span>
-            </div>
-          </div>
         </div>
       </div>
 
