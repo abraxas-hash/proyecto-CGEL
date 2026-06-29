@@ -40,7 +40,7 @@ export default async function GasPage() {
           Volver al Resumen
         </Link>
       </div>
-      <GasClient initialProveedores={proveedores || []} fichasDiarias={fichas || []} />
+      <GasClient initialGas={proveedores || []} fichasDiarias={fichas || []} />
     </div>
   );
 }
