@@ -35,14 +35,31 @@ export default function GasClient({ initialGas, fichasDiarias }: { initialGas: a
 
   const handleExport = () => {
     if (!filteredByDate || filteredByDate.length === 0) return;
-    const exportData = filteredByDate.map(item => ({
-      'Fecha': item.fecha,
-      'Empresa': item.empresa_proveedor,
-      'Placa': item.placa,
-      'Conductor': item.conductor,
-      'Llenos (Ingreso)': (() => { try { const o = typeof item.observaciones === 'string' ? JSON.parse(item.observaciones) : item.observaciones; return o?.detalles_gas?.llenos_ingreso || 0; } catch { return 0; } })(),
-      'Vacíos (Salida)': (() => { try { const o = typeof item.observaciones === 'string' ? JSON.parse(item.observaciones) : item.observaciones; return o?.detalles_gas?.vacios_salida || 0; } catch { return 0; } })()
-    }));
+    const exportData = filteredByDate.map(item => {
+      let fotos = { guias: '', estiba: '', dni: '' };
+      let llenos = 0;
+      let vacios = 0;
+      try {
+        if (item.observaciones) {
+          const obs = typeof item.observaciones === 'string' ? JSON.parse(item.observaciones) : item.observaciones;
+          fotos = obs.fotos || fotos;
+          llenos = obs?.detalles_gas?.llenos_ingreso || 0;
+          vacios = obs?.detalles_gas?.vacios_salida || 0;
+        }
+      } catch (e) {}
+
+      return {
+        'Fecha': item.fecha,
+        'Empresa': item.empresa_proveedor,
+        'Placa': item.placa,
+        'Conductor': item.conductor,
+        'Llenos (Ingreso)': llenos,
+        'Vacíos (Salida)': vacios,
+        'Foto Guía': fotos.guias ? fotos.guias : 'Sin Foto',
+        'Foto Estiba': fotos.estiba ? fotos.estiba : 'Sin Foto',
+        'Foto DNI': fotos.dni ? fotos.dni : 'Sin Foto',
+      };
+    });
     exportToExcel(exportData, `Gas Montacarga_${selectedDate}`, 'Gas Montacarga');
   };
 

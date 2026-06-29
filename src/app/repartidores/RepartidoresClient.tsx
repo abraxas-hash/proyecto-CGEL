@@ -36,16 +36,29 @@ export default function RepartidoresClient({ initialData }: { initialData: any[]
 
   const handleExport = () => {
     if (!filteredByDate || filteredByDate.length === 0) return;
-    const exportData = filteredByDate.map(row => ({
-      'FECHA': row.fecha,
-      'TURNO': row.turno,
-      'EMPRESA': row.empresa_abreviatura,
-      'PLACA': row.placa,
-      'CONDUCTOR': row.conductor_apellido,
-      'SCTR': row.sctr_ok ? 'OK' : 'PEND',
-      'EPP': row.epp_ok ? 'OK' : 'OBS',
-      'ESTADO': (!row.salida_1 || (row.entrada_2 && !row.salida_2)) ? 'PLANTA' : 'FINAL'
-    }));
+    const exportData = filteredByDate.map(row => {
+      let fotos = { guias: '', estiba: '', dni: '' };
+      try {
+        if (row.observaciones) {
+          const obs = typeof row.observaciones === 'string' ? JSON.parse(row.observaciones) : row.observaciones;
+          fotos = obs.fotos || fotos;
+        }
+      } catch (e) {}
+
+      return {
+        'FECHA': row.fecha,
+        'TURNO': row.turno,
+        'EMPRESA': row.empresa_abreviatura,
+        'PLACA': row.placa,
+        'CONDUCTOR': row.conductor_apellido,
+        'SCTR': row.sctr_ok ? 'OK' : 'PEND',
+        'EPP': row.epp_ok ? 'OK' : 'OBS',
+        'ESTADO': (!row.salida_1 || (row.entrada_2 && !row.salida_2)) ? 'PLANTA' : 'FINAL',
+        'Foto Guía': fotos.guias ? fotos.guias : 'Sin Foto',
+        'Foto Estiba': fotos.estiba ? fotos.estiba : 'Sin Foto',
+        'Foto DNI': fotos.dni ? fotos.dni : 'Sin Foto',
+      };
+    });
     exportToExcel(exportData, `repartidores_${selectedDate}`, 'Repartidores');
   };
 

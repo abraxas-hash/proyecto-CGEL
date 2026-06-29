@@ -35,14 +35,27 @@ export default function ProveedoresClient({ initialProveedores, fichasDiarias }:
 
   const handleExport = () => {
     if (!filteredByDate || filteredByDate.length === 0) return;
-    const exportData = filteredByDate.map(item => ({
-      'Fecha': item.fecha,
-      'Empresa': item.empresa_proveedor,
-      'Placa': item.placa,
-      'Conductor': item.conductor,
-      'SCTR': (item.sctr_salud && item.sctr_pension) ? 'OK' : 'X',
-      'EPP': item.epp_completo ? 'OK' : 'X'
-    }));
+    const exportData = filteredByDate.map(item => {
+      let fotos = { guias: '', estiba: '', dni: '' };
+      try {
+        if (item.observaciones) {
+          const obs = typeof item.observaciones === 'string' ? JSON.parse(item.observaciones) : item.observaciones;
+          fotos = obs.fotos || fotos;
+        }
+      } catch (e) {}
+
+      return {
+        'Fecha': item.fecha,
+        'Empresa': item.empresa_proveedor,
+        'Placa': item.placa,
+        'Conductor': item.conductor,
+        'SCTR': (item.sctr_salud && item.sctr_pension) ? 'OK' : 'X',
+        'EPP': item.epp_completo ? 'OK' : 'X',
+        'Foto Guía': fotos.guias ? fotos.guias : 'Sin Foto',
+        'Foto Estiba': fotos.estiba ? fotos.estiba : 'Sin Foto',
+        'Foto DNI': fotos.dni ? fotos.dni : 'Sin Foto',
+      };
+    });
     exportToExcel(exportData, `proveedores_${selectedDate}`, 'Proveedores');
   };
 

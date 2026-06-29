@@ -35,15 +35,26 @@ export default function VisitasClient({ initialVisitas, fichasDiarias }: { initi
 
   const handleExport = () => {
     if (!filteredByDate || filteredByDate.length === 0) return;
-    const exportData = filteredByDate.map(v => ({
-      'FECHA': v.fecha,
-      'NOMBRE': v.nombre_completo,
-      'DOCUMENTO': v.dni_ce,
-      'EMPRESA': v.empresa || 'PARTICULAR',
-      'DESTINO': v.referencia_visita,
-      'MOTIVO': v.motivo_visita,
-      'SCTR': v.sctr_vigente ? 'VIGENTE' : 'VENCIDO'
-    }));
+    const exportData = filteredByDate.map(v => {
+      let fotos = { dni: '' };
+      try {
+        if (v.observaciones) {
+          const obs = typeof v.observaciones === 'string' ? JSON.parse(v.observaciones) : v.observaciones;
+          fotos = obs.fotos || fotos;
+        }
+      } catch (e) {}
+
+      return {
+        'FECHA': v.fecha,
+        'NOMBRE': v.nombre_completo,
+        'DOCUMENTO': v.dni_ce,
+        'EMPRESA': v.empresa || 'PARTICULAR',
+        'DESTINO': v.referencia_visita,
+        'MOTIVO': v.motivo_visita,
+        'SCTR': v.sctr_vigente ? 'VIGENTE' : 'VENCIDO',
+        'Foto DNI': fotos.dni ? fotos.dni : 'Sin Foto',
+      };
+    });
     exportToExcel(exportData, `visitas_${selectedDate}`, 'Visitas');
   };
 
