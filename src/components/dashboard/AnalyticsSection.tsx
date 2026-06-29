@@ -296,6 +296,7 @@ export default function AnalyticsSection({ data }: { data: any }) {
 
       {/* 4. INFOGRAPHIC PROGRESS CHART */}
       <InfographicChart />
+      </div>
 
     </div>
   );
