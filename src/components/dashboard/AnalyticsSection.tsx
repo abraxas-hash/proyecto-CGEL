@@ -15,6 +15,7 @@ import {
   ShieldCheck, AlertTriangle, Users, Activity, 
   ArrowUpRight, Clock, Zap
 } from 'lucide-react';
+import { InfographicChart } from './InfographicChart';
 
 // Colores del sistema Nexus (Paleta Shadboard)
 const COLORS = {
@@ -293,7 +294,11 @@ export default function AnalyticsSection({ data }: { data: any }) {
         </CardContent>
       </Card>
 
+      </div>
 
+      {/* 4. INFOGRAPHIC PROGRESS CHART */}
+      <div className="mt-6">
+        <InfographicChart />
       </div>
     </div>
   );
