@@ -8,11 +8,11 @@ import { FileText, Camera } from 'lucide-react';
 
 import VisualCalendar from '@/components/ui/VisualCalendar';
 
-export default function GasClient({ initialGas Montacarga, fichasDiarias }: { initialGas Montacarga: any[], fichasDiarias?: any[] }) {
+export default function GasClient({ initialGas, fichasDiarias }: { initialGas: any[], fichasDiarias?: any[] }) {
   // Grouping logic for the calendar dots
   const availableDates = useMemo(() => {
-    return Array.from(new Set(initialGas Montacarga?.map(p => p.fecha) || []));
-  }, [initialGas Montacarga]);
+    return Array.from(new Set(initialGas?.map(p => p.fecha) || []));
+  }, [initialGas]);
 
   const [selectedDate, setSelectedDate] = useState<string | null>(() => {
     if (availableDates.length > 0) {
@@ -25,13 +25,13 @@ export default function GasClient({ initialGas Montacarga, fichasDiarias }: { in
 
   const filteredByDate = useMemo(() => {
     if (!selectedDate) return [];
-    return initialGas Montacarga?.filter(p => p.fecha === selectedDate && (
+    return initialGas?.filter(p => p.fecha === selectedDate && (
       !searchTerm || 
       p.empresa_proveedor?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       p.placa?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       p.conductor?.toLowerCase().includes(searchTerm.toLowerCase())
     ));
-  }, [initialGas Montacarga, selectedDate, searchTerm]);
+  }, [initialGas, selectedDate, searchTerm]);
 
   const handleExport = () => {
     if (!filteredByDate || filteredByDate.length === 0) return;
@@ -279,4 +279,5 @@ export default function GasClient({ initialGas Montacarga, fichasDiarias }: { in
     </main>
   );
 }
+
 
