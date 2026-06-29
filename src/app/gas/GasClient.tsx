@@ -194,7 +194,7 @@ export default function GasClient({ initialGas, fichasDiarias }: { initialGas: a
                 {filteredByDate.map((item) => (
                   <Link 
                     key={item.id} 
-                    href={`/Gas Montacarga/${item.id}`}
+                    href={`/gas/${item.id}`}
                     className="group flex items-center gap-4 p-3 hover:bg-white/[0.03] transition-all"
                   >
                     <div className="flex items-center gap-3 min-w-[150px] sm:min-w-[200px]">
