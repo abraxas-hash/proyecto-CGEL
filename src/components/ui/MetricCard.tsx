@@ -8,7 +8,7 @@ interface MetricCardProps {
   value: number | string;
   Icon: LucideIcon;
   colorTheme: 'blue' | 'purple' | 'green' | 'orange';
-  href: string;
+  href?: string;
 }
 
 const colorStyles = {

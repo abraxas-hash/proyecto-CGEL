@@ -130,16 +130,14 @@ export function DashboardMetrics({ counts }: Props) {
 
 
 
-        <div onClick={(e) => { e.preventDefault(); openModal('gas'); }}>
-          <MetricCard 
-            title="Gas Montacarga" 
-            subtitle={`${gasData.llenos} ING / ${gasData.vacios} SAL`}
-            value={gasData.count}
-            Icon={Flame}
-            colorTheme="orange"
-            href="/garita/proveedores/gas"
-          />
-        </div>
+        <MetricCard 
+          title="Gas Montacarga" 
+          subtitle={`${gasData.llenos} ING / ${gasData.vacios} SAL`}
+          value={gasData.count}
+          Icon={Flame}
+          colorTheme="orange"
+          onClick={() => openModal('gas')}
+        />
 
 
       </div>
