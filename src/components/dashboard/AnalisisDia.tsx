@@ -15,35 +15,34 @@ export function AnalisisDia() {
     alquileres: 0,
     ocurrencias: [] as any[]
   });
+  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [modalData, setModalData] = useState<any[]>([]);
 
   useEffect(() => {
     fetchDashboard();
-  }, []);
+  }, [selectedDate]);
 
   async function fetchDashboard() {
     setLoading(true);
     try {
-      const today = new Date().toISOString().split('T')[0];
-
       // 1. Visitas
       const { data: visitas } = await supabase
         .from('registro_visitas')
         .select('*')
-        .eq('fecha', today);
+        .eq('fecha', selectedDate);
 
       // 2. Proveedores (incluye Gas y Alquiler)
       const { data: proveedores } = await supabase
         .from('registro_proveedores_carga')
         .select('*')
-        .eq('fecha', today);
+        .eq('fecha', selectedDate);
 
       // 3. Ocurrencias
       const { data: ocurrenciasData } = await supabase
         .from('cuaderno_ocurrencias')
         .select('*')
-        .gte('created_at', `${today}T00:00:00.000Z`)
+        .gte('created_at', `${selectedDate}T00:00:00.000Z`)
         .order('created_at', { ascending: false });
 
       let provs = 0;
@@ -113,13 +112,25 @@ export function AnalisisDia() {
     );
   }
 
-  const dateStr = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  // Convert selectedDate to local display
+  const dateObj = new Date(selectedDate + 'T00:00:00');
+  const dateStr = dateObj.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
   return (
     <div className="flex flex-col gap-6 animate-in slide-in-from-right-4 duration-300 pb-4 bg-slate-900/50 p-6 rounded-3xl border border-slate-800">
-      <div className="text-center">
-        <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest">Resumen Analítico</p>
-        <p className="text-slate-800 dark:text-white font-bold capitalize">{dateStr}</p>
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="text-center sm:text-left">
+          <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest">Resumen Analítico</p>
+          <p className="text-slate-800 dark:text-white font-bold capitalize">{dateStr}</p>
+        </div>
+        <div>
+          <input 
+            type="date" 
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+            className="bg-black/20 border border-slate-700 text-white text-sm rounded-xl px-3 py-2 outline-none focus:border-blue-500 transition-colors"
+          />
+        </div>
       </div>
 
       {/* METRIC CARDS */}
