@@ -128,16 +128,7 @@ export function DashboardMetrics({ counts }: Props) {
           />
         </div>
 
-        <div onClick={(e) => { e.preventDefault(); openModal('contratistas'); }}>
-          <MetricCard 
-            title="Contratistas" 
-            subtitle="Inventario y personal"
-            value={counts.contratistas}
-            Icon={Wrench}
-            colorTheme="orange"
-            href="/contratistas"
-          />
-        </div>
+
 
         <div onClick={(e) => { e.preventDefault(); openModal('gas'); }}>
           <MetricCard 
