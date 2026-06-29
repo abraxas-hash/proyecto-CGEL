@@ -4,7 +4,8 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Truck, Users, ShieldCheck, ShieldAlert, Wrench, LogOut, Clock, MapPin, BarChart2, Flame } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useTransition } from 'react';
+import { changeUserRole } from '@/app/actions/roles';
 import { ModeToggle } from '@/components/ui/ModeToggle';
 import { GuidedTourButton } from '@/components/ui/GuidedTourButton';
 
@@ -17,6 +18,17 @@ export default function Header() {
   const [time, setTime] = useState<Date | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+
+  const handleRoleChange = (newRole: string) => {
+    if (!userId) return;
+    setUserRole(newRole);
+    startTransition(async () => {
+      await changeUserRole(userId, newRole);
+      window.location.reload(); // Recargar para aplicar middleware y UI
+    });
+  };
 
   useEffect(() => {
     // Clock
@@ -29,6 +41,7 @@ export default function Header() {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         setUserEmail(user.email || null);
+        setUserId(user.id);
         const { data: profile } = await supabase
           .from('perfiles')
           .select('rol')
@@ -53,6 +66,10 @@ export default function Header() {
     { name: 'ANALÍTICA', href: '/analitica', icon: BarChart2, color: 'text-purple-400', activeBg: 'bg-purple-500/20', hoverBg: 'hover:bg-purple-500/20' },
     { name: 'POLÍTICAS', href: '/politicas', icon: ShieldCheck, color: 'text-blue-400', activeBg: 'bg-blue-500/20', hoverBg: 'hover:bg-blue-500/20' },
   ];
+
+  if (userRole === 'ssoma' || userRole === 'gerencia') {
+    navItems.push({ name: 'COMUNICADOS', href: '/admin/comunicados', icon: ShieldAlert, color: 'text-red-400', activeBg: 'bg-red-500/20', hoverBg: 'hover:bg-red-500/20' });
+  }
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-300 dark:border-white/[0.08] bg-[#e0e5ec] dark:bg-[#0e1117] px-2 md:px-4 py-2 transition-colors duration-500">
@@ -109,6 +126,23 @@ export default function Header() {
                </div>
              )}
           </div>
+
+          {/* Selector de Rol (Para Pruebas) */}
+          {userId && (
+            <div className="hidden md:flex items-center gap-2 border-r border-black/10 dark:border-white/10 pr-3 mr-1">
+              <span className="text-[9px] font-bold text-gray-500 uppercase">Probar Rol:</span>
+              <select 
+                value={userRole || 'garita'} 
+                onChange={(e) => handleRoleChange(e.target.value)}
+                disabled={isPending}
+                className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs text-slate-800 dark:text-white rounded-lg p-1 font-bold outline-none cursor-pointer"
+              >
+                <option value="garita">Garita (Default)</option>
+                <option value="ssoma">SSOMA (Admin)</option>
+                <option value="gerencia">Gerencia (Admin)</option>
+              </select>
+            </div>
+          )}
           
           <ModeToggle />
           

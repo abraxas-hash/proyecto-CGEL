@@ -52,6 +52,22 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(url)
     }
 
+    // Protección de rutas de administración (RBAC)
+    if (user && pathname.startsWith('/admin')) {
+      const { data: profile } = await supabase
+        .from('perfiles')
+        .select('rol')
+        .eq('id', user.id)
+        .single()
+        
+      const role = profile?.rol
+      if (role !== 'ssoma' && role !== 'gerencia') {
+        const url = request.nextUrl.clone()
+        url.pathname = '/'
+        return NextResponse.redirect(url)
+      }
+    }
+
     // Si está logueado e intenta ir a login, simplemente dejar pasar.
     // El login page maneja su propia redirección post-login.
     // NO redirigir aquí para evitar el bucle al hacer logout.
