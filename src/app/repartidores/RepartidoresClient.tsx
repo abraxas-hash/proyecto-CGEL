@@ -3,38 +3,11 @@
 import React, { useState, useMemo, useEffect, useTransition } from 'react';
 import { Truck, Search, ArrowRight, CheckCircle2, XCircle, ChevronDown, ChevronRight, HardHat, Calendar, Download, History, X, Clock, Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { marcarTiempoRepartidor } from '@/app/actions/repartidores';
+
 import { exportToExcel } from '@/lib/excelHelper';
 
 import VisualCalendar from '@/components/ui/VisualCalendar';
 
-function TimeButton({ id, columna, label, timeValue }: { id: string, columna: any, label: string, timeValue: string | null }) {
-  const [isPending, startTransition] = useTransition();
-
-  const handleMarkTime = () => {
-    startTransition(async () => {
-      await marcarTiempoRepartidor(id, columna);
-    });
-  };
-
-  return (
-    <button 
-      onClick={handleMarkTime}
-      disabled={isPending || !!timeValue}
-      className={`relative overflow-hidden flex flex-col items-center justify-center px-3 py-1.5 rounded-lg border transition-all ${
-        timeValue 
-          ? 'bg-green-500/10 border-green-500/20 text-green-400 cursor-default' 
-          : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10 hover:text-white'
-      }`}
-    >
-      <span className="text-[8px] font-black uppercase tracking-widest mb-0.5">{label}</span>
-      <div className="flex items-center gap-1.5">
-        {isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <Clock className="w-3 h-3" />}
-        <span className="text-xs font-bold font-mono">{timeValue || '--:--'}</span>
-      </div>
-    </button>
-  );
-}
 
 export default function RepartidoresClient({ initialData }: { initialData: any[] }) {
   // Grouping logic for the calendar dots
@@ -249,14 +222,7 @@ export default function RepartidoresClient({ initialData }: { initialData: any[]
                         </div>
                       </div>
 
-                      {/* Botones de Asistencia / Control de Tiempos */}
-                      <div className="mt-3 pt-3 border-t border-white/5 flex flex-wrap gap-2 items-center">
-                        <TimeButton id={row.id} columna="hora_llegada" label="Llegada" timeValue={row.hora_llegada} />
-                        <ArrowRight className="w-3 h-3 text-white/10 hidden sm:block" />
-                        <TimeButton id={row.id} columna="hora_inicio_carga" label="Inicio Carga" timeValue={row.hora_inicio_carga} />
-                        <ArrowRight className="w-3 h-3 text-white/10 hidden sm:block" />
-                        <TimeButton id={row.id} columna="hora_fin_carga" label="Fin Carga" timeValue={row.hora_fin_carga} />
-                      </div>
+
                     </div>
                   );
                 })}
