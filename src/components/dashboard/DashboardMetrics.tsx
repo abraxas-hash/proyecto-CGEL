@@ -94,7 +94,7 @@ export function DashboardMetrics({ counts }: Props) {
 
   return (
     <>
-      <div id="tour-metrics" className="grid grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
+      <div id="tour-metrics" className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <div onClick={(e) => { e.preventDefault(); openModal('repartidores'); }}>
           <MetricCard 
             title="Repartidores" 
