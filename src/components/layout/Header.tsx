@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Truck, Users, ShieldCheck, ShieldAlert, Wrench, LogOut, Clock, MapPin, BarChart2 } from 'lucide-react';
+import { Home, Truck, Users, ShieldCheck, ShieldAlert, Wrench, LogOut, Clock, MapPin, BarChart2, Flame } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { ModeToggle } from '@/components/ui/ModeToggle';
 import { GuidedTourButton } from '@/components/ui/GuidedTourButton';
@@ -49,6 +49,7 @@ export default function Header() {
     { name: 'REPARTIDORES', href: '/repartidores', icon: Truck, color: 'text-slate-800 dark:text-white', activeBg: 'bg-[#00d4ff]/20', hoverBg: 'hover:bg-[#00d4ff]/20' },
     { name: 'VISITAS', href: '/visitas', icon: Users, color: 'text-purple-400', activeBg: 'bg-purple-500/20', hoverBg: 'hover:bg-purple-500/20' },
     { name: 'PROVEEDORES', href: '/proveedores', icon: ShieldCheck, color: 'text-green-400', activeBg: 'bg-green-500/20', hoverBg: 'hover:bg-green-500/20' },
+    { name: 'GAS', href: '/gas', icon: Flame, color: 'text-orange-500', activeBg: 'bg-orange-500/20', hoverBg: 'hover:bg-orange-500/20' },
     { name: 'ANALÍTICA', href: '/analitica', icon: BarChart2, color: 'text-purple-400', activeBg: 'bg-purple-500/20', hoverBg: 'hover:bg-purple-500/20' },
     { name: 'POLÍTICAS', href: '/politicas', icon: ShieldCheck, color: 'text-blue-400', activeBg: 'bg-blue-500/20', hoverBg: 'hover:bg-blue-500/20' },
   ];
