@@ -86,16 +86,15 @@ export function AnalisisDia() {
 
   const openDetailsModal = async (type: string) => {
     setActiveModal(type);
-    const today = new Date().toISOString().split('T')[0];
     
     try {
       let result;
       if (type === 'visitas') {
-        result = await supabase.from('registro_visitas').select('*').eq('fecha', today);
+        result = await supabase.from('registro_visitas').select('*').eq('fecha', selectedDate);
       } else if (type === 'proveedores') {
-        result = await supabase.from('registro_proveedores_carga').select('*').eq('fecha', today).neq('tipo_carga', 'GAS MONTACARGA');
+        result = await supabase.from('registro_proveedores_carga').select('*').eq('fecha', selectedDate).neq('tipo_carga', 'GAS MONTACARGA');
       } else if (type === 'gas') {
-        result = await supabase.from('registro_proveedores_carga').select('*').eq('fecha', today).eq('tipo_carga', 'GAS MONTACARGA');
+        result = await supabase.from('registro_proveedores_carga').select('*').eq('fecha', selectedDate).eq('tipo_carga', 'GAS MONTACARGA');
       }
       if (result && result.data) setModalData(result.data);
     } catch(e) {
