@@ -34,42 +34,43 @@ export function CollapsibleAnalytics({ data }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-black/20 backdrop-blur-sm overflow-hidden shadow-sm">
-      {/* Header clicable */}
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-5 py-4 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
-      >
+    <div className="space-y-4">
+      {/* Encabezado de sección */}
+      <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
             <LineChart className="w-4 h-4 text-purple-400" />
           </div>
-          <div className="text-left">
-            <p className="text-sm font-bold text-slate-800 dark:text-white">Analíticas Avanzadas</p>
+          <div>
+            <h2 className="text-sm font-black uppercase tracking-widest text-slate-800 dark:text-white">
+              Analíticas Avanzadas
+            </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Embudo de operaciones · Performance operativo · Mix de seguridad · Mapa de calor
+              Embudo · Performance · Mix de seguridad · Mapa de calor
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-purple-500 dark:text-purple-400 hidden sm:block">
-            {isOpen ? 'Ocultar' : 'Ver gráficas'}
-          </span>
-          <div className={`w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
-            <ChevronDown className="w-4 h-4 text-slate-500 dark:text-slate-400" />
-          </div>
-        </div>
-      </button>
+        {/* Botón separado */}
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 hover:border-purple-500/40 text-purple-400 hover:text-purple-300 text-xs font-bold uppercase tracking-widest transition-all duration-200"
+        >
+          <span>{isOpen ? 'Ocultar' : 'Ver gráficas'}</span>
+          <ChevronDown
+            className={`w-3.5 h-3.5 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+          />
+        </button>
+      </div>
 
-      {/* Contenido colapsable */}
+      {/* Contenido expandible */}
       <div
         className={`transition-all duration-300 ease-in-out overflow-hidden ${
-          isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+          isOpen ? 'max-h-[3000px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
         }`}
       >
-        <div className="border-t border-slate-200 dark:border-slate-800 p-6 space-y-8">
+        <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-black/20 backdrop-blur-sm p-6 space-y-8">
           <OperationalFunnel />
           <AnalyticsSection data={data} />
         </div>
