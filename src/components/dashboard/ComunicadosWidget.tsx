@@ -67,30 +67,29 @@ export function ComunicadosWidget() {
 
   if (comunicados.length === 0) {
     return (
-      <Card className="glass-panel border-slate-400 dark:border-slate-700 dark:border-slate-700 relative overflow-hidden group w-full">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-black uppercase tracking-widest text-black dark:text-slate-800 dark:text-white flex items-center gap-2">
+      <div className="w-full mb-8">
+        <div className="pb-2">
+          <h3 className="text-sm font-black uppercase tracking-widest text-black dark:text-slate-800 dark:text-white flex items-center gap-2">
             <MessageSquare className="w-4 h-4 text-slate-800 dark:text-white" />
             Bandeja Oficial
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </h3>
+        </div>
+        <div>
           <p className="text-xs text-gray-500">No hay comunicados recientes de Gerencia o SSOMA.</p>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card className="glass-panel border-slate-400 dark:border-slate-700 dark:border-slate-700 relative overflow-hidden group w-full mb-8">
-      <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 gap-2">
-        <CardTitle className="text-xs sm:text-sm font-black uppercase tracking-widest text-black dark:text-slate-800 dark:text-white flex items-center gap-2">
+    <div className="w-full mb-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 gap-2">
+        <h3 className="text-xs sm:text-sm font-black uppercase tracking-widest text-black dark:text-slate-800 dark:text-white flex items-center gap-2">
           <MessageSquare className="w-4 h-4 text-slate-800 dark:text-white" />
           Bandeja Oficial
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
+        </h3>
+      </div>
+      <div className="space-y-4">
         {comunicados.map((item) => {
           // Estilos según tipo
           const isAlerta = item.tipo === 'Alerta';
@@ -157,7 +156,7 @@ export function ComunicadosWidget() {
           );
         })}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
