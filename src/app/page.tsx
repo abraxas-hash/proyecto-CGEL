@@ -4,9 +4,7 @@ import Header from '@/components/layout/Header';
 import { DashboardMetrics } from '@/components/dashboard/DashboardMetrics';
 import { CollapsibleAnalytics } from '@/components/dashboard/CollapsibleAnalytics';
 
-import { OperationalFunnel } from '@/components/dashboard/OperationalFunnel';
 
-import { EmotionManagementWidget } from '@/components/dashboard/EmotionManagementWidget';
 import { AnalisisDia } from '@/components/dashboard/AnalisisDia';
 export const dynamic = 'force-dynamic';
 
@@ -102,15 +100,7 @@ export default async function Home() {
 
 
 
-        {/* Embudo y Gestión Emocional en 2 columnas */}
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div id="tour-funnel">
-            <OperationalFunnel />
-          </div>
-          <div id="tour-emotions">
-            <EmotionManagementWidget />
-          </div>
-        </div>
+
 
         {/* Analíticas Avanzadas — Colapsable */}
         <div className="mt-8 mb-8">

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { ChevronDown, LineChart } from 'lucide-react';
 import dynamic from 'next/dynamic';
+import { OperationalFunnel } from './OperationalFunnel';
 
 const AnalyticsSection = dynamic(() => import('./AnalyticsSection'), {
   ssr: false,
@@ -47,7 +48,7 @@ export function CollapsibleAnalytics({ data }: Props) {
           <div className="text-left">
             <p className="text-sm font-bold text-slate-800 dark:text-white">Analíticas Avanzadas</p>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Performance operativo · Mix de seguridad · Mapa de calor de ingresos
+              Embudo de operaciones · Performance operativo · Mix de seguridad · Mapa de calor
             </p>
           </div>
         </div>
@@ -68,7 +69,8 @@ export function CollapsibleAnalytics({ data }: Props) {
           isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <div className="border-t border-slate-200 dark:border-slate-800">
+        <div className="border-t border-slate-200 dark:border-slate-800 p-6 space-y-8">
+          <OperationalFunnel />
           <AnalyticsSection data={data} />
         </div>
       </div>
