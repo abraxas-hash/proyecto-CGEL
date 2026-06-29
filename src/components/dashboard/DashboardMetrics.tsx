@@ -131,7 +131,7 @@ export function DashboardMetrics({ counts }: Props) {
 
 
         <MetricCard 
-          title="Gas Montacarga" 
+          title="Gas Montacargas" 
           subtitle={`${gasData.llenos} ING / ${gasData.vacios} SAL`}
           value={gasData.count}
           Icon={Flame}
