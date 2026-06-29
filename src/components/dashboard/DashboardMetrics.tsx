@@ -146,7 +146,7 @@ export function DashboardMetrics({ counts }: Props) {
             value={gasData.count}
             Icon={Flame}
             colorTheme="orange"
-            href="/proveedores"
+            href="/garita/proveedores/gas"
           />
         </div>
 
