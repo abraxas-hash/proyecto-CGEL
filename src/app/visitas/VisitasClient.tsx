@@ -215,8 +215,12 @@ export default function VisitasClient({ initialVisitas, fichasDiarias }: { initi
 
                     <div className="flex items-center gap-6 shrink-0">
                       <div className="flex flex-col items-center min-w-[60px]">
-                        <span className="text-[8px] text-gray-600 font-black uppercase mb-1">Horario</span>
-                        <span className="text-[10px] text-slate-500 dark:text-gray-400 font-mono">{v.hora_ingreso?.slice(0,5)} — {v.hora_salida?.slice(0,5) || '--:--'}</span>
+                        <span className="text-[8px] text-gray-600 font-black uppercase mb-1">Ingreso</span>
+                        <span className="text-[10px] text-slate-500 dark:text-gray-400 font-mono">{v.hora_ingreso?.slice(0,5) || '--:--'}</span>
+                      </div>
+                      <div className="flex flex-col items-center min-w-[60px]">
+                        <span className="text-[8px] text-gray-600 font-black uppercase mb-1">Salida</span>
+                        <span className="text-[10px] text-slate-500 dark:text-gray-400 font-mono">{v.hora_salida?.slice(0,5) || '--:--'}</span>
                       </div>
 
                       <div className="hidden md:flex flex-col items-end min-w-[80px]">
