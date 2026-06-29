@@ -69,25 +69,14 @@ const CustomBar = (props: any) => {
       {/* Texto Vertical del porcentaje dentro de la barra */}
       <text
         x={x + width / 2}
-        y={y + height - 20}
+        y={y + height - 10}
         fill="#ffffff"
         textAnchor="start"
         alignmentBaseline="middle"
-        transform={`rotate(-90, ${x + width / 2}, ${y + height - 20})`}
-        className="text-2xl font-black tracking-widest drop-shadow-md"
+        transform={`rotate(-90, ${x + width / 2}, ${y + height - 10})`}
+        className="text-lg font-black tracking-widest drop-shadow-md"
       >
         {value}%
-      </text>
-      
-      {/* Texto del "Año" encima de la barra */}
-      <text
-        x={x + width / 2}
-        y={y - 15}
-        fill="#ffffff"
-        textAnchor="middle"
-        className="text-sm font-bold"
-      >
-        {props.payload.year}
       </text>
     </g>
   );
@@ -182,7 +171,7 @@ export function InfographicChart() {
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
             data={data}
-            margin={{ top: 60, right: 20, bottom: 20, left: 20 }}
+            margin={{ top: 80, right: 20, bottom: 20, left: 20 }}
           >
             {/* Ocultamos el eje Y visualmente */}
             <YAxis domain={[0, 110]} hide />
