@@ -2,7 +2,7 @@ import { createAdminClient } from '@/lib/supabaseClient';
 import { ComunicadosWidget } from '@/components/dashboard/ComunicadosWidget';
 import Header from '@/components/layout/Header';
 import { DashboardMetrics } from '@/components/dashboard/DashboardMetrics';
-import { CollapsibleAnalytics } from '@/components/dashboard/CollapsibleAnalytics';
+
 
 
 import { AnalisisDia } from '@/components/dashboard/AnalisisDia';
@@ -102,17 +102,7 @@ export default async function Home() {
 
 
 
-        {/* Analíticas Avanzadas — Colapsable */}
-        <div className="mt-8 mb-8">
-          <CollapsibleAnalytics
-            data={{
-              distribution: distributionData,
-              hourly: hourlyData,
-              weekly: weeklyData,
-              counts: counts
-            }}
-          />
-        </div>
+
       </main>
     </div>
   );
