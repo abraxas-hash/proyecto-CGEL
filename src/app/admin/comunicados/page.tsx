@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ShieldCheck, Send, UploadCloud, FileText, AlertTriangle, MessageSquare, Loader2, Home } from 'lucide-react';
+import { ShieldCheck, Send, UploadCloud, FileText, AlertTriangle, MessageSquare, Loader2, Home, ArrowLeft } from 'lucide-react';
 import { supabase } from '@/lib/supabaseClient';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -102,9 +102,8 @@ export default function ComunicadosPage() {
           </div>
         </div>
         <Link href="/">
-          <Button variant="outline" className="border-white/10 text-slate-800 dark:text-white hover:bg-white/10 gap-2">
-            <Home className="w-4 h-4" />
-            Volver al Dashboard
+          <Button variant="outline" size="icon" className="border-white/10 text-slate-800 dark:text-white hover:bg-white/10 shrink-0">
+            <ArrowLeft className="w-5 h-5" />
           </Button>
         </Link>
       </div>

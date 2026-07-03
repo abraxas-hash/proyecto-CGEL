@@ -12,6 +12,7 @@ export function FloatingChat() {
   const [messages, setMessages] = useState<Array<{role: string, content: string, id: string}>>([]);
   const [myInput, setMyInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -21,6 +22,29 @@ export function FloatingChat() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isLoading]);
+
+  useEffect(() => {
+    async function loadRole() {
+      try {
+        const { supabase } = await import('@/lib/supabaseClient');
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          let r = 'agente';
+          const { data: profile } = await supabase.from('perfiles').select('rol').eq('id', user.id).single();
+          if (profile) r = profile.rol;
+          if (user.email === 'ssoma@cgel.com') r = 'ssoma';
+          if (user.email === 'gerencia@cgel.com') r = 'gerencia';
+          if (user.email === 'garita@cgel.com') r = 'garita';
+          setUserRole(r);
+        } else {
+          setUserRole('guest'); // Para no dejarlo null eternamente si no hay sesión
+        }
+      } catch (e) {
+        setUserRole('guest');
+      }
+    }
+    loadRole();
+  }, []);
 
   // Focus en el input cuando se abre el chat
   useEffect(() => {
@@ -126,8 +150,9 @@ export function FloatingChat() {
     sendMessage();
   };
 
-  // Ocultar el chat flotante en la página de login o en la app de garita
-  if (pathname === '/login' || pathname?.startsWith('/garita')) {
+  // Ocultar el chat flotante en la página de login, en la app de garita, o para SSOMA
+  // También ocultar mientras carga (null) para evitar FOUC si es ssoma
+  if (pathname === '/login' || pathname?.startsWith('/garita') || userRole === 'ssoma' || userRole === null) {
     return null;
   }
 
