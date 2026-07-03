@@ -15,12 +15,18 @@ export function useAuth() {
     setError(null);
 
     try {
-      const { error: authError } = await supabase.auth.signInWithPassword({
+      const { data, error: authError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (authError) throw authError;
+
+      // Restricciones de acceso basadas en el rol/correo
+      if (data.user?.email === 'ssoma@cgel.com' && destination === '/garita') {
+        await supabase.auth.signOut();
+        throw new Error('Acceso denegado: El departamento SSOMA no tiene autorización para acceder al módulo operativo de Garita.');
+      }
 
       // Redirección exitosa
       window.location.replace(destination);
