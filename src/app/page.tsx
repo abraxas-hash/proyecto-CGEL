@@ -1,4 +1,6 @@
 import { createAdminClient } from '@/lib/supabaseClient';
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
 import { ComunicadosWidget } from '@/components/dashboard/ComunicadosWidget';
 import Header from '@/components/layout/Header';
 import { DashboardMetrics } from '@/components/dashboard/DashboardMetrics';
@@ -20,6 +22,26 @@ const HOURLY_DATA = [
 ];
 
 export default async function Home() {
+  const cookieStore = cookies();
+  const supabaseAuth = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
+        },
+      },
+    }
+  );
+
+  const { data: { user } } = await supabaseAuth.auth.getUser();
+  let userRole = null;
+  if (user) {
+    const { data: profile } = await supabaseAuth.from('perfiles').select('rol').eq('id', user.id).single();
+    userRole = profile?.rol;
+  }
+
   const supabase = createAdminClient();
   const [
     { count: countRepartidores },
@@ -87,10 +109,12 @@ export default async function Home() {
           <ComunicadosWidget />
         </div>
 
-        {/* Grid de tarjetas métricas */}
-        <div className="mb-8">
-          <DashboardMetrics counts={counts} />
-        </div>
+        {/* Grid de tarjetas métricas (Oculto para SSOMA) */}
+        {userRole !== 'ssoma' && (
+          <div className="mb-8">
+            <DashboardMetrics counts={counts} />
+          </div>
+        )}
 
         {/* Resumen Analítico del Día */}
         <div className="mb-8" id="tour-analisis">

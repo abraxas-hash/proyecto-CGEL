@@ -53,7 +53,7 @@ export async function proxy(request: NextRequest) {
     }
 
     // Protección de rutas de administración (RBAC)
-    if (user && pathname.startsWith('/admin')) {
+    if (user && pathname !== '/') {
       const { data: profile } = await supabase
         .from('perfiles')
         .select('rol')
@@ -61,10 +61,24 @@ export async function proxy(request: NextRequest) {
         .single()
         
       const role = profile?.rol
-      if (role !== 'ssoma' && role !== 'gerencia') {
-        const url = request.nextUrl.clone()
-        url.pathname = '/'
-        return NextResponse.redirect(url)
+      
+      // Restricciones para Garita
+      if (role === 'garita') {
+        if (pathname.startsWith('/admin') || pathname.startsWith('/analitica')) {
+          const url = request.nextUrl.clone()
+          url.pathname = '/'
+          return NextResponse.redirect(url)
+        }
+      }
+      
+      // Restricciones para SSOMA
+      if (role === 'ssoma') {
+        const operationalRoutes = ['/repartidores', '/visitas', '/proveedores', '/gas']
+        if (operationalRoutes.some(route => pathname.startsWith(route))) {
+          const url = request.nextUrl.clone()
+          url.pathname = '/'
+          return NextResponse.redirect(url)
+        }
       }
     }
 
