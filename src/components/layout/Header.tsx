@@ -4,8 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Truck, Users, ShieldCheck, ShieldAlert, Wrench, LogOut, Clock, MapPin, BarChart2, Flame } from 'lucide-react';
-import { useState, useEffect, useTransition } from 'react';
-import { changeUserRole } from '@/app/actions/roles';
+import { useState, useEffect } from 'react';
 import { ModeToggle } from '@/components/ui/ModeToggle';
 import { GuidedTourButton } from '@/components/ui/GuidedTourButton';
 
@@ -19,16 +18,6 @@ export default function Header() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
-  const [isPending, startTransition] = useTransition();
-
-  const handleRoleChange = (newRole: string) => {
-    if (!userId) return;
-    setUserRole(newRole);
-    startTransition(async () => {
-      await changeUserRole(userId, newRole);
-      window.location.reload(); // Recargar para aplicar middleware y UI
-    });
-  };
 
   useEffect(() => {
     // Clock
@@ -127,23 +116,6 @@ export default function Header() {
              )}
           </div>
 
-          {/* Selector de Rol (Para Pruebas) */}
-          {userId && (
-            <div className="hidden md:flex items-center gap-2 border-r border-black/10 dark:border-white/10 pr-3 mr-1">
-              <span className="text-[9px] font-bold text-gray-500 uppercase">Probar Rol:</span>
-              <select 
-                value={userRole || 'garita'} 
-                onChange={(e) => handleRoleChange(e.target.value)}
-                disabled={isPending}
-                className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs text-slate-800 dark:text-white rounded-lg p-1 font-bold outline-none cursor-pointer"
-              >
-                <option value="garita">Garita (Default)</option>
-                <option value="ssoma">SSOMA (Admin)</option>
-                <option value="gerencia">Gerencia (Admin)</option>
-              </select>
-            </div>
-          )}
-          
           <ModeToggle />
           
           <div className="hidden sm:block">
