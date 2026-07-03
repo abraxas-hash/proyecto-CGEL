@@ -39,7 +39,10 @@ export default async function Home() {
   let userRole = null;
   if (user) {
     const { data: profile } = await supabaseAuth.from('perfiles').select('rol').eq('id', user.id).single();
-    userRole = profile?.rol;
+    userRole = profile?.rol || 'agente';
+    if (user.email === 'ssoma@cgel.com') userRole = 'ssoma';
+    if (user.email === 'gerencia@cgel.com') userRole = 'gerencia';
+    if (user.email === 'garita@cgel.com') userRole = 'garita';
   }
 
   const supabase = createAdminClient();

@@ -60,7 +60,10 @@ export async function proxy(request: NextRequest) {
         .eq('id', user.id)
         .single()
         
-      const role = profile?.rol
+      let role = profile?.rol || 'agente';
+      if (user.email === 'ssoma@cgel.com') role = 'ssoma';
+      if (user.email === 'gerencia@cgel.com') role = 'gerencia';
+      if (user.email === 'garita@cgel.com') role = 'garita';
       
       // Restricciones para Garita
       if (role === 'garita') {

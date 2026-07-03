@@ -32,9 +32,11 @@ export function DashboardMetrics({ counts }: Props) {
           .select('rol')
           .eq('id', user.id)
           .single();
-        if (profile) {
-          setUserRole(profile.rol);
-        }
+        let r = profile?.rol || 'agente';
+        if (user.email === 'ssoma@cgel.com') r = 'ssoma';
+        if (user.email === 'gerencia@cgel.com') r = 'gerencia';
+        if (user.email === 'garita@cgel.com') r = 'garita';
+        setUserRole(r);
       }
     }
     loadUser();
