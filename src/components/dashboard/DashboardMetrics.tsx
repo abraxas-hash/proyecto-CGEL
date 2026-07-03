@@ -110,7 +110,7 @@ export function DashboardMetrics({ counts }: Props) {
     }
   };
 
-  if (userRole === 'ssoma') {
+  if (userRole === 'ssoma' || !userRole) {
     return null;
   }
 

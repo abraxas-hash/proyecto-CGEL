@@ -52,7 +52,7 @@ export default function Header() {
     { name: 'RESUMEN', href: '/', icon: Home, color: 'text-gray-400', activeBg: 'bg-white/10', hoverBg: 'hover:bg-white/10' },
   ];
 
-  if (userRole === 'gerencia' || userRole === 'garita' || !userRole) {
+  if (userRole === 'gerencia' || userRole === 'garita') {
     navItems.push(
       { name: 'REPARTIDORES', href: '/repartidores', icon: Truck, color: 'text-slate-800 dark:text-white', activeBg: 'bg-[#00d4ff]/20', hoverBg: 'hover:bg-[#00d4ff]/20' },
       { name: 'VISITAS', href: '/visitas', icon: Users, color: 'text-purple-400', activeBg: 'bg-purple-500/20', hoverBg: 'hover:bg-purple-500/20' },

@@ -129,18 +129,18 @@ export default function ComunicadosPage() {
         {/* Autor */}
         <div className="mb-6">
           <label className="block text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">Emitido Por</label>
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <button
               type="button"
               onClick={() => setAutorRol('Gerencia')}
-              className={`flex-1 py-3 rounded-xl border font-bold transition-all ${autorRol === 'Gerencia' ? 'bg-blue-600/20 border-blue-500 text-blue-400' : 'bg-black/20 border-white/10 text-slate-500 dark:text-gray-400 hover:bg-white/5'}`}
+              className={`flex-1 py-3 rounded-xl border font-bold text-sm sm:text-base transition-all ${autorRol === 'Gerencia' ? 'bg-blue-600/20 border-blue-500 text-blue-400' : 'bg-black/20 border-white/10 text-slate-500 dark:text-gray-400 hover:bg-white/5'}`}
             >
               Gerencia General
             </button>
             <button
               type="button"
               onClick={() => setAutorRol('SSOMA')}
-              className={`flex-1 py-3 rounded-xl border font-bold transition-all ${autorRol === 'SSOMA' ? 'bg-orange-500/20 border-orange-500 text-orange-400' : 'bg-black/20 border-white/10 text-slate-500 dark:text-gray-400 hover:bg-white/5'}`}
+              className={`flex-1 py-3 rounded-xl border font-bold text-sm sm:text-base transition-all ${autorRol === 'SSOMA' ? 'bg-orange-500/20 border-orange-500 text-orange-400' : 'bg-black/20 border-white/10 text-slate-500 dark:text-gray-400 hover:bg-white/5'}`}
             >
               Dpto. SSOMA
             </button>
@@ -150,27 +150,27 @@ export default function ComunicadosPage() {
         {/* Tipo de Comunicado */}
         <div className="mb-6">
           <label className="block text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">Tipo de Comunicado</label>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
             <div 
               onClick={() => setTipo('Mensaje')}
-              className={`cursor-pointer border rounded-xl p-4 flex flex-col items-center gap-2 transition-all ${tipo === 'Mensaje' ? 'bg-blue-600/20 border-blue-500 text-blue-400' : 'bg-black/20 border-white/10 text-slate-500 dark:text-gray-400 hover:bg-white/5'}`}
+              className={`cursor-pointer border rounded-xl p-3 sm:p-4 flex flex-col items-center gap-2 transition-all ${tipo === 'Mensaje' ? 'bg-blue-600/20 border-blue-500 text-blue-400' : 'bg-black/20 border-white/10 text-slate-500 dark:text-gray-400 hover:bg-white/5'}`}
             >
-              <MessageSquare className="w-6 h-6" />
-              <span className="font-bold">Mensaje Normal</span>
+              <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6" />
+              <span className="font-bold text-sm text-center leading-tight">Mensaje Normal</span>
             </div>
             <div 
               onClick={() => setTipo('Alerta')}
-              className={`cursor-pointer border rounded-xl p-4 flex flex-col items-center gap-2 transition-all ${tipo === 'Alerta' ? 'bg-red-500/20 border-red-500 text-red-400' : 'bg-black/20 border-white/10 text-slate-500 dark:text-gray-400 hover:bg-white/5'}`}
+              className={`cursor-pointer border rounded-xl p-3 sm:p-4 flex flex-col items-center gap-2 transition-all ${tipo === 'Alerta' ? 'bg-red-500/20 border-red-500 text-red-400' : 'bg-black/20 border-white/10 text-slate-500 dark:text-gray-400 hover:bg-white/5'}`}
             >
-              <AlertTriangle className="w-6 h-6" />
-              <span className="font-bold">Alerta de Seguridad</span>
+              <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6" />
+              <span className="font-bold text-sm text-center leading-tight">Alerta de Seguridad</span>
             </div>
             <div 
               onClick={() => setTipo('Documento')}
-              className={`cursor-pointer border rounded-xl p-4 flex flex-col items-center gap-2 transition-all ${tipo === 'Documento' ? 'bg-purple-500/20 border-purple-500 text-purple-400' : 'bg-black/20 border-white/10 text-slate-500 dark:text-gray-400 hover:bg-white/5'}`}
+              className={`cursor-pointer border rounded-xl p-3 sm:p-4 flex flex-col items-center gap-2 transition-all ${tipo === 'Documento' ? 'bg-purple-500/20 border-purple-500 text-purple-400' : 'bg-black/20 border-white/10 text-slate-500 dark:text-gray-400 hover:bg-white/5'}`}
             >
-              <FileText className="w-6 h-6" />
-              <span className="font-bold">Documento / Política</span>
+              <FileText className="w-5 h-5 sm:w-6 sm:h-6" />
+              <span className="font-bold text-sm text-center leading-tight">Documento / Política</span>
             </div>
           </div>
         </div>
