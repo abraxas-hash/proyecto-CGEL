@@ -21,8 +21,24 @@ export function DashboardMetrics({ counts }: Props) {
   const [loading, setLoading] = useState(false);
   const [gasData, setGasData] = useState({ llenos: 0, vacios: 0, count: 0 });
   const [fichas, setFichas] = useState<any[]>([]);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   useEffect(() => {
+    async function loadUser() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('perfiles')
+          .select('rol')
+          .eq('id', user.id)
+          .single();
+        if (profile) {
+          setUserRole(profile.rol);
+        }
+      }
+    }
+    loadUser();
+
     // Fetch gas data for today
     async function fetchGas() {
       const today = new Date().toISOString().split('T')[0];
@@ -91,6 +107,10 @@ export function DashboardMetrics({ counts }: Props) {
       setLoading(false);
     }
   };
+
+  if (userRole === 'ssoma') {
+    return null;
+  }
 
   return (
     <>
